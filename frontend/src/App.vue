@@ -1,85 +1,103 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
+import { Search } from 'lucide-vue-next';
 </script>
 
 <template>
-  <header>
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
 
-      <nav>
+  <div class="homepage">
+
+    <!-- NAVBAR ON TOP -->
+    <header class="header">
+      <nav class="branding">
+        <img class="logo" src="/appIcon.png" alt="Placeholder Logo" />
+        <span class="app-name">App Name</span>
+      </nav>
+
+      <nav class="nav">
+        <a href="#">Sign In</a> <!-- You said you'd do these so I'll let you do it, then link here -->
+        <a href="#">Create Account</a> <!-- Same as line above -->
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/diary">Diary</RouterLink>
         <RouterLink to="/likes">Likes</RouterLink>
         <RouterLink to="/profile">Profile</RouterLink>
         <RouterLink to="/about">About</RouterLink>
+
+        <div class="searchWrapper">
+          <input type="text" placeholder="Search... " class="search" />
+          <Search class="searchIcon" />
+        </div>
       </nav>
-    </div>
-  </header>
+    </header>
+  </div>
 
   <RouterView />
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
+<style>
+.homepage {
+  padding: 20px;
+  font-family: sans-serif;
+  background-color: #ddd;
+}
+
+.branding {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.app-name {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #222;
+}
+
+.searchWrapper {
+  position: relative;
+  width: 200px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 32px;
+  gap: 60px;
 }
 
 .logo {
-  display: block;
-  margin: 0 auto 2rem;
+  align-items: center;
+  justify-content: center;
+  height: 80px;
+  width: 80px;
 }
 
-nav {
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  flex-wrap: nowrap;
+}
+
+.search {
   width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
+  padding: 8px 36px 8px 12px; /* room for icon on right */
+  border: 2px solid black;
+  font-size: 1rem;
+  border-radius: 18px;
 }
 
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
+.searchIcon {
+  position: absolute;
+  top: 50%;
+  right: -40px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  width: 18px;
+  height: 18px;
+  color: #bbb;
 }
 </style>
