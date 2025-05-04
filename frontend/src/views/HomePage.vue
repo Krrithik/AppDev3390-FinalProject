@@ -1,5 +1,19 @@
 <script setup>
+import { supabase } from '@/supabase/supabase.init';
+
 //NOT YET ADDED
+
+async function handleLogout() {
+  const {error } = await supabase.auth.signOut()
+  if(error){
+    console.log(error);
+    
+  }
+  else{
+    console.log('logout successfull');
+    
+  }
+}
 </script>
 
 <template>
@@ -11,6 +25,8 @@
         Note films to watch next.<br />
         Then tell your friends the great ones.</p>
     </section>
+
+    <button @click="handleLogout">logout</button>
 
     <!-- TRENDING SECTION -->
     <section class="movie-section">
