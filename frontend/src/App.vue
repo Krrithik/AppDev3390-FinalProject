@@ -15,8 +15,8 @@ import { Search } from 'lucide-vue-next';
       </nav>
 
       <nav class="nav">
-        <a href="#">Sign In</a> <!-- You said you'd do these so I'll let you do it, then link here -->
-        <a href="#">Create Account</a> <!-- Same as line above -->
+        <RouterLink to="/login">Login</RouterLink>
+        <RouterLink to="/signup">Signup</RouterLink>
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/diary">Diary</RouterLink>
         <RouterLink to="/likes">Likes</RouterLink>

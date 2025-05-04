@@ -3,6 +3,8 @@ import HomePage from '@/views/HomePage.vue'
 import LikesPage from '@/views/LikesPage.vue'
 import ProfilePage from '@/views/ProfilePage.vue'
 import DiaryPage from '@/views/DiaryPage.vue'
+import LoginPage from '@/views/LoginPage.vue'
+import SignupPage from '@/views/SignupPage.vue'
 
 
 const router = createRouter({
@@ -36,6 +38,16 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/AboutPage.vue'),
     },
+    {
+      path: '/login',
+      name: 'login',
+      component: LoginPage,
+    },
+    {
+      path: '/signup',
+      name: 'signup',
+      component: SignupPage,
+    }
   ],
 })
 
