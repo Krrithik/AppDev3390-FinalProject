@@ -50,7 +50,7 @@ onMounted(() => {
 
   <!-- TRENDING SECTION -->
   <section class="movieSection">
-    <h2>TRENDING</h2>
+    <h2 id="headerText">TRENDING</h2>
     <div class="movieRow">
       <MovieCard 
       v-for="movie in trendingMovies.slice(0, 6)"
@@ -65,7 +65,7 @@ onMounted(() => {
 
   <!-- IN THEATERS -->
   <section class="movieSection">
-    <h2>IN THEATERS</h2>
+    <h2 id="headerText">IN THEATERS</h2>
     <div class="movieRow">
       <MovieCard 
       v-for="movie in nowPlayingMovies.slice(0, 6)"
@@ -100,7 +100,13 @@ onMounted(() => {
   text-align: center;
   margin-top: 80px;
   margin-bottom: 80px;
-  font-size: 1.1em;
+  font-size: 48px;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+#headerText {
+  font-size: 30px;
+  font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
 .movieSection {
@@ -123,43 +129,15 @@ onMounted(() => {
   background-color: black;
   border-radius: 4px;
   margin-bottom: 20px;
-}
-
-
-.modal-backdrop {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.6);
   display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
+  flex-direction: column;
+  overflow: hidden;
 }
-.modal-content {
-  background: #222;
-  color: #fff;
-  border-radius: 8px;
-  padding: 24px;
-  min-width: 300px;
-  max-width: 90vw;
-  position: relative;
-}
-.close-btn {
-  position: absolute;
-  top: 8px; right: 12px;
-  background: none;
-  border: none;
-  color: #fff;
-  font-size: 2em;
-  cursor: pointer;
-}
-.like-btn {
-  background: #e50914;
-  color: #fff;
-  border: none;
-  padding: 8px 18px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 1.1em;
-}
+
+.movieBox:hover {
+  /* THIS IS COMPIED FROM MY 2650 PROJ, CHANGE COLORS LATER */
+  transform: scale(1.05);
+  box-shadow: 0 0 15px #A696C8, 0 0 25px #A696C8; 
+  transition: all 0.3s ease; 
+} 
 </style>
