@@ -37,7 +37,12 @@ const loading = ref(false)
 async function handleSignup(){
     const { data, error } = await supabase.auth.signUp({
         email : email.value,
-        password : password.value
+        password : password.value,
+        options : {
+            data : {
+                fullName : fullName.value
+            }
+        }
      })
      if(error){
         console.log(error);

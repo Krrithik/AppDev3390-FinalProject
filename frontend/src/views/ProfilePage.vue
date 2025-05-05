@@ -1,27 +1,31 @@
 <script setup>
 import { supabase } from '@/supabase/supabase.init';
-import { ref, onMounted } from 'vue'
+import { ref, onMounted } from 'vue';
 
-const localUser = ref(null)
-const data = ref(null)
+const profileUser = ref('');
+const sessionData = ref(null);
 
-async function seeCurrentUser() {
-    const localUser = await supabase.auth.getSession();
-    console.log(localUser);
-    
-
-    const data = 8;
-
+async function getUserForProfile() {
+  const { data: { user } } = await supabase.auth.getUser();
+  const fullName = user?.user_metadata?.fullName || '';
+  return fullName;
 }
 
-seeCurrentUser();
+async function seeCurrentUser() {
+  const { data: session } = await supabase.auth.getSession();
+  sessionData.value = session;
+  console.log(sessionData.value);
+}
+
+onMounted(async () => {
+  profileUser.value = await getUserForProfile();
+  await seeCurrentUser();
+});
 </script>
 
 <template>
- <h1>User Profile Page!</h1>
- <p>{{ localUser }}</p>
- <p>{{ data }}</p>
- <p>hi</p>
+  <h1>User Profile Page!</h1>
+  <div>Full Name: {{ profileUser }}</div>
 </template>
 
 <style>
