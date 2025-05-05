@@ -1,6 +1,23 @@
 <script setup>
-//NO FUNCTIONALITY YET
+import { ref, onMounted } from 'vue'
 import MovieCard from '@/components/MovieCard.vue';
+
+const movies = ref([])
+const imgBaseUrl = 'https://image.tmdb.org/t/p/w500'
+const apiKey = import.meta.env.VITE_TMDB_API_KEY
+
+
+async function fetchNowPlaying() {
+  try {
+    const res = await fetch(`https://api.themoviedb.org/3/movie/now_playing?api_key=${apiKey}&language=en-US&page=1`)
+    const data = await res.json()
+    movies.value = data.results
+  } catch (err) {
+    console.error('Failed to fetch movies:', err)
+  }
+}
+
+onMounted(fetchNowPlaying)
 </script>
 
 <template>
@@ -24,12 +41,20 @@ import MovieCard from '@/components/MovieCard.vue';
     <section class="movieSection">
       <h2>IN THEATERS</h2>
       <div class="movieRow">
-        <div v-for="n in 6" :key="n" class="movieBox"></div>
+        <div v-for="n in 6" :key="n" class="movieBox">
+          
+        </div>
       </div>
     </section>
 
     <div>
-      <MovieCard />
+      <MovieCard 
+      v-for="movie in movies"
+          :key="movie.id"
+          :title="movie.title"
+          :imgUrl="imgBaseUrl + movie.poster_path"
+          :releaseDate="movie.release_date"
+      />
     </div>
 </template>
 

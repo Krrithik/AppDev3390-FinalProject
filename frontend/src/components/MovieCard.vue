@@ -6,7 +6,7 @@ const nowPlaying = ref([]) // Reactive array to hold movies
 
 async function getMovies(url) {
   try {
-    const apiKey = import.meta.env.VITE_VUE_APP_TMDB_API_KEY
+    const apiKey = import.meta.env.VITE_TMDB_API_KEY
     const response = await fetch(`${url}?api_key=${apiKey}`)
     const data = await response.json()
     nowPlaying.value = data.results // Update reactive variable
