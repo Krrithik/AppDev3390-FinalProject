@@ -44,7 +44,7 @@ defineProps({
 
 <template>
   <div class="movieBox">
-    <img v-if="imgUrl" :src="imgUrl" :alt="title" class="moviePoster" />
+    <img v-if="imgUrl" :src="imgUrl" :alt="title"/>
     <div class="movieInfo">
       <h3 class="movieTitle">{{ title }}</h3>
       <p class="movieDate">{{ releaseDate }}</p>
@@ -53,14 +53,5 @@ defineProps({
 </template>
 
 <style scoped>
-.movieBox {
-  width: 156px;
-  height: 231px;
-  background-color: black;
-  border-radius: 4px;
-  margin-bottom: 20px;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
+/* NO STYLE NEEDED */
 </style>

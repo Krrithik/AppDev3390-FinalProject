@@ -92,5 +92,15 @@ onMounted(() => {
   background-color: black;
   border-radius: 4px;
   margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
+
+.movieBox:hover {
+  /* THIS IS COMPIED FROM MY 2650 PROJ, CHANGE COLORS LATER */
+  transform: scale(1.05);
+  box-shadow: 0 0 15px #A696C8, 0 0 25px #A696C8; 
+  transition: all 0.3s ease; 
+} 
 </style>
