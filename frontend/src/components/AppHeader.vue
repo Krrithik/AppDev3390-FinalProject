@@ -1,7 +1,6 @@
 <script setup>
 import { useAuth } from '@/composables/useAuth';
 const { user } = useAuth();
-import { Search } from 'lucide-vue-next';
 </script>
 
 <template>
