@@ -1,5 +1,6 @@
 <script setup>
 //NO FUNCTIONALITY YET
+import MovieCard from '@/components/MovieCard.vue';
 </script>
 
 <template>
@@ -26,6 +27,10 @@
         <div v-for="n in 6" :key="n" class="movieBox"></div>
       </div>
     </section>
+
+    <div>
+      <MovieCard />
+    </div>
 </template>
 
 <!-- STYLE -->
