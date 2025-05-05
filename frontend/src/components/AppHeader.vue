@@ -1,4 +1,6 @@
-<script setup></script>
+<script setup>
+import { Search } from 'lucide-vue-next';
+</script>
 
 <template>
   <!-- NAVBAR ON TOP -->
