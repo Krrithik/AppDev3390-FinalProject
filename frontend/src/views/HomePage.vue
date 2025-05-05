@@ -2,6 +2,9 @@
 import { ref, onMounted } from 'vue'
 import MovieCard from '@/components/MovieCard.vue';
 
+const showModal = ref(false)
+const selectedMovie = ref(null)
+
 const trendingMovies = ref([])
 const nowPlayingMovies = ref([])
 const imgBaseUrl = 'https://image.tmdb.org/t/p/w500'
@@ -16,6 +19,18 @@ async function fetchMovies(endpoint, targetRef) {
   } catch (err) {
     console.error(`Failed to fetch ${endpoint}:`, err)
   }
+}
+
+
+function openModal(movie) {
+  selectedMovie.value = movie
+  showModal.value = true
+}
+
+function closeModal() {
+  showModal.value = false
+  selectedMovie.value = null
+  reviewInput.value = ''
 }
 
 onMounted(() => {
@@ -42,7 +57,9 @@ onMounted(() => {
           :key="movie.id"
           :title="movie.title"
           :imgUrl="imgBaseUrl + movie.poster_path"
-          :releaseDate="movie.release_date" />
+          :releaseDate="movie.release_date" 
+           @click="openModal(movie)"
+          />
     </div>
   </section>
 
@@ -58,6 +75,20 @@ onMounted(() => {
           :releaseDate="movie.release_date" />
     </div>
   </section>
+
+
+  <!-- Modal -->
+  <div v-if="showModal" class="modal-backdrop" @click.self="closeModal">
+    <div class="modal-content">
+      <button class="close-btn" @click="closeModal">×</button>
+      <h2>{{ selectedMovie.title }}</h2>
+      <img :src="imgBaseUrl + selectedMovie.poster_path" :alt="selectedMovie.title" style="width:150px;"/>
+      <p><strong>Release:</strong> {{ selectedMovie.release_date }}</p>
+      <p><strong>Description:</strong> {{ selectedMovie.overview }}</p>
+      <textarea v-model="reviewInput" placeholder="Write your review here..." style="width:100%;margin:10px 0;"></textarea>
+      <button @click="handleLike" class="like-btn">❤️ Like & Save</button>
+    </div>
+  </div>
 
   
 </template>
@@ -92,5 +123,43 @@ onMounted(() => {
   background-color: black;
   border-radius: 4px;
   margin-bottom: 20px;
+}
+
+
+.modal-backdrop {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.modal-content {
+  background: #222;
+  color: #fff;
+  border-radius: 8px;
+  padding: 24px;
+  min-width: 300px;
+  max-width: 90vw;
+  position: relative;
+}
+.close-btn {
+  position: absolute;
+  top: 8px; right: 12px;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 2em;
+  cursor: pointer;
+}
+.like-btn {
+  background: #e50914;
+  color: #fff;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1.1em;
 }
 </style>
