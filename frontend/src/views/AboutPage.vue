@@ -1,5 +1,5 @@
 <script setup>
-//NO FUNCTIONALITY YET
+//NO FUNCTIONALITY NEEDED
 </script>
 
 <template>
@@ -9,13 +9,13 @@
         <aside class="sideBar">
             <div class="sideBarContent">
                 <ul>
-                    <li>What is Appname?</li>
-                    <li>Why the name Appname?</li>
-                    <li>Do I need an account to use this site?</li>
-                    <li>Is there a paywall for this site?</li>
-                    <li>Is there an incentive for leaving reviews?</li>
-                    <li>Can I watch films on Appname?</li>
-                    <li>How do I validate my email?</li>
+                    <li><a href="#1">What is Appname?</a></li>
+                    <li><a href="#2">Why the name Appname?</a></li>
+                    <li><a href="#3">Do I need an account to use this site?</a></li>
+                    <li><a href="#4">Is there a paywall for this site?</a></li>
+                    <li><a href="#5">Is there an incentive for leaving reviews?</a></li>
+                    <li><a href="#6">Can I watch films on Appname?</a></li>
+                    <li><a href="#7">How do I validate my email?</a></li>
                     <!-- ADD/REMOVE STUFF -->
                 </ul>
             </div>
@@ -24,7 +24,7 @@
         <!-- ABOUT INFO STUFF -->
         <main class="aboutMain">
             <div class="block">
-                <h2>What is Appname?</h2>
+                <h2 id="1">What is Appname?</h2>
                 <p>
                     Appname is your personal movie journal — a platform to track the films you've watched, curate a
                     watchlist of upcoming titles, and share your thoughts and favorites. Log your movie-watching
@@ -33,14 +33,14 @@
             </div>
 
             <div class="block">
-                <h2>Why the name Appname?</h2>
+                <h2 id="2">Why the name Appname?</h2>
                 <p>
                     To be determined.
                 </p>
             </div>
 
             <div class="block">
-                <h2>Do I need an account to use this site?</h2>
+                <h2 id="3">Do I need an account to use this site?</h2>
                 <p>
                     Yes! While an account is required to use Appname, signing up is completely free. Without an account,
                     access is limited to the Sign In, Create Account, and About pages.
@@ -48,14 +48,14 @@
             </div>
 
             <div class="block">
-                <h2>Is there a paywall for this site?</h2>
+                <h2 id="4">Is there a paywall for this site?</h2>
                 <p>
                     Appname has no paywalls — all features are completely free to use with a registered account.
                 </p>
             </div>
 
             <div class="block">
-                <h2>Is there an incentive for leaving reviews? </h2>
+                <h2 id="5">Is there an incentive for leaving reviews? </h2>
                 <p>
                     While reviews—written or star-rated—aren’t incentivized with rewards, they play a vital role in
                     building the Appname community. Sharing your thoughts helps others discover new films, assess
@@ -65,7 +65,7 @@
             </div>
 
             <div class="block">
-                <h2>Can I watch films on Appname?</h2>
+                <h2 id="6">Can I watch films on Appname?</h2>
                 <p>
                     Appname is a platform for logging and sharing your movie experiences — it does not offer streaming
                     or viewing of films. That said, it’s a great way to discover new titles, explore recommendations,
@@ -74,7 +74,7 @@
             </div>
 
             <div class="block">
-                <h2>How do I validate my email?</h2>
+                <h2 id="7">How do I validate my email?</h2>
                 <p>
                     krrithik do this!
                 </p>
@@ -119,6 +119,20 @@
 
 .sideBar li:hover {
     color: #209CE6;
+}
+
+.sideBar a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.sideBar a:visited {
+    color: inherit;
+}
+
+.sideBar a:hover {
+    text-decoration: none;
+    color: #209CE6
 }
 
 .aboutMain {
