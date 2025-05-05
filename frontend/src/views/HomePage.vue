@@ -21,41 +21,38 @@ onMounted(fetchNowPlaying)
 </script>
 
 <template>
-    <!-- SHORT DESCRIPTION -->
-    <section class="description">
-      <p>Jot the films you've seen.<br />
-        Note films to watch next.<br />
-        Then tell your friends the great ones.</p>
-    </section>
+  <!-- SHORT DESCRIPTION -->
+  <section class="description">
+    <p>Jot the films you've seen.<br />
+      Note films to watch next.<br />
+      Then tell your friends the great ones.</p>
+  </section>
 
 
-    <!-- TRENDING SECTION -->
-    <section class="movieSection">
-      <h2>TRENDING</h2>
-      <div class="movieRow">
-        <div v-for="n in 6" :key="n" class="movieBox"></div>
-      </div>
-    </section>
+  <!-- TRENDING SECTION -->
+  <section class="movieSection">
+    <h2>TRENDING</h2>
+    <div class="movieRow">
+      <div v-for="n in 6" :key="n" class="movieBox"></div>
+    </div>
+  </section>
 
-    <!-- IN THEATERS -->
-    <section class="movieSection">
-      <h2>IN THEATERS</h2>
-      <div class="movieRow">
-        <div v-for="n in 6" :key="n" class="movieBox">
-          
-        </div>
-      </div>
-    </section>
-
-    <div>
+  <!-- IN THEATERS -->
+  <section class="movieSection">
+    <h2>IN THEATERS</h2>
+    <div class="movieRow">
       <MovieCard 
-      v-for="movie in movies"
+      v-for="movie in movies.slice(0, 6)"
           :key="movie.id"
           :title="movie.title"
           :imgUrl="imgBaseUrl + movie.poster_path"
-          :releaseDate="movie.release_date"
-      />
+          :releaseDate="movie.release_date" />
     </div>
+  </section>
+
+  <div>
+    <!-- Put Trending Movies Here -->
+  </div>
 </template>
 
 <!-- STYLE -->
