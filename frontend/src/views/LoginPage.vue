@@ -18,7 +18,7 @@ async function handleLogin(){
      loading.value = false;
      if(error){
         console.log(error);
-        
+        window.alert(error)
      }
      else {
         console.log(data);

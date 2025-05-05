@@ -50,6 +50,7 @@ async function handleSignup(){
      loading.value = false;
      if(error){
         console.log(error);
+        window.alert(error)
         
      }
      else {

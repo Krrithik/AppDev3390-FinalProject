@@ -37,6 +37,7 @@ async function handleLogout() {
   else{
     console.log('logout successfull');
     router.push('/login')
+    window.alert('logout success')
     
   }
 }
