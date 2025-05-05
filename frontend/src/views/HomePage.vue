@@ -2,22 +2,26 @@
 import { ref, onMounted } from 'vue'
 import MovieCard from '@/components/MovieCard.vue';
 
-const movies = ref([])
+const trendingMovies = ref([])
+const nowPlayingMovies = ref([])
 const imgBaseUrl = 'https://image.tmdb.org/t/p/w500'
 const apiKey = import.meta.env.VITE_TMDB_API_KEY
 
 
-async function fetchNowPlaying() {
+async function fetchMovies(endpoint, targetRef) {
   try {
-    const res = await fetch(`https://api.themoviedb.org/3/movie/now_playing?api_key=${apiKey}&language=en-US&page=1`)
+    const res = await fetch(`https://api.themoviedb.org/3/${endpoint}?api_key=${apiKey}&language=en-US&page=1`)
     const data = await res.json()
-    movies.value = data.results
+    targetRef.value = data.results
   } catch (err) {
-    console.error('Failed to fetch movies:', err)
+    console.error(`Failed to fetch ${endpoint}:`, err)
   }
 }
 
-onMounted(fetchNowPlaying)
+onMounted(() => {
+  fetchMovies('trending/movie/week', trendingMovies)
+  fetchMovies('movie/now_playing', nowPlayingMovies)
+})
 </script>
 
 <template>
@@ -33,7 +37,12 @@ onMounted(fetchNowPlaying)
   <section class="movieSection">
     <h2>TRENDING</h2>
     <div class="movieRow">
-      <div v-for="n in 6" :key="n" class="movieBox"></div>
+      <MovieCard 
+      v-for="movie in trendingMovies.slice(0, 6)"
+          :key="movie.id"
+          :title="movie.title"
+          :imgUrl="imgBaseUrl + movie.poster_path"
+          :releaseDate="movie.release_date" />
     </div>
   </section>
 
@@ -42,7 +51,7 @@ onMounted(fetchNowPlaying)
     <h2>IN THEATERS</h2>
     <div class="movieRow">
       <MovieCard 
-      v-for="movie in movies.slice(0, 6)"
+      v-for="movie in nowPlayingMovies.slice(0, 6)"
           :key="movie.id"
           :title="movie.title"
           :imgUrl="imgBaseUrl + movie.poster_path"
@@ -50,9 +59,7 @@ onMounted(fetchNowPlaying)
     </div>
   </section>
 
-  <div>
-    <!-- Put Trending Movies Here -->
-  </div>
+  
 </template>
 
 <!-- STYLE -->
