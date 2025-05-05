@@ -43,57 +43,24 @@ defineProps({
 </script>
 
 <template>
-  <section class="movieSection">
-      <img v-if="imgUrl" :src="imgUrl" :alt="title" class="movieBox" />
+  <div class="movieBox">
+    <img v-if="imgUrl" :src="imgUrl" :alt="title" class="moviePoster" />
     <div class="movieInfo">
       <h3 class="movieTitle">{{ title }}</h3>
       <p class="movieDate">{{ releaseDate }}</p>
     </div>
-  </section>
+  </div>
 </template>
 
 <style scoped>
-.movieSection {
-  text-align: center;
-  margin-top: 40px;
-  margin-bottom: 20px;
-}
-
-.movieRow {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 10px;
-}
-
 .movieBox {
   width: 156px;
   height: 231px;
   background-color: black;
   border-radius: 4px;
   margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
-
-/* Maybe Keep This 
-.movieInfo { 
-  padding: 8px;
-  color: white;
-}
-*/
-
-/* For Title Text 
-.movieTitle {
-  font-size: 1em;
-  color: white;
-  margin: 0 0 4px;
-}
-*/
-
-/* For Year Text
-.movieDate {
-  font-size: 0.9em;
-  color: #bbb;
-  margin: 0;
-} */
 </style>
