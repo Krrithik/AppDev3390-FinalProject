@@ -1,6 +1,9 @@
 <script setup>
 import { ref } from 'vue'
 import { supabase } from '@/supabase/supabase.init'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 const email = ref('')
 const password = ref('')
@@ -44,13 +47,15 @@ async function handleSignup(){
             }
         }
      })
+     loading.value = false;
      if(error){
         console.log(error);
+        window.alert(error)
         
      }
      else {
         console.log(data);
-        
+        router.push('/')
      }
 }
 

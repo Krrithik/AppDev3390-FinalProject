@@ -5,6 +5,7 @@ import ProfilePage from '@/views/ProfilePage.vue'
 import DiaryPage from '@/views/DiaryPage.vue'
 import LoginPage from '@/views/LoginPage.vue'
 import SignupPage from '@/views/SignupPage.vue'
+import { supabase } from '@/supabase/supabase.init'
 
 
 const router = createRouter({
@@ -49,6 +50,26 @@ const router = createRouter({
       component: SignupPage,
     }
   ],
+})
+
+
+// List of routes that don't require authentication
+const publicPages = ['/login', '/signup']
+
+router.beforeEach(async (to, from, next) => {
+  const { data: { session } } = await supabase.auth.getSession()
+  const isAuth = !!session?.user
+  const isPublic = publicPages.includes(to.path)
+
+  if (!isAuth && !isPublic) {
+    // Not logged in and trying to access a protected page
+    return next('/login')
+  }
+  if (isAuth && isPublic) {
+    // Logged in and trying to access login/signup
+    return next('/')
+  }
+  next()
 })
 
 export default router

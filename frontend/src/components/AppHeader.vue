@@ -1,5 +1,6 @@
 <script setup>
-import { Search } from 'lucide-vue-next';
+import { useAuth } from '@/composables/useAuth';
+const { user } = useAuth();
 </script>
 
 <template>
@@ -11,13 +12,13 @@ import { Search } from 'lucide-vue-next';
     </nav>
 
     <nav class="nav">
-      <RouterLink to="/login">Login</RouterLink>
-      <RouterLink to="/signup">Signup</RouterLink>
-      <RouterLink to="/">Home</RouterLink>
-      <RouterLink to="/diary">Diary</RouterLink>
-      <RouterLink to="/likes">Likes</RouterLink>
-      <RouterLink to="/profile">Profile</RouterLink>
-      <RouterLink to="/about">About</RouterLink>
+      <RouterLink v-if="!user" to="/login">Login</RouterLink>
+      <RouterLink v-if="!user" to="/signup">Signup</RouterLink>
+      <RouterLink v-if="user" to="/">Home</RouterLink>
+      <RouterLink v-if="user" to="/diary">Diary</RouterLink>
+      <RouterLink v-if="user" to="/likes">Likes</RouterLink>
+      <RouterLink  v-if="user" to="/profile">Profile</RouterLink>
+      <RouterLink v-if="user" to="/about">About</RouterLink>
 
       <div class="searchWrapper">
         <input type="text" placeholder="Search... " class="search" />

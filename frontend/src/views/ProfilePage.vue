@@ -1,6 +1,9 @@
 <script setup>
 import { supabase } from '@/supabase/supabase.init';
 import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 const profileUser = ref('');
 const sessionData = ref(null);
@@ -33,6 +36,8 @@ async function handleLogout() {
   }
   else{
     console.log('logout successfull');
+    router.push('/login')
+    window.alert('logout success')
     
   }
 }
