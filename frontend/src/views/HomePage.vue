@@ -1,5 +1,5 @@
 <script setup>
-//NOT YET ADDED
+
 </script>
 
 <template>
@@ -11,6 +11,7 @@
         Note films to watch next.<br />
         Then tell your friends the great ones.</p>
     </section>
+
 
     <!-- TRENDING SECTION -->
     <section class="movie-section">
