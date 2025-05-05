@@ -35,7 +35,7 @@ onMounted(() => {
 
   <!-- TRENDING SECTION -->
   <section class="movieSection">
-    <h2>TRENDING</h2>
+    <h2 id="headerText">TRENDING</h2>
     <div class="movieRow">
       <MovieCard 
       v-for="movie in trendingMovies.slice(0, 6)"
@@ -48,7 +48,7 @@ onMounted(() => {
 
   <!-- IN THEATERS -->
   <section class="movieSection">
-    <h2>IN THEATERS</h2>
+    <h2 id="headerText">IN THEATERS</h2>
     <div class="movieRow">
       <MovieCard 
       v-for="movie in nowPlayingMovies.slice(0, 6)"
@@ -69,7 +69,13 @@ onMounted(() => {
   text-align: center;
   margin-top: 80px;
   margin-bottom: 80px;
-  font-size: 1.1em;
+  font-size: 48px;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+#headerText {
+  font-size: 30px;
+  font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
 .movieSection {
