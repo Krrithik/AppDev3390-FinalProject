@@ -5,6 +5,9 @@ import MovieModal from '@/components/MovieModal.vue'
 import { supabase } from '@/supabase/supabase.init'
 import { watch } from "vue"
 
+import { useLikes } from '@/composables/useLikes'
+const { checkLikeStatus, toggleLike, fetchUserLikes } = useLikes()
+
 const showModal = ref(false)
 const selectedMovie = ref(null)
 
@@ -12,6 +15,9 @@ const reviews = ref([])
 const reviewInput = ref('')
 const submitting = ref(false)
 const user = ref(null)
+
+const isLiked = ref(false)
+const liking = ref(false)
 
 const trendingMovies = ref([])
 const nowPlayingMovies = ref([])
@@ -78,12 +84,28 @@ async function submitReview() {
   }
 }
 
+// Add like handler
+async function handleLike() {
+  if (!user.value) return
+  liking.value = true
+  isLiked.value = await toggleLike(selectedMovie.value)
+  liking.value = false
+}
 
 watch(selectedMovie, (movie) => {
   if (movie && movie.id) {
     fetchReviews(movie.id)
   }
 })
+
+// Add this watch
+watch(selectedMovie, async (movie) => {
+  if (movie && movie.id) {
+    fetchReviews(movie.id)
+    isLiked.value = await checkLikeStatus(movie.id)
+  }
+})
+
 
 onMounted(() => {
   fetchMovies('trending/movie/week', trendingMovies)
@@ -142,6 +164,19 @@ onMounted(() => {
     />
     <p><strong>Release:</strong> {{ selectedMovie.release_date }}</p>
     <p><strong>Description:</strong> {{ selectedMovie.overview }}</p>
+
+    <!-- like section -->
+<div class="review-input-bar">
+  <!-- ... existing review input ... -->
+  <button 
+    @click="handleLike" 
+    class="like-btn"
+    :disabled="liking"
+    :class="{ 'liked': isLiked }"
+  >
+    {{ isLiked ? '❤️ Liked' : '🤍 Like' }}
+  </button>
+</div>
 
     <!-- Scrollable Reviews Section -->
     <div class="reviews-section">
@@ -296,5 +331,29 @@ onMounted(() => {
 .review-submit-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+
+.like-btn {
+  background: #e50914;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.like-btn:hover:not(:disabled) {
+  transform: scale(1.05);
+}
+
+.like-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.like-btn.liked {
+  background: #4caf50;
 }
 </style>
