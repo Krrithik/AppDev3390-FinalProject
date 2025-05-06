@@ -46,24 +46,27 @@ async function handleLogin() {
 .loginWrapper {
    display: flex;
    flex-direction: column;
-   align-items: center;
    justify-content: center;
+   align-items: center;
    height: 100vh;
    background-color: white;
    padding: 40px;
-   border-radius: 8px;
-   width: 100%;
    gap: 20px;
 }
 
 .loginBar {
+   background-color: black;
+   padding: 40px;
+   border-radius: 8px;
+   width: 100%;
+   max-width: 400px;
    display: flex;
    flex-direction: column;
-   background-color: black;
-   padding: 20px;
-   border-radius: 6px;
-   gap: 10px;
-   box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+   gap: 20px;
+   box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
+   justify-content: center;
+   align-items: center;
+   text-align: center;
 }
 
 .formTitle {
@@ -74,17 +77,13 @@ async function handleLogin() {
 }
 
 .loginInput {
-   background-color: #dce6f0;
-   border: none;
-   padding: 10px 12px;
-   border-radius: 4px;
-   font-size: 1rem;
-   width: 200px;
    padding: 12px;
    border-radius: 4px;
    border: none;
    font-size: 1rem;
    background-color: #dce6f0;
+   width: 376px;
+
 }
 
 .loginInput:focus {
@@ -100,6 +99,7 @@ async function handleLogin() {
    font-weight: bold;
    font-size: 1rem;
    cursor: pointer;
+   width: 400px;
    transition: background-color 0.3s ease;
 }
 
