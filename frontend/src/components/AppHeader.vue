@@ -13,13 +13,13 @@ const { user } = useAuth();
     </nav>
 
     <nav class="nav">
-      <RouterLink v-if="!user" to="/login">Login</RouterLink>
-      <RouterLink v-if="!user" to="/signup">Signup</RouterLink>
-      <RouterLink v-if="user" to="/">Home</RouterLink>
-      <RouterLink v-if="user" to="/diary">Diary</RouterLink>
-      <RouterLink v-if="user" to="/likes">Likes</RouterLink>
-      <RouterLink  v-if="user" to="/profile">Profile</RouterLink>
-      <RouterLink v-if="user" to="/about">About</RouterLink>
+      <RouterLink v-if="!user" to="/login" class="links">Login</RouterLink>
+      <RouterLink v-if="!user" to="/signup" class="links">Signup</RouterLink>
+      <RouterLink v-if="user" to="/" class="links">Home</RouterLink>
+      <RouterLink v-if="user" to="/diary" class="links">Diary</RouterLink>
+      <RouterLink v-if="user" to="/likes" class="links">Likes</RouterLink>
+      <RouterLink v-if="user" to="/profile" class="links">Profile</RouterLink>
+      <RouterLink v-if="user" to="/about" class="links">About</RouterLink>
 
       <div class="searchWrapper">
         <input type="text" placeholder="Search... " class="search" />
@@ -73,7 +73,8 @@ const { user } = useAuth();
 
 .search {
   width: 100%;
-  padding: 8px 36px 8px 12px; /* room for icon on right */
+  padding: 8px 36px 8px 12px;
+  /* room for icon on right */
   border: 2px solid black;
   font-size: 1rem;
   border-radius: 18px;
@@ -88,5 +89,16 @@ const { user } = useAuth();
   width: 18px;
   height: 18px;
   color: #bbb;
+}
+
+.links {
+  text-decoration: none;
+  color: #444;
+  cursor: pointer;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.links:hover {
+  color: #209CE6;
 }
 </style>
