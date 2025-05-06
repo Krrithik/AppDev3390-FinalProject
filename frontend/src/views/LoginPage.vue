@@ -146,6 +146,12 @@ async function handleLogin() {
    cursor: pointer;
 }
 
+.dontAccount:hover {
+   transform: scale(1.05);
+   text-shadow: 0 0 15px white, 0 0 25px #209CE6;
+   transition: all 0.3s ease;
+}
+
 .errorMsg {
    color: #ff6b6b;
    text-align: center;
