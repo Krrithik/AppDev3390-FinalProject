@@ -37,6 +37,10 @@ async function handleLogin() {
          <button :disabled="loading" class="loginButton">
             {{ loading ? 'Logging in...' : 'LOGIN' }}
          </button>
+         <h2 class="redirectHeader">Don't have an account?</h2>
+         <RouterLink v-if="!user" to="/signup" class="links">
+         <h3 class="dontAccount">Create an account</h3>
+         </RouterLink>
       </form>
       <p v-if="errorMsg" class="errorMsg">{{ errorMsg }}</p>
    </div>
@@ -105,6 +109,17 @@ async function handleLogin() {
 
 .loginButton:hover {
    background-color: #1b7641;
+}
+
+.redirectHeader{
+   color: gray;
+   height: 1px;
+}
+
+.dontAccount {
+   color: #209CE6;
+   text-decoration: none;
+   cursor: pointer;
 }
 
 .errorMsg {
