@@ -80,11 +80,10 @@ async function handleSignup() {
 .signupWrapper {
   display: flex;
   flex-direction: column;
-  justify-content: top;
-  padding-top: 20px;
+  justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: gray;
+  background-color: white;
 }
 
 .signupForm {

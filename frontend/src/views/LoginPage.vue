@@ -31,6 +31,7 @@ async function handleLogin() {
 <template>
    <div class="loginWrapper">
       <form class="loginBar" @submit.prevent="handleLogin">
+         <h1 class="formTitle">Login Appname</h1>
          <input v-model="email" type="email" placeholder="Email" required class="loginInput" />
          <input v-model="password" type="password" placeholder="Password" required class="loginInput" />
          <button :disabled="loading" class="loginButton">
@@ -46,19 +47,30 @@ async function handleLogin() {
    display: flex;
    flex-direction: column;
    align-items: center;
-   margin-top: 20px;
-   justify-content: top;
+   justify-content: center;
    height: 100vh;
    background-color: white;
+   padding: 40px;
+   border-radius: 8px;
+   width: 100%;
+   gap: 20px;
 }
 
 .loginBar {
    display: flex;
+   flex-direction: column;
    background-color: black;
    padding: 20px;
    border-radius: 6px;
    gap: 10px;
    box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+}
+
+.formTitle {
+   color: #ccc;
+   font-size: 1.5rem;
+   text-align: center;
+   margin-bottom: 10px;
 }
 
 .loginInput {
@@ -68,6 +80,11 @@ async function handleLogin() {
    border-radius: 4px;
    font-size: 1rem;
    width: 200px;
+   padding: 12px;
+   border-radius: 4px;
+   border: none;
+   font-size: 1rem;
+   background-color: #dce6f0;
 }
 
 .loginInput:focus {
