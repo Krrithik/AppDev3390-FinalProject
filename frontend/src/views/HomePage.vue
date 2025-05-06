@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import MovieCard from '@/components/MovieCard.vue';
+import MovieModal from '@/components/MovieModal.vue';
 
 const showModal = ref(false)
 const selectedMovie = ref(null)
@@ -72,23 +73,26 @@ onMounted(() => {
           :key="movie.id"
           :title="movie.title"
           :imgUrl="imgBaseUrl + movie.poster_path"
-          :releaseDate="movie.release_date" />
+          :releaseDate="movie.release_date"
+          @click="openModal(movie)"
+          />
     </div>
   </section>
 
 
   <!-- Modal -->
-  <div v-if="showModal" class="modal-backdrop" @click.self="closeModal">
-    <div class="modal-content">
-      <button class="close-btn" @click="closeModal">×</button>
+<MovieModal v-if="showModal" @close="closeModal">
+
+  <template #default>
       <h2>{{ selectedMovie.title }}</h2>
       <img :src="imgBaseUrl + selectedMovie.poster_path" :alt="selectedMovie.title" style="width:150px;"/>
       <p><strong>Release:</strong> {{ selectedMovie.release_date }}</p>
       <p><strong>Description:</strong> {{ selectedMovie.overview }}</p>
       <textarea v-model="reviewInput" placeholder="Write your review here..." style="width:100%;margin:10px 0;"></textarea>
       <button @click="handleLike" class="like-btn">❤️ Like & Save</button>
-    </div>
-  </div>
+    </template>
+</MovieModal>
+
 
   
 </template>
