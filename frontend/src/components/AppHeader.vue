@@ -19,8 +19,7 @@ const { user } = useAuth();
       <RouterLink v-if="user" to="/diary" class="links">Diary</RouterLink>
       <RouterLink v-if="user" to="/likes" class="links">Likes</RouterLink>
       <RouterLink v-if="user" to="/profile" class="links">Profile</RouterLink>
-      <RouterLink v-if="!user" to="/about" class="links">About</RouterLink>
-      <RouterLink v-if="user" to="/about" class="links">About</RouterLink>
+      <RouterLink to="/about" class="links">About</RouterLink>
 
       <div class="searchWrapper">
         <input type="text" placeholder="Search... " class="search" />
