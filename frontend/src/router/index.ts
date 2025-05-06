@@ -6,6 +6,7 @@ import DiaryPage from '@/views/DiaryPage.vue'
 import LoginPage from '@/views/LoginPage.vue'
 import SignupPage from '@/views/SignupPage.vue'
 import { supabase } from '@/supabase/supabase.init'
+import SearchPage from '@/views/SearchPage.vue'
 
 
 const router = createRouter({
@@ -48,6 +49,11 @@ const router = createRouter({
       path: '/signup',
       name: 'signup',
       component: SignupPage,
+    },
+    {
+      path: '/search',
+      name: 'search',
+      component: SearchPage
     }
   ],
 })
