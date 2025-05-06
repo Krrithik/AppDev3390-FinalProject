@@ -37,3 +37,7 @@ async function handleLogin(){
     <p v-if="errorMsg" style="color: red">{{ errorMsg }}</p>
   </form>
 </template>
+
+<style scoped>
+
+</style>
