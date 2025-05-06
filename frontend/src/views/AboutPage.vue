@@ -1,5 +1,5 @@
 <script setup>
-//NO FUNCTIONALITY YET
+//NO FUNCTIONALITY NEEDED
 </script>
 
 <template>
