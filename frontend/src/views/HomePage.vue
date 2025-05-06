@@ -77,7 +77,7 @@ onMounted(() => {
   </section>
 
 
-  <!-- Modal -->
+  <!-- MODAL -->
   <div v-if="showModal" class="modal-backdrop" @click.self="closeModal">
     <div class="modal-content">
       <button class="close-btn" @click="closeModal">×</button>
@@ -140,4 +140,5 @@ onMounted(() => {
   box-shadow: 0 0 15px #A696C8, 0 0 25px #A696C8; 
   transition: all 0.3s ease; 
 } 
+
 </style>
