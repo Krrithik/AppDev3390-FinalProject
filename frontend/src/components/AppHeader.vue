@@ -96,6 +96,7 @@ const { user } = useAuth();
   color: #444;
   cursor: pointer;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 18px;
 }
 
 .links:hover {
