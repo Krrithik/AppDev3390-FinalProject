@@ -32,14 +32,23 @@ async function handleLogin() {
    <div class="loginWrapper">
       <form class="loginBar" @submit.prevent="handleLogin">
          <h1 class="formTitle">Login Appname</h1>
-         <input v-model="email" type="email" placeholder="Email" required class="loginInput" />
-         <input v-model="password" type="password" placeholder="Password" required class="loginInput" />
+
+         <div class="inputGroup">
+            <label for="email" class="inputLabel">Email</label>
+            <input v-model="email" type="email" placeholder="Email" required class="loginInput" />
+         </div>
+
+         <div class="inputGroup">
+            <label for="password" class="inputLabel">Password</label>
+            <input v-model="password" type="password" placeholder="Password" required class="loginInput" />
+         </div>
+
          <button :disabled="loading" class="loginButton">
             {{ loading ? 'Logging in...' : 'LOGIN' }}
          </button>
          <h2 class="redirectHeader">Don't have an account?</h2>
          <RouterLink v-if="!user" to="/signup" class="links">
-         <h3 class="dontAccount">Create an account</h3>
+            <h3 class="dontAccount">Create an account</h3>
          </RouterLink>
       </form>
       <p v-if="errorMsg" class="errorMsg">{{ errorMsg }}</p>
@@ -80,6 +89,21 @@ async function handleLogin() {
    margin-bottom: 10px;
 }
 
+.inputGroup {
+   display: flex;
+   flex-direction: column;
+   align-items: flex-start;
+   width: 100%;
+   max-width: 400px;
+}
+
+.inputLabel {
+   color: white;
+   margin-bottom: 5px;
+   font-size: 0.95rem;
+   font-weight: 500;
+}
+
 .loginInput {
    padding: 12px;
    border-radius: 4px;
@@ -111,7 +135,7 @@ async function handleLogin() {
    background-color: #1b7641;
 }
 
-.redirectHeader{
+.redirectHeader {
    color: gray;
    height: 1px;
 }
