@@ -106,14 +106,8 @@ onMounted(() => {
   <section class="movieSection">
     <h2 id="headerText">TRENDING</h2>
     <div class="movieRow">
-      <MovieCard
-        v-for="movie in trendingMovies.slice(0, 6)"
-        :key="movie.id"
-        :title="movie.title"
-        :imgUrl="imgBaseUrl + movie.poster_path"
-        :releaseDate="movie.release_date"
-        @click="openModal(movie)"
-      />
+      <MovieCard v-for="movie in trendingMovies.slice(0, 6)" :key="movie.id" :title="movie.title"
+        :imgUrl="imgBaseUrl + movie.poster_path" :releaseDate="movie.release_date" @click="openModal(movie)" />
     </div>
   </section>
 
@@ -121,25 +115,15 @@ onMounted(() => {
   <section class="movieSection">
     <h2 id="headerText">IN THEATERS</h2>
     <div class="movieRow">
-      <MovieCard
-        v-for="movie in nowPlayingMovies.slice(0, 6)"
-        :key="movie.id"
-        :title="movie.title"
-        :imgUrl="imgBaseUrl + movie.poster_path"
-        :releaseDate="movie.release_date"
-        @click="openModal(movie)"
-      />
+      <MovieCard v-for="movie in nowPlayingMovies.slice(0, 6)" :key="movie.id" :title="movie.title"
+        :imgUrl="imgBaseUrl + movie.poster_path" :releaseDate="movie.release_date" @click="openModal(movie)" />
     </div>
   </section>
 
   <!-- Modal -->
   <MovieModal v-if="showModal" @close="closeModal">
     <h2>{{ selectedMovie.title }}</h2>
-    <img
-      :src="imgBaseUrl + selectedMovie.poster_path"
-      :alt="selectedMovie.title"
-      class="modal-poster"
-    />
+    <img :src="imgBaseUrl + selectedMovie.poster_path" :alt="selectedMovie.title" class="modal-poster" />
     <p><strong>Release:</strong> {{ selectedMovie.release_date }}</p>
     <p><strong>Description:</strong> {{ selectedMovie.overview }}</p>
 
@@ -157,18 +141,9 @@ onMounted(() => {
 
     <!-- Review Input Fixed at Bottom -->
     <div class="review-input-bar">
-      <input
-        v-model="reviewInput"
-        :disabled="submitting"
-        class="review-input"
-        placeholder="Write your review..."
-        @keyup.enter="submitReview"
-      />
-      <button
-        @click="submitReview"
-        :disabled="submitting || !reviewInput.trim()"
-        class="review-submit-btn"
-      >
+      <input v-model="reviewInput" :disabled="submitting" class="review-input" placeholder="Write your review..."
+        @keyup.enter="submitReview" />
+      <button @click="submitReview" :disabled="submitting || !reviewInput.trim()" class="review-submit-btn">
         Send
       </button>
     </div>
@@ -220,10 +195,9 @@ onMounted(() => {
 .movieBox:hover {
   /* THIS IS COMPIED FROM MY 2650 PROJ, CHANGE COLORS LATER */
   transform: scale(1.05);
-  box-shadow:
-    0 0 15px #a696c8,
-    0 0 25px #a696c8;
+  box-shadow: 0 0 15px #a696c8, 0 0 25px #a696c8;
   transition: all 0.3s ease;
+  cursor: pointer;
 }
 
 .modal-poster {
@@ -231,6 +205,7 @@ onMounted(() => {
   border-radius: 6px;
   margin-bottom: 12px;
 }
+
 .reviews-section {
   margin: 16px 0 0 0;
   max-height: 180px;
@@ -239,11 +214,13 @@ onMounted(() => {
   border-radius: 6px;
   padding: 12px;
 }
+
 .reviews-list {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
+
 .review-item {
   background: #252525;
   border-radius: 4px;
@@ -251,31 +228,37 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
 }
+
 .review-user {
   font-size: 0.93em;
   font-weight: bold;
   color: #ffb700;
   margin-bottom: 2px;
 }
+
 .review-text {
   font-size: 1em;
   color: #eee;
 }
+
 .reviews-empty {
   color: #bbb;
   font-size: 0.98em;
   text-align: center;
 }
+
 .review-input-bar {
   position: sticky;
   bottom: 0;
-  left: 0; right: 0;
+  left: 0;
+  right: 0;
   background: #181818;
   padding: 10px 0 0 0;
   display: flex;
   gap: 8px;
   align-items: center;
 }
+
 .review-input {
   flex: 1 1 auto;
   padding: 8px 10px;
@@ -284,6 +267,7 @@ onMounted(() => {
   font-size: 1em;
   outline: none;
 }
+
 .review-submit-btn {
   background: #4caf50;
   color: #fff;
@@ -293,6 +277,7 @@ onMounted(() => {
   cursor: pointer;
   font-size: 1em;
 }
+
 .review-submit-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
