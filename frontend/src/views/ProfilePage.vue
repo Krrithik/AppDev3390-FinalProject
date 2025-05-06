@@ -5,13 +5,12 @@ import { useRouter } from 'vue-router'
 
 const router = useRouter()
 
-const profileUser = ref('');
+const profileUser = ref(null);
 const sessionData = ref(null);
 
 async function getUserForProfile() {
   const { data: { user } } = await supabase.auth.getUser();
-  const fullName = user?.user_metadata?.fullName || '';
-  return fullName;
+  return user || null;
 }
 
 async function seeCurrentUser() {
@@ -49,7 +48,7 @@ async function handleLogout() {
       <!-- USER INFO -->
       <div class="formGroup">
         <label class="formLabel">Full Name</label>
-        <div class="formValue">{{ profileUser }}</div>
+        <div class="formValue">{{ profileUser?.user_metadata?.fullName }}</div>
       </div>
 
       <div class="formGroup">
@@ -62,7 +61,7 @@ async function handleLogout() {
 
       <div class="accountInfoRow">
         <span class="infoLabel">Member Since</span>
-        <span class="infoValue">Ask Krrithik</span> <!-- ASK KRRITHIK -->
+        <span class="infoValue">{{ profileUser?.created_at ? new Date(profileUser.created_at).toLocaleDateString() : '' }}</span> <!-- ASK KRRITHIK -->
       </div>
 
       <div class="accountInfoRow">
