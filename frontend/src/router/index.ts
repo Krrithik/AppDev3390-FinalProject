@@ -54,7 +54,7 @@ const router = createRouter({
 
 
 // List of routes that don't require authentication
-const publicPages = ['/login', '/signup']
+const publicPages = ['/login', '/signup', '/about']
 
 router.beforeEach(async (to, from, next) => {
   const { data: { session } } = await supabase.auth.getSession()
