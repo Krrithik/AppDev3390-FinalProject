@@ -79,7 +79,9 @@ async function handleSignup() {
 <style scoped>
 .signupWrapper {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: top;
+  padding-top: 20px;
   align-items: center;
   height: 100vh;
   background-color: gray;
