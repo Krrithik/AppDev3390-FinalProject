@@ -1,7 +1,8 @@
 <script setup>
-// NOT DONE YET
+//NOT SETUP YET
 </script>
 
+<!-- USE ROW UNDER EDIT, AND MAYBE SCROLL IN THE SPACE OR JUST SCROLL THE PAGE, ASK KRITTHIK -->
 <template>
     <div class="diaryPage">
 
