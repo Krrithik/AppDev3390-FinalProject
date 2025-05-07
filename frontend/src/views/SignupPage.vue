@@ -65,9 +65,22 @@ async function handleSignup() {
   <div class="signupWrapper">
     <form class="signupForm" @submit.prevent="handleSignup">
       <h1 class="formTitle">Join Appname</h1>
-      <input v-model="fullName" type="text" placeholder="Full Name" required />
-      <input v-model="email" type="email" placeholder="Email Address" required />
-      <input v-model="password" type="password" placeholder="Create Password" required />
+
+      <div class="inputGroup">
+        <label for="text" class="inputLabel">Full Name</label>
+        <input v-model="fullName" type="text" placeholder="Full Name" required />
+      </div>
+
+      <div class="inputGroup">
+        <label for="email" class="inputLabel">Email</label>
+        <input v-model="email" type="email" placeholder="Email Address" required />
+      </div>
+
+      <div class="inputGroup">
+        <label for="password" class="inputLabel">Password</label>
+        <input v-model="password" type="password" placeholder="Create Password" required />
+      </div>
+
       <button :disabled="loading">
         {{ loading ? 'Signing up...' : 'Sign Up' }}
       </button>
@@ -103,6 +116,18 @@ async function handleSignup() {
   font-size: 1.5rem;
   text-align: center;
   margin-bottom: 10px;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.inputLabel {
+  color: white;
+  margin-bottom: 5px;
+  font-size: 0.95rem;
+  font-weight: 500;
 }
 
 .signupForm input {
