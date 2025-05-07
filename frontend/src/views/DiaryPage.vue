@@ -1,134 +1,80 @@
 <script setup>
-// NOT DONE YET
+import { ref, onMounted } from 'vue'
+import { supabase } from '@/supabase/supabase.init'
+import DataTable from 'primevue/datatable'
+import Column from 'primevue/column'
+import Button from 'primevue/button'
+import Tag from 'primevue/tag'
+import Rating from 'primevue/rating'
+
+// Helper to format date
+function formatDate(dateString) {
+  const date = new Date(dateString)
+  return date.toLocaleDateString()
+}
+
+const products = ref([])
+
+async function fetchLikedMovies() {
+  // Get current user
+  const { data: { session } } = await supabase.auth.getSession()
+  const user = session?.user
+  if (!user) return
+
+  // Fetch likes with movie details
+  const { data, error } = await supabase
+    .from('likes')
+    .select(`
+      liked_at,
+      movies (
+        id,
+        title,
+        image
+      )
+    `)
+    .eq('user_id', user.id)
+
+  if (error) {
+    console.error(error)
+    return
+  }
+
+  // Map to table format
+  products.value = data.map(like => ({
+    title: like.movies.title,
+    image: like.movies.image,
+    liked_at: like.liked_at
+  }))
+}
+
+onMounted(fetchLikedMovies)
 </script>
 
 <template>
-    <div class="diaryPage">
-
-        <!-- TOP TABS -->
-        <div class="topTabs">
-            <span class="tab activeTab">Diary</span>
-            <span class="tab">Next Watch</span>
+    <DataTable :value="products" tableStyle="min-width: 50rem">
+      <template #header>
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <span class="text-xl font-bold">Liked Movies</span>
+          <Button icon="pi pi-refresh" rounded raised @click="fetchLikedMovies" />
         </div>
-
-        <!-- COLUMN HEADERS -->
-        <div class="diaryHeaders">
-            <span>Month</span>
-            <span>Day</span>
-            <span>Film</span>
-            <span>Released</span>
-            <span>Rating</span>
-            <span>Like</span>
-            <span>Review</span>
-            <span>Edit</span>
-        </div>
-
-        <!-- ENTRY 1 -->
-        <div class="diaryEntry">
-            <span class="month">MAY 2025</span>
-            <span class="day">04</span>
-            <div class="film">
-                <img src="/toyStoryForMockup.jpg" alt="Poster" />
-                <span class="title">Toy Story 3</span>
-            </div>
-            <span class="released">2010</span>
-            <span class="rating">★★★★½</span>
-            <span class="like">❤️</span>
-            <span class="review">📝</span>
-            <span class="edit">✏️</span>
-        </div>
-
-        <!-- ENTRY 2 -->
-        <div class="diaryEntry">
-            <span class="month">APR 2025</span>
-            <span class="day">11</span>
-            <div class="film">
-                <img src="/toyStoryForMockup.jpg" alt="Poster" />
-                <span class="title">Toy Story 3</span>
-            </div>
-            <span class="released">2010</span>
-            <span class="rating">★★★★½</span>
-            <span class="like">❤️</span>
-            <span class="review">📝</span>
-            <span class="edit">✏️</span>
-        </div>
-    </div>
-</template>
+      </template>
+      <Column field="title" header="Movie Title"></Column>
+      <Column header="Image">
+        <template #body="slotProps">
+          <img :src="slotProps.data.image" :alt="slotProps.data.title" class="w-24 rounded" />
+        </template>
+      </Column>
+      <Column field="liked_at" header="Liked At">
+        <template #body="slotProps">
+          {{ formatDate(slotProps.data.liked_at) }}
+        </template>
+      </Column>
+      <template #footer>
+        In total there are {{ products ? products.length : 0 }} liked movies.
+      </template>
+    </DataTable>
+  </template>
 
 <style scoped>
-.diaryPage {
-    padding: 40px;
-    font-family: sans-serif;
-    background-color: white;
-    color: #111;
-}
 
-.topTabs {
-    display: flex;
-    gap: 20px;
-    padding-bottom: 10px;
-    margin-bottom: 40px;
-    border-bottom: 1px solid #bbb;
-}
-
-.tab {
-    padding: 8px 16px;
-    background-color: #333;
-    color: white;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.activeTab {
-    background-color: #555;
-    font-weight: bold;
-}
-
-/* Grid structure */
-.diaryHeaders {
-    display: grid;
-    grid-template-columns: 80px 60px 1fr 80px 100px 60px 60px 60px;
-    align-items: center;
-    padding: 12px 0;
-    gap: 10px;
-    border-bottom: 1px solid #aaa;
-}
-
-.diaryEntry {
-    display: grid;
-    grid-template-columns: 80px 60px 1fr 80px 100px 60px 60px 60px;
-    align-items: center;
-    padding: 12px 0;
-    gap: 10px;
-    border-bottom: 1px solid #aaa;
-}
-
-.diaryEntry span {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.film {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.film img {
-    width: 40px;
-    height: 60px;
-    border-radius: 4px;
-    object-fit: cover;
-    display: block;
-}
-
-.title {
-    font-weight: bold;
-    font-size: 1rem;
-    line-height: 1;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
 </style>
