@@ -2,11 +2,14 @@
 import { ref } from 'vue'
 import { supabase } from '@/supabase/supabase.init'
 import { useRouter } from 'vue-router'
+import { Eye } from 'lucide-vue-next'
+import { EyeOff } from 'lucide-vue-next'
 
 const router = useRouter()
 
 const email = ref('')
 const password = ref('')
+const showPassword = ref(false)
 const errorMsg = ref('')
 const loading = ref(false)
 
@@ -40,7 +43,14 @@ async function handleLogin() {
 
          <div class="inputGroup">
             <label for="password" class="inputLabel">Password</label>
-            <input v-model="password" type="password" placeholder="Password" required class="loginInput" />
+            <div class="passwordInputWrapper">
+               <input v-model="password" :type="showPassword ? 'text' : 'password'" placeholder="Password" required
+                  autocomplete="current-password" class="loginInput" />
+               <button type="button" class="toggleEye" @click="showPassword = !showPassword">
+                  <EyeOff v-if="!showPassword" />
+                  <Eye v-else />
+               </button>
+            </div>
          </div>
 
          <button :disabled="loading" class="loginButton">
@@ -104,14 +114,40 @@ async function handleLogin() {
    font-weight: 500;
 }
 
+.passwordInputWrapper {
+   position: relative;
+   width: 100%;
+}
+
 .loginInput {
    padding: 12px;
    border-radius: 4px;
    border: none;
    font-size: 1rem;
    background-color: #dce6f0;
-   width: 376px;
+   width: 100%;
+   box-sizing: border-box;
+}
 
+.passwordInputWrapper .loginInput {
+   padding-right: 40px;
+}
+
+.toggleEye svg {
+   width: 20px;
+   height: 20px;
+}
+
+.toggleEye {
+   position: absolute;
+   right: 10px;
+   top: 50%;
+   transform: translateY(-50%);
+   background: none;
+   border: none;
+   padding: 0;
+   cursor: pointer;
+   color: #444;
 }
 
 .loginInput:focus {

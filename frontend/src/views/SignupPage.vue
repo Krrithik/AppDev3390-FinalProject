@@ -2,11 +2,13 @@
 import { ref } from 'vue'
 import { supabase } from '@/supabase/supabase.init'
 import { useRouter } from 'vue-router'
-
+import { Eye } from 'lucide-vue-next'
+import { EyeOff } from 'lucide-vue-next'
 const router = useRouter()
 
 const email = ref('')
 const password = ref('')
+const showPassword = ref(false)
 const fullName = ref('')
 const errorMsg = ref('')
 const loading = ref(false)
@@ -78,10 +80,17 @@ async function handleSignup() {
 
       <div class="inputGroup">
         <label for="password" class="inputLabel">Password</label>
-        <input v-model="password" type="password" placeholder="Create Password" required />
+        <div class="passwordInputWrapper">
+          <input v-model="password" :type="showPassword ? 'text' : 'password'" placeholder="Create Password" required
+            class="loginInput" />
+          <button type="button" class="toggleEye" @click="showPassword = !showPassword">
+            <EyeOff v-if="!showPassword" />
+            <Eye v-else />
+          </button>
+        </div>
       </div>
 
-      <button :disabled="loading">
+      <button :disabled="loading" class="signUpButton">
         {{ loading ? 'Signing up...' : 'Sign Up' }}
       </button>
       <p v-if="errorMsg" class="errorMsg">{{ errorMsg }}</p>
@@ -130,6 +139,42 @@ async function handleSignup() {
   font-weight: 500;
 }
 
+.loginInput {
+  padding: 12px;
+  border-radius: 4px;
+  border: none;
+  font-size: 1rem;
+  background-color: #dce6f0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.passwordInputWrapper {
+  position: relative;
+  width: 100%;
+}
+
+.passwordInputWrapper .loginInput {
+  padding-right: 40px;
+}
+
+.toggleEye svg {
+  width: 20px;
+  height: 20px;
+}
+
+.toggleEye {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: #444;
+}
+
 .signupForm input {
   padding: 12px;
   border-radius: 4px;
@@ -142,7 +187,7 @@ async function handleSignup() {
   outline: 2px solid #a696c8;
 }
 
-.signupForm button {
+.signUpButton {
   background-color: #27ae60;
   color: white;
   border: none;
@@ -154,7 +199,7 @@ async function handleSignup() {
   transition: background-color 0.3s ease;
 }
 
-.signupForm button:hover {
+.signUpButton:hover {
   background-color: #1b7641;
 }
 
