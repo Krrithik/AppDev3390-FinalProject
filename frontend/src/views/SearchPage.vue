@@ -2,6 +2,7 @@
 import { ref, watch, onMounted } from 'vue'
 import { supabase } from '@/supabase/supabase.init'
 import { useLikes } from '@/composables/useLikes'
+import { Search } from 'lucide-vue-next'
 import MovieModal from '@/components/MovieModal.vue'
 
 const { checkLikeStatus, toggleLike } = useLikes()
@@ -120,8 +121,11 @@ onMounted(() => {
 
     <!-- SEARCH BAR -->
     <div class="searchBarWrapper">
-      <input type="text" v-model="searchQuery" @input="searchMovies" class="searchInput"
-        placeholder="Search for a movie..." />
+      <div class="searchInputContainer">
+        <input type="text" v-model="searchQuery" @input="searchMovies" class="searchInput"
+          placeholder="Search for a movie..." />
+        <Search class="searchIcon" />
+      </div>
     </div>
 
     <!-- MOVIE ON LEFT -->
@@ -135,7 +139,8 @@ onMounted(() => {
           <h2 class="resultTitle">{{ movie.title }}</h2>
           <p class="resultYear">{{ movie.release_date }}</p>
           <p class="resultOverview">
-            {{ movie.overview || 'No description given, this may be due to unavailability or an error on our part..' }}
+            {{ movie.overview || 'No description given, this may be due to unavailability or an error on our part..'
+            }}
           </p>
         </div>
       </div>
@@ -199,10 +204,16 @@ onMounted(() => {
   margin-bottom: 2rem;
 }
 
+.searchInputContainer {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+}
+
 .searchInput {
   width: 100%;
   max-width: 500px;
-  padding: 12px 16px;
+  padding: 12px 40px 12px 16px;
   font-size: 1rem;
   border-radius: 20px;
   border: 2px solid black;
