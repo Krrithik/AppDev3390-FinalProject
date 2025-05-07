@@ -1,11 +1,15 @@
 <script setup>
-import { ref, watch, onMounted } from 'vue'
-import { supabase } from '@/supabase/supabase.init'
-import { useLikes } from '@/composables/useLikes'
+import { ref, watch } from 'vue'
 import MovieCard from '@/components/MovieCard.vue'
 import MovieModal from '@/components/MovieModal.vue'
+import { supabase } from '@/supabase/supabase.init'
+import { useLikes } from '@/composables/useLikes'
+import { Search } from 'lucide-vue-next'
+
 const { checkLikeStatus, toggleLike } = useLikes()
 
+const query = ref('')
+const searchResults = ref([])
 const showModal = ref(false)
 const selectedMovie = ref(null)
 
@@ -20,41 +24,35 @@ const liking = ref(false)
 const imgBaseUrl = 'https://image.tmdb.org/t/p/w500'
 const apiKey = import.meta.env.VITE_TMDB_API_KEY
 
-const searchQuery = ref('')
-const searchResults = ref([])
-
-async function searchMovies() {
-  if (!searchQuery.value.trim()) {
-    searchResults.value = []
-    return
-  }
-
-  try {
-    const response = await fetch(
-      `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&language=en-US&query=${encodeURIComponent(searchQuery.value)}&page=1&include_adult=false`,
-    )
-    const responseData = await response.json()
-    searchResults.value = (responseData.results || []).slice(0, 15)
-    console.log(searchResults)
-  } catch (error) {
-    window.alert('Search failed: ', error)
-    console.error('Search failed:', error)
-    searchResults.value = []
-  }
-}
-
+// Fetch user info
 async function fetchUser() {
-  const {
-    data: { user: currentUser },
-  } = await supabase.auth.getUser()
+  const { data: { user: currentUser } } = await supabase.auth.getUser()
   user.value = currentUser
 }
 
+// Search movies from TMDB
+async function searchMovies() {
+  if (!query.value.trim()) {
+    searchResults.value = []
+    return
+  }
+  try {
+    const res = await fetch(
+      `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&language=en-US&query=${encodeURIComponent(query.value)}&page=1&include_adult=false`
+    )
+    const data = await res.json()
+    searchResults.value = (data.results || []).slice(0, 15)
+  } catch (err) {
+    console.error('Search failed:', err)
+    searchResults.value = []
+  }
+}
+
+// Modal logic
 function openModal(movie) {
   selectedMovie.value = movie
   showModal.value = true
 }
-
 function closeModal() {
   showModal.value = false
   selectedMovie.value = null
@@ -63,7 +61,7 @@ function closeModal() {
 
 // Fetch reviews for a movie
 async function fetchReviews(movieId) {
-  const { data, error } = await supabase
+  const { data } = await supabase
     .from('reviews')
     .select('*')
     .eq('movie_id', movieId)
@@ -90,7 +88,7 @@ async function submitReview() {
   }
 }
 
-// Add like handler
+// Like handler
 async function handleLike() {
   if (!user.value) return
   liking.value = true
@@ -98,8 +96,7 @@ async function handleLike() {
   liking.value = false
 }
 
-
-// Add this watch
+// Watch for modal open to fetch reviews and like status
 watch(selectedMovie, async (movie) => {
   if (movie && movie.id) {
     fetchReviews(movie.id)
@@ -107,31 +104,28 @@ watch(selectedMovie, async (movie) => {
   }
 })
 
-onMounted(() => {
-  fetchUser()
-})
+// Fetch user on mount
+fetchUser()
 </script>
 
 <template>
-  <div class="search-page">
-    <h1>Search Page</h1>
-
-    <div class="searchBar-wrapper">
+  <main class="searchPage">
+    <h1 class="searchTitle">Search Movies</h1>
+    <div class="searchBarWrapper">
       <input
-        type="text"
-        v-model="searchQuery"
+        v-model="query"
         @input="searchMovies"
-        class="search-input"
+        type="text"
+        class="searchInput"
         placeholder="Search for a movie..."
       />
+      <span class="searchIcon">
+        <Search />
+      </span>
     </div>
-
-    <p v-for="movie in searchResults" :key="movie.id">
-      {{ movie.title }}
-    </p>
-
-    <section class="search-results-section">
-      <div class="movieRow">
+    <section class="resultsSection">
+      <div v-if="searchResults.length === 0 && query" class="noResults">No results found.</div>
+      <div v-else class="movieRow">
         <MovieCard
           v-for="movie in searchResults"
           :key="movie.id"
@@ -142,7 +136,6 @@ onMounted(() => {
         />
       </div>
     </section>
-
 
     <!-- Modal (same as homepage) -->
     <MovieModal v-if="showModal" @close="closeModal">
@@ -193,7 +186,164 @@ onMounted(() => {
         </button>
       </div>
     </MovieModal>
-  </div>
+  </main>
 </template>
 
-<style></style>
+<style scoped>
+.searchPage {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 24px;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+}
+
+.searchTitle {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 24px;
+  color: #222;
+  text-align: center;
+}
+
+.searchBarWrapper {
+  position: relative;
+  width: 100%;
+  margin-bottom: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.searchInput {
+  width: 100%;
+  max-width: 400px;
+  padding: 10px 38px 10px 14px;
+  border: 2px solid #209CE6;
+  border-radius: 18px;
+  font-size: 1.1rem;
+  outline: none;
+  background: #f9f9f9;
+  transition: border 0.2s;
+}
+.searchInput:focus {
+  border: 2px solid #0a7ac7;
+}
+
+.searchIcon {
+  position: absolute;
+  right: 22px;
+  color: #209CE6;
+  pointer-events: none;
+}
+
+.resultsSection {
+  margin-top: 24px;
+}
+
+.noResults {
+  text-align: center;
+  color: #aaa;
+  font-size: 1.2rem;
+  margin-top: 32px;
+}
+
+.movieRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  justify-content: center;
+}
+
+.modal-poster {
+  display: block;
+  margin: 0 auto 16px auto;
+  width: 220px;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+
+.review-input-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 18px 0;
+}
+
+.like-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #209CE6;
+  transition: color 0.2s;
+}
+.like-btn.liked {
+  color: #e63946;
+}
+
+.reviews-section {
+  margin: 18px 0;
+  max-height: 180px;
+  overflow-y: auto;
+  background: #f6f8fa;
+  border-radius: 10px;
+  padding: 10px 16px;
+}
+
+.reviews-empty {
+  color: #aaa;
+  font-style: italic;
+  text-align: center;
+  padding: 12px 0;
+}
+
+.reviews-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.review-item {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.review-user {
+  font-weight: bold;
+  color: #209CE6;
+  font-size: 1rem;
+}
+
+.review-text {
+  margin-left: 2px;
+  color: #222;
+  font-size: 1.04rem;
+}
+
+.review-input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1.5px solid #209CE6;
+  border-radius: 12px;
+  font-size: 1rem;
+}
+
+.review-submit-btn {
+  background: #209CE6;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 7px 18px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.review-submit-btn:disabled {
+  background: #b2d9f7;
+  cursor: not-allowed;
+}
+</style>
