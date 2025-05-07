@@ -2,47 +2,43 @@
 import { ref, watch, onMounted } from 'vue'
 import { supabase } from '@/supabase/supabase.init'
 import { useLikes } from '@/composables/useLikes'
-import MovieCard from '@/components/MovieCard.vue'
 import MovieModal from '@/components/MovieModal.vue'
+
 const { checkLikeStatus, toggleLike } = useLikes()
 
 const showModal = ref(false)
 const selectedMovie = ref(null)
-
 const reviews = ref([])
 const reviewInput = ref('')
 const submitting = ref(false)
 const user = ref(null)
-
 const isLiked = ref(false)
 const liking = ref(false)
-
 const imgBaseUrl = 'https://image.tmdb.org/t/p/w500'
 const apiKey = import.meta.env.VITE_TMDB_API_KEY
-
 const searchQuery = ref('')
 const searchResults = ref([])
 
+//LIVE SEARCHES
 async function searchMovies() {
   if (!searchQuery.value.trim()) {
     searchResults.value = []
     return
   }
-
   try {
     const response = await fetch(
-      `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&language=en-US&query=${encodeURIComponent(searchQuery.value)}&page=1&include_adult=false`,
+      `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&language=en-US&query=${encodeURIComponent(searchQuery.value)}&page=1&include_adult=false`
     )
     const responseData = await response.json()
     searchResults.value = (responseData.results || []).slice(0, 15)
-    console.log(searchResults)
   } catch (error) {
-    window.alert('Search failed: ', error)
     console.error('Search failed:', error)
+    window.alert('Search failed.')
     searchResults.value = []
   }
 }
 
+//ATTAIN CURRENT USER
 async function fetchUser() {
   const {
     data: { user: currentUser },
@@ -61,7 +57,14 @@ function closeModal() {
   reviewInput.value = ''
 }
 
-// Fetch reviews for a movie
+//IN CASE IMAGE CANNOT BE LOADED
+function handleImgError(event) {
+  event.target.src = ''
+  event.target.alt = 'Image could not be loaded; this may be due to unavailability or an error on our part.'
+  event.target.classList.add('imgError') //SEE CSS ENTRY FOR MORE
+}
+
+//GET CURRENT REVIEWS FOR MOVIE
 async function fetchReviews(movieId) {
   const { data, error } = await supabase
     .from('reviews')
@@ -71,7 +74,7 @@ async function fetchReviews(movieId) {
   reviews.value = data || []
 }
 
-// Submit a new review
+//ALLOWS REVIEW SUBMISSION
 async function submitReview() {
   if (!reviewInput.value.trim() || !user.value) return
   submitting.value = true
@@ -90,7 +93,7 @@ async function submitReview() {
   }
 }
 
-// Add like handler
+//LIKE BUTTON FUNCTION
 async function handleLike() {
   if (!user.value) return
   liking.value = true
@@ -98,8 +101,7 @@ async function handleLike() {
   liking.value = false
 }
 
-
-// Add this watch
+//CHECK IF USER HAS IT LIKED AND CALLS REVIEWS
 watch(selectedMovie, async (movie) => {
   if (movie && movie.id) {
     fetchReviews(movie.id)
@@ -112,88 +114,332 @@ onMounted(() => {
 })
 </script>
 
+<!-- TEMPLATE -->
 <template>
-  <div class="search-page">
-    <h1>Search Page</h1>
+  <div class="searchPage">
 
-    <div class="searchBar-wrapper">
-      <input
-        type="text"
-        v-model="searchQuery"
-        @input="searchMovies"
-        class="search-input"
-        placeholder="Search for a movie..."
-      />
+    <!-- SEARCH BAR -->
+    <div class="searchBarWrapper">
+      <input type="text" v-model="searchQuery" @input="searchMovies" class="searchInput"
+        placeholder="Search for a movie..." />
     </div>
 
-    <p v-for="movie in searchResults" :key="movie.id">
-      {{ movie.title }}
-    </p>
+    <!-- MOVIE ON LEFT -->
+    <section class="searchResultsSection">
+      <div class="searchResultCard" v-for="movie in searchResults" :key="movie.id" @click="openModal(movie)">
+        <img :src="imgBaseUrl + movie.poster_path" :alt="movie.title" class="resultImg"
+          @error="handleImgError($event)" />
 
-    <section class="search-results-section">
-      <div class="movieRow">
-        <MovieCard
-          v-for="movie in searchResults"
-          :key="movie.id"
-          :title="movie.title"
-          :imgUrl="imgBaseUrl + movie.poster_path"
-          :releaseDate="movie.release_date"
-          @click="openModal(movie)"
-        />
+        <!-- DETAILS RIGHT OF MOVIE -->
+        <div class="resultDetails">
+          <h2 class="resultTitle">{{ movie.title }}</h2>
+          <p class="resultYear">{{ movie.release_date }}</p>
+          <p class="resultOverview">
+            {{ movie.overview || 'No description given, this may be due to unavailability or an error on our part..' }}
+          </p>
+        </div>
       </div>
     </section>
 
-
-    <!-- Modal (same as homepage) -->
+    <!-- MODAL WIP -->
     <MovieModal v-if="showModal" @close="closeModal">
-      <h2>{{ selectedMovie.title }}</h2>
-      <img :src="imgBaseUrl + selectedMovie.poster_path" :alt="selectedMovie.title" class="modal-poster" />
-      <p><strong>Release:</strong> {{ selectedMovie.release_date }}</p>
-      <p><strong>Description:</strong> {{ selectedMovie.overview }}</p>
+      <div class="modalHeader">
+        <div class="modalImgWrapper">
+          <img :src="imgBaseUrl + selectedMovie.poster_path" :alt="selectedMovie.title" class="modalImg" />
+          <img :src="isLiked ? '/heartFilled.png' : '/heartOutline.png'" alt="Like" class="likeIcon"
+            @click="handleLike" />
+        </div>
 
-      <!-- like section -->
-      <div class="review-input-bar">
-        <button 
-          @click="handleLike" 
-          class="like-btn"
-          :disabled="liking"
-          :class="{ 'liked': isLiked }"
-        >
-          {{ isLiked ? '❤️ Liked' : '🤍 Like' }}
-        </button>
-      </div>
-
-      <!-- Reviews Section -->
-      <div class="reviews-section">
-        <h3>Reviews</h3>
-        <div v-if="reviews.length === 0" class="reviews-empty">No reviews yet.</div>
-        <div v-else class="reviews-list">
-          <div v-for="review in reviews" :key="review.id" class="review-item">
-            <span class="review-user">{{ review.user_name }}</span>
-            <span class="review-text">{{ review.review }}</span>
+        <div class="modalText">
+          <div class="modalTitleRow">
+            <h2 class="modalTitle">{{ selectedMovie.title }}</h2>
+            <span class="modalYear">({{ selectedMovie.release_date }})</span>
           </div>
+          <p class="modalDescription">{{ selectedMovie.overview }}</p>
         </div>
       </div>
 
-      <!-- Review Input -->
-      <div class="review-input-bar">
-        <input
-          v-model="reviewInput"
-          :disabled="submitting"
-          class="review-input"
-          placeholder="Write your review..."
-          @keyup.enter="submitReview"
-        />
-        <button
-          @click="submitReview"
-          :disabled="submitting || !reviewInput.trim()"
-          class="review-submit-btn"
-        >
-          Send
-        </button>
+      <div class="reviewsWrapper">
+        <h3 class="reviewsLabel">Reviews</h3>
+
+        <div class="reviewInputBar">
+          <input v-model="reviewInput" :disabled="submitting" class="reviewInput" placeholder="Write your review..."
+            @keyup.enter="submitReview" />
+          <button @click="submitReview" :disabled="submitting || !reviewInput.trim()" class="reviewSubmitBtn">
+            Send
+          </button>
+        </div>
+
+        <div class="reviewsSection">
+          <div v-if="reviews.length === 0" class="reviewsEmpty">No reviews yet.</div>
+          <div v-else class="reviewsList">
+            <div v-for="review in reviews" :key="review.id" class="reviewItem">
+              <span class="reviewUser">{{ review.user_name }}</span>
+              <span class="reviewText">{{ review.review }}</span>
+            </div>
+          </div>
+        </div>
       </div>
     </MovieModal>
   </div>
 </template>
 
-<style></style>
+<!-- STYLE -->
+<style scoped>
+.searchPage {
+  padding: 2rem;
+  color: white;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+}
+
+.searchBarWrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.searchInput {
+  width: 100%;
+  max-width: 500px;
+  padding: 12px 16px;
+  font-size: 1rem;
+  border-radius: 20px;
+  border: 2px solid black;
+  outline: none;
+  background: white;
+  color: black;
+}
+
+.searchInput::placeholder {
+  color: rgba(0, 0, 0, 0.199);
+}
+
+.searchResultsSection {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.searchResultCard {
+  display: flex;
+  gap: 20px;
+  border: 2px solid black;
+  background: white;
+  border-radius: 8px;
+  padding: 16px;
+  transition: background 0.3s ease, transform 0.2s ease;
+  cursor: pointer;
+}
+
+.searchResultCard:hover {
+  background: black;
+  transform: scale(1.01);
+}
+
+.searchResultCard:hover .resultTitle,
+.searchResultCard:hover .resultYear,
+.searchResultCard:hover .resultOverview {
+  color: white;
+}
+
+.searchResultCard:hover .resultImg.imgError {
+  color: white;
+  background-color: black;
+}
+
+.resultImg {
+  width: 120px;
+  height: 180px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+/* THIS IS CLASS FOR IMAGES NOT LOADED */
+.resultImg.imgError {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  color: black;
+  font-size: 0.9rem;
+  width: 120px;
+  height: 180px;
+  text-align: center;
+  padding: 10px;
+  border-radius: 6px;
+}
+
+.resultDetails {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.resultTitle {
+  font-size: 1.4rem;
+  margin: 0;
+  color: black;
+}
+
+.resultYear {
+  font-size: 1rem;
+  color: black;
+  margin: 4px 0 10px;
+}
+
+.resultOverview {
+  font-size: 0.95rem;
+  color: black;
+  line-height: 1.5;
+}
+
+.modalHeader {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.modalImgWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.modalImg {
+  width: 190px;
+  height: 270px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.likeIcon {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.likeIcon:hover {
+  transform: scale(1.1);
+}
+
+.modalText {
+  flex: 1;
+}
+
+.modalTitleRow {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.modalTitle {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin: 0;
+  color: #fff;
+}
+
+.modalYear {
+  font-size: 1rem;
+  color: #aaa;
+  margin-top: 4px;
+}
+
+.modalDescription {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #ddd;
+  margin-bottom: 20px;
+}
+
+.reviewsWrapper {
+  margin-top: 20px;
+}
+
+.reviewsLabel {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #fff;
+  margin-bottom: 10px;
+}
+
+.reviewInputBar {
+  margin-bottom: 16px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.reviewInput {
+  flex: 1 1 auto;
+  padding: 8px 10px;
+  border-radius: 4px;
+  border: none;
+  font-size: 1em;
+  outline: none;
+}
+
+.reviewSubmitBtn {
+  background: #4caf50;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1em;
+}
+
+.reviewSubmitBtn:hover {
+  background: #2e6730;
+  transition: transform 0.3s ease;
+}
+
+.reviewSubmitBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.reviewsSection {
+  max-height: 200px;
+  overflow-y: auto;
+  background: #181818;
+  border-radius: 6px;
+  padding: 12px;
+}
+
+.reviewsList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.reviewItem {
+  background: #252525;
+  border-radius: 4px;
+  padding: 7px 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.reviewUser {
+  font-size: 0.93em;
+  font-weight: bold;
+  color: #ffb700;
+  margin-bottom: 2px;
+}
+
+.reviewText {
+  font-size: 1em;
+  color: #eee;
+}
+
+.reviewsEmpty {
+  color: #bbb;
+  font-size: 0.98em;
+  text-align: center;
+}
+</style>
