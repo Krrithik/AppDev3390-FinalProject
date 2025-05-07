@@ -92,11 +92,7 @@ async function handleLike() {
   liking.value = false
 }
 
-watch(selectedMovie, (movie) => {
-  if (movie && movie.id) {
-    fetchReviews(movie.id)
-  }
-})
+
 
 // Add this watch
 watch(selectedMovie, async (movie) => {

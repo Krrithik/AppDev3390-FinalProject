@@ -50,7 +50,7 @@ export function useLikes() {
   }
 
   // Fetch all liked movies for current user
-  const fetchUserLikes = async () => {
+  async function fetchUserLikes() {
     loadingLikes.value = true
     const user = (await supabase.auth.getUser()).data.user
     if (!user) return
