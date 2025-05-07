@@ -81,7 +81,10 @@ async function submitReview() {
   if (!error) {
     reviewInput.value = ''
     fetchReviews(selectedMovie.value.id)
-  }
+  }else {
+  console.error('Failed to submit review:', error.message)
+  window.alert('Something went wrong while submitting your review.')
+}
 }
 
 // Add like handler
