@@ -7,7 +7,7 @@ const imgBaseUrl = 'https://image.tmdb.org/t/p/w500'
 
 //ADJUST AS WANTED
 const currentPage = ref(1)
-const itemsPerPage = 8
+const itemsPerPage = 16
 
 //CREATES TABS OFF PAGES
 const totalPages = computed(() =>
