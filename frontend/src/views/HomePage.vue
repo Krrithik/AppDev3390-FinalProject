@@ -47,7 +47,7 @@ function closeModal() {
   reviewInput.value = ''
 }
 
-// Get current user info (with full name)
+// GET CURRENT USER INFO (WITH FULL NAME)
 async function fetchUser() {
   const {
     data: { user: currentUser },
@@ -55,7 +55,7 @@ async function fetchUser() {
   user.value = currentUser
 }
 
-// Fetch reviews for a movie
+// FETCH REVIEWS FOR A MOVIE
 async function fetchReviews(movieId) {
   const { data, error } = await supabase
     .from('reviews')
@@ -65,7 +65,7 @@ async function fetchReviews(movieId) {
   reviews.value = data || []
 }
 
-// Submit a new review
+// SUBMIT A NEW REVIEW
 async function submitReview() {
   if (!reviewInput.value.trim() || !user.value) return
   submitting.value = true
@@ -81,13 +81,13 @@ async function submitReview() {
   if (!error) {
     reviewInput.value = ''
     fetchReviews(selectedMovie.value.id)
-  }else {
-  console.error('Failed to submit review:', error.message)
-  window.alert('Something went wrong while submitting your review.')
-}
+  } else {
+    console.error('Failed to submit review:', error.message)
+    window.alert('Something went wrong while submitting your review.')
+  }
 }
 
-// Add like handler
+// ADD LIKE HANDLER
 async function handleLike() {
   if (!user.value) return
   liking.value = true
@@ -95,16 +95,13 @@ async function handleLike() {
   liking.value = false
 }
 
-
-
-// Add this watch
+// ADD THIS WATCH
 watch(selectedMovie, async (movie) => {
   if (movie && movie.id) {
     fetchReviews(movie.id)
     isLiked.value = await checkLikeStatus(movie.id)
   }
 })
-
 
 onMounted(() => {
   fetchMovies('trending/movie/week', trendingMovies)
@@ -141,51 +138,55 @@ onMounted(() => {
     </div>
   </section>
 
-  <!-- Modal -->
+  <!-- MODAL SECTION -->
   <MovieModal v-if="showModal" @close="closeModal">
-    <h2>{{ selectedMovie.title }}</h2>
-    <img :src="imgBaseUrl + selectedMovie.poster_path" :alt="selectedMovie.title" class="modal-poster" />
-    <p><strong>Release:</strong> {{ selectedMovie.release_date }}</p>
-    <p><strong>Description:</strong> {{ selectedMovie.overview }}</p>
+    <!-- HEART BUTTON -->
+    <div class="modalHeader">
+      <div class="modalImgWrapper">
+        <img :src="imgBaseUrl + selectedMovie.poster_path" :alt="selectedMovie.title" class="modalImg" />
+        <img :src="isLiked ? '/heartFilled.png' : '/heartOutline.png'" alt="Like" class="likeIcon"
+          @click="handleLike" />
+      </div>
 
-    <!-- like section -->
-<div class="review-input-bar">
-  <!-- ... existing review input ... -->
-  <button 
-    @click="handleLike" 
-    class="like-btn"
-    :disabled="liking"
-    :class="{ 'liked': isLiked }"
-  >
-    {{ isLiked ? '❤️ Liked' : '🤍 Like' }}
-  </button>
-</div>
-
-    <!-- Scrollable Reviews Section -->
-    <div class="reviews-section">
-      <h3>Reviews</h3>
-      <div v-if="reviews.length === 0" class="reviews-empty">No reviews yet.</div>
-      <div v-else class="reviews-list">
-        <div v-for="review in reviews" :key="review.id" class="review-item">
-          <span class="review-user">{{ review.user_name }}</span>
-          <span class="review-text">{{ review.review }}</span>
+      <!-- MOVIE IMG WITH TEXT TO ITS RIGHT -->
+      <div class="modalText">
+        <div class="modalTitleRow">
+          <h2 class="modalTitle">{{ selectedMovie.title }}</h2>
+          <span class="modalYear">({{ selectedMovie.release_date }})</span>
         </div>
+
+        <!-- MOVIE DESCRIPTION -->
+        <p class="modalDescription">{{ selectedMovie.overview }}</p>
       </div>
     </div>
 
-    <!-- Review Input Fixed at Bottom -->
-    <div class="review-input-bar">
-      <input v-model="reviewInput" :disabled="submitting" class="review-input" placeholder="Write your review..."
-        @keyup.enter="submitReview" />
-      <button @click="submitReview" :disabled="submitting || !reviewInput.trim()" class="review-submit-btn">
-        Send
-      </button>
+    <!-- REVIEWS SECTION -->
+    <div class="reviewsWrapper">
+      <h3 class="reviewsLabel">Reviews</h3>
+
+      <!-- WRITE REVIEW AND INPUT -->
+      <div class="reviewInputBar">
+        <input v-model="reviewInput" :disabled="submitting" class="reviewInput" placeholder="Write your review..."
+          @keyup.enter="submitReview" />
+        <button @click="submitReview" :disabled="submitting || !reviewInput.trim()" class="reviewSubmitBtn">
+          Send
+        </button>
+      </div>
+
+      <!-- SCROLL REVIEW LIST -->
+      <div class="reviewsSection">
+        <div v-if="reviews.length === 0" class="reviewsEmpty">No reviews yet.</div>
+        <div v-else class="reviewsList">
+          <div v-for="review in reviews" :key="review.id" class="reviewItem">
+            <span class="reviewUser">{{ review.user_name }}</span>
+            <span class="reviewText">{{ review.review }}</span>
+          </div>
+        </div>
+      </div>
     </div>
   </MovieModal>
 </template>
 
-<!-- STYLE -->
-<!-- NOTE: Style Scoped applies styling to just this view, instead of all others -->
 <style scoped>
 .description {
   text-align: center;
@@ -234,28 +235,107 @@ onMounted(() => {
   cursor: pointer;
 }
 
-.modal-poster {
-  width: 150px;
-  border-radius: 6px;
-  margin-bottom: 12px;
+.modalHeader {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  margin-bottom: 20px;
 }
 
-.reviews-section {
-  margin: 16px 0 0 0;
-  max-height: 180px;
+.modalImgWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  gap: 10px;
+}
+
+.likeIcon {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.likeIcon:hover {
+  transform: scale(1.1);
+}
+
+.modalImg {
+  width: 190px;
+  height: 270px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.modalText {
+  flex: 1;
+}
+
+.modalTitleRow {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.modalTitle {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin: 0;
+  color: #fff;
+}
+
+.modalYear {
+  font-size: 1rem;
+  color: #aaa;
+  margin-top: 4px;
+}
+
+.modalDescription {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #ddd;
+  margin-bottom: 20px;
+}
+
+.reviewsWrapper {
+  margin-top: 20px;
+}
+
+.reviewsLabel {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #fff;
+  margin-bottom: 10px;
+}
+
+.reviewInputBar {
+  position: static;
+  margin-bottom: 16px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 10px 0 0 0;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.reviewsSection {
+  max-height: 200px;
   overflow-y: auto;
   background: #181818;
   border-radius: 6px;
   padding: 12px;
 }
 
-.reviews-list {
+.reviewsList {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-.review-item {
+.reviewItem {
   background: #252525;
   border-radius: 4px;
   padding: 7px 10px;
@@ -263,37 +343,25 @@ onMounted(() => {
   flex-direction: column;
 }
 
-.review-user {
+.reviewUser {
   font-size: 0.93em;
   font-weight: bold;
   color: #ffb700;
   margin-bottom: 2px;
 }
 
-.review-text {
+.reviewText {
   font-size: 1em;
   color: #eee;
 }
 
-.reviews-empty {
+.reviewsEmpty {
   color: #bbb;
   font-size: 0.98em;
   text-align: center;
 }
 
-.review-input-bar {
-  position: sticky;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: #181818;
-  padding: 10px 0 0 0;
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
-
-.review-input {
+.reviewInput {
   flex: 1 1 auto;
   padding: 8px 10px;
   border-radius: 4px;
@@ -302,7 +370,7 @@ onMounted(() => {
   outline: none;
 }
 
-.review-submit-btn {
+.reviewSubmitBtn {
   background: #4caf50;
   color: #fff;
   border: none;
@@ -312,32 +380,14 @@ onMounted(() => {
   font-size: 1em;
 }
 
-.review-submit-btn:disabled {
+.reviewSubmitBtn:hover {
+  background: #2e6730;
+  transition: transform 0.3s ease;
+
+}
+
+.reviewSubmitBtn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
-}
-
-
-.like-btn {
-  background: #e50914;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.like-btn:hover:not(:disabled) {
-  transform: scale(1.05);
-}
-
-.like-btn:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-}
-
-.like-btn.liked {
-  background: #4caf50;
 }
 </style>
