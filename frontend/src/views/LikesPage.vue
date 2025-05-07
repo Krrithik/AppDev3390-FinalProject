@@ -1,9 +1,13 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useLikes } from '@/composables/useLikes'
+import { supabase } from '@/supabase/supabase.init'
 
-const { likedMovies, loadingLikes, fetchUserLikes } = useLikes()
+const { likedMovies, loadingLikes, fetchUserLikes, toggleLike } = useLikes()
 const imgBaseUrl = 'https://image.tmdb.org/t/p/w500'
+
+const user = ref(null)
+const liking = ref(false)
 
 //ADJUST AS WANTED
 const currentPage = ref(1)
@@ -25,7 +29,29 @@ function goToPage(page) {
   currentPage.value = page
 }
 
+async function handleLike(movie) {
+  console.log('Clicked heart for:', movie)
+
+  if (!user.value) return
+  liking.value = true
+
+  const isNowLiked = await toggleLike({
+    id: movie.movie_id, // <- use the actual TMDB movie ID
+    title: movie.movie_title,
+    poster_path: movie.movie_poster,
+  })
+
+  liking.value = false
+
+
+  if (!isNowLiked) {
+    await fetchUserLikes();
+  }
+}
+
 onMounted(async () => {
+  const { data: { user: currentUser } } = await supabase.auth.getUser()
+  user.value = currentUser
   await fetchUserLikes()
 })
 </script>
@@ -42,6 +68,11 @@ onMounted(async () => {
     <div class="movie-grid">
       <div v-for="movie in paginatedMovies" :key="movie.id" class="liked-movie">
         <img :src="imgBaseUrl + movie.movie_poster" :alt="movie.movie_title" class="liked-poster" />
+
+        <div class="card-footer" @click.stop="handleLike(movie)">
+          <img :src="likedMovies.some(m => m.id === movie.id) ? '/heartFilled.png' : '/heartOutline.png'" alt="Like"
+            class="likeIcon" />
+        </div>
       </div>
     </div>
 
@@ -63,6 +94,40 @@ onMounted(async () => {
 
 .liked-movie {
   text-align: center;
+  position: relative;
+}
+
+.card-footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 20px;
+  background: rgba(33, 32, 32, 0.885);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: 20px;
+  pointer-events: none;
+}
+
+.liked-movie:hover .card-footer {
+  opacity: 1;
+}
+
+.likeIcon {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.liked-movie:hover .liked-poster,
+.card-footer:hover+.liked-poster {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px #a696c8, 0 0 25px #a696c8;
 }
 
 .liked-poster {
@@ -101,6 +166,7 @@ onMounted(async () => {
   color: white;
   cursor: pointer;
   border-radius: 4px;
+  margin-bottom: 150px;
 }
 
 .pagination button:hover {
