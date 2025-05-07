@@ -81,7 +81,10 @@ async function submitReview() {
   if (!error) {
     reviewInput.value = ''
     fetchReviews(selectedMovie.value.id)
-  }
+  }else {
+  console.error('Failed to submit review:', error.message)
+  window.alert('Something went wrong while submitting your review.')
+}
 }
 
 // Add like handler
@@ -92,11 +95,7 @@ async function handleLike() {
   liking.value = false
 }
 
-watch(selectedMovie, (movie) => {
-  if (movie && movie.id) {
-    fetchReviews(movie.id)
-  }
-})
+
 
 // Add this watch
 watch(selectedMovie, async (movie) => {
