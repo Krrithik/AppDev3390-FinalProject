@@ -61,17 +61,20 @@ const router = createRouter({
 
 // List of routes that don't require authentication
 const publicPages = ['/login', '/signup', '/about']
+const authOnlyPages = ['/login', '/signup']
 
 router.beforeEach(async (to, from, next) => {
   const { data: { session } } = await supabase.auth.getSession()
   const isAuth = !!session?.user
   const isPublic = publicPages.includes(to.path)
+  const isAuthOnly = authOnlyPages.includes(to.path)
+
 
   if (!isAuth && !isPublic) {
     // Not logged in and trying to access a protected page
     return next('/login')
   }
-  if (isAuth && isPublic) {
+  if (isAuth && isAuthOnly) {
     // Logged in and trying to access login/signup
     return next('/')
   }
