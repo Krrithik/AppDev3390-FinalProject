@@ -111,6 +111,23 @@ async function handleDeleteReview(reviewId) {
   }
 }
 
+async function handleDeleteEntry(entryId) {
+  const confirmDelete = window.confirm('Are you sure you want to delete this log entry?');
+  if (!confirmDelete) return;
+
+  const { error } = await supabase
+    .from('diary')
+    .delete()
+    .eq('id', entryId);
+
+  if (error) {
+    window.alert('Failed to delete entry: ' + error.message);
+  } else {
+    // Remove the entry from the local array for instant UI update
+    diaryEntries.value = diaryEntries.value.filter(entry => entry.id !== entryId);
+  }
+}
+
 // Like handler
 async function handleLike() {
   if (!user.value) return
