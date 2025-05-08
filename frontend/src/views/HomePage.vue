@@ -103,7 +103,7 @@ async function handleDeleteReview(reviewId) {
     .from('reviews')
     .delete()
     .eq('id', reviewId)
-    .eq('user_id', user.value.id) // extra safety: only delete your own
+    .eq('user_id', user.value.id) // extra check in database for current user
 
   if (error) {
     window.alert('Failed to delete review: ' + error.message)

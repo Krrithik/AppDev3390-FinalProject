@@ -28,7 +28,7 @@ async function searchMovies() {
   }
   try {
     const response = await fetch(
-      `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&language=en-US&query=${encodeURIComponent(searchQuery.value)}&page=1&include_adult=false`
+      `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&language=en-US&query=${encodeURIComponent(searchQuery.value)}&page=1&include_adult=false`,
     )
     const responseData = await response.json()
     searchResults.value = (responseData.results || []).slice(0, 15)
@@ -61,7 +61,8 @@ function closeModal() {
 //IN CASE IMAGE CANNOT BE LOADED
 function handleImgError(event) {
   event.target.src = ''
-  event.target.alt = 'Image could not be loaded; this may be due to unavailability or an error on our part.'
+  event.target.alt =
+    'Image could not be loaded; this may be due to unavailability or an error on our part.'
   event.target.classList.add('imgError') //SEE CSS ENTRY FOR MORE
 }
 
@@ -94,6 +95,26 @@ async function submitReview() {
   }
 }
 
+//DELETING CURRENT USERS REVIEWS
+async function handleDeleteReview(reviewId) {
+  if (!user.value) return
+  const confirmDelete = window.confirm('Delete this review?')
+  if (!confirmDelete) return
+
+  const { error } = await supabase
+    .from('reviews')
+    .delete()
+    .eq('id', reviewId)
+    .eq('user_id', user.value.id) // extra check in database for current user
+
+  if (error) {
+    window.alert('Failed to delete review: ' + error.message)
+  } else {
+    // Refresh reviews after delete
+    fetchReviews(selectedMovie.value.id)
+  }
+}
+
 //LIKE BUTTON FUNCTION
 async function handleLike() {
   if (!user.value) return
@@ -118,28 +139,43 @@ onMounted(() => {
 <!-- TEMPLATE -->
 <template>
   <div class="searchPage">
-
     <!-- SEARCH BAR -->
     <div class="searchBarWrapper">
       <div class="searchInputContainer">
-        <input type="text" v-model="searchQuery" @input="searchMovies" class="searchInput"
-          placeholder="Search for a movie..." />
+        <input
+          type="text"
+          v-model="searchQuery"
+          @input="searchMovies"
+          class="searchInput"
+          placeholder="Search for a movie..."
+        />
         <Search class="searchIcon" />
       </div>
     </div>
 
     <!-- MOVIE ON LEFT -->
     <section class="searchResultsSection">
-      <div class="searchResultCard" v-for="movie in searchResults" :key="movie.id" @click="openModal(movie)">
-        <img :src="imgBaseUrl + movie.poster_path" :alt="movie.title" class="resultImg"
-          @error="handleImgError($event)" />
+      <div
+        class="searchResultCard"
+        v-for="movie in searchResults"
+        :key="movie.id"
+        @click="openModal(movie)"
+      >
+        <img
+          :src="imgBaseUrl + movie.poster_path"
+          :alt="movie.title"
+          class="resultImg"
+          @error="handleImgError($event)"
+        />
 
         <!-- DETAILS RIGHT OF MOVIE -->
         <div class="resultDetails">
           <h2 class="resultTitle">{{ movie.title }}</h2>
           <p class="resultYear">{{ movie.release_date }}</p>
           <p class="resultOverview">
-            {{ movie.overview || 'No description given, this may be due to unavailability or an error on our part..'
+            {{
+              movie.overview ||
+              'No description given, this may be due to unavailability or an error on our part..'
             }}
           </p>
         </div>
@@ -150,9 +186,17 @@ onMounted(() => {
     <MovieModal v-if="showModal" @close="closeModal">
       <div class="modalHeader">
         <div class="modalImgWrapper">
-          <img :src="imgBaseUrl + selectedMovie.poster_path" :alt="selectedMovie.title" class="modalImg" />
-          <img :src="isLiked ? '/heartFilled.png' : '/heartOutline.png'" alt="Like" class="likeIcon"
-            @click="handleLike" />
+          <img
+            :src="imgBaseUrl + selectedMovie.poster_path"
+            :alt="selectedMovie.title"
+            class="modalImg"
+          />
+          <img
+            :src="isLiked ? '/heartFilled.png' : '/heartOutline.png'"
+            alt="Like"
+            class="likeIcon"
+            @click="handleLike"
+          />
         </div>
 
         <div class="modalText">
@@ -168,19 +212,37 @@ onMounted(() => {
         <h3 class="reviewsLabel">Reviews</h3>
 
         <div class="reviewInputBar">
-          <input v-model="reviewInput" :disabled="submitting" class="reviewInput" placeholder="Write your review..."
-            @keyup.enter="submitReview" />
-          <button @click="submitReview" :disabled="submitting || !reviewInput.trim()" class="reviewSubmitBtn">
+          <input
+            v-model="reviewInput"
+            :disabled="submitting"
+            class="reviewInput"
+            placeholder="Write your review..."
+            @keyup.enter="submitReview"
+          />
+          <button
+            @click="submitReview"
+            :disabled="submitting || !reviewInput.trim()"
+            class="reviewSubmitBtn"
+          >
             Send
           </button>
         </div>
-
         <div class="reviewsSection">
           <div v-if="reviews.length === 0" class="reviewsEmpty">No reviews yet.</div>
           <div v-else class="reviewsList">
             <div v-for="review in reviews" :key="review.id" class="reviewItem">
               <span class="reviewUser">{{ review.user_name }}</span>
               <span class="reviewText">{{ review.review }}</span>
+
+              <!-- SHOW DELETE ONLY FOR CURRENT USER -->
+              <button
+                v-if="user && review.user_id === user.id"
+                class="delete-review-btn"
+                @click="handleDeleteReview(review.id)"
+                title="Delete your review"
+              >
+                🗑️
+              </button>
             </div>
           </div>
         </div>
@@ -239,7 +301,9 @@ onMounted(() => {
   background: white;
   border-radius: 8px;
   padding: 16px;
-  transition: background 0.3s ease, transform 0.2s ease;
+  transition:
+    background 0.3s ease,
+    transform 0.2s ease;
   cursor: pointer;
 }
 
@@ -452,5 +516,22 @@ onMounted(() => {
   color: #bbb;
   font-size: 0.98em;
   text-align: center;
+
+  
+}
+
+/* delete review button styles */
+.delete-review-btn {
+  background: none;
+  border: none;
+  color: #ff4d4f;
+  font-size: 1.1em;
+  cursor: pointer;
+  margin-left: auto;
+  align-self: flex-end;
+  transition: color 0.2s;
+}
+.delete-review-btn:hover {
+  color: #e50914;
 }
 </style>
