@@ -235,7 +235,7 @@ onMounted(() => {
           <p class="resultOverview">
             {{
               movie.overview ||
-              'No description given, this may be due to unavailability or an error on our part..'
+              'No description given, this may be due to unavailability or an error on our part..'}}
             {{
               movie.overview ||
               'No description given, this may be due to unavailability or an error on our part..'
@@ -298,18 +298,6 @@ onMounted(() => {
         <h3 class="reviewsLabel">Reviews</h3>
 
         <div class="reviewInputBar">
-          <input
-            v-model="reviewInput"
-            :disabled="submitting"
-            class="reviewInput"
-            placeholder="Write your review..."
-            @keyup.enter="submitReview"
-          />
-          <button
-            @click="submitReview"
-            :disabled="submitting || !reviewInput.trim()"
-            class="reviewSubmitBtn"
-          >
           <input
             v-model="reviewInput"
             :disabled="submitting"
