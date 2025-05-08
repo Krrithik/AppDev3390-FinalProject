@@ -20,6 +20,12 @@ const apiKey = import.meta.env.VITE_TMDB_API_KEY
 const searchQuery = ref('')
 const searchResults = ref([])
 
+/* For Adding to diary functions */
+const logDate = ref(new Date().toISOString().slice(0,10)) 
+const logging = ref(false)
+const logSuccess = ref(false)
+const logError = ref('')
+
 //LIVE SEARCHES
 async function searchMovies() {
   if (!searchQuery.value.trim()) {
@@ -123,6 +129,38 @@ async function handleLike() {
   liking.value = false
 }
 
+//HANDLING ADD DATA TO DIARY
+async function handleLogMovie(){
+  if(!user.value){
+    return
+  }
+
+  logging.value = true
+  logError.value = ''
+
+  const { error } = await supabase.from('diary').insert([{
+    user_id : user.value.id,
+    movie_id : selectedMovie.value.id,
+    movie_title : selectedMovie.value.title,
+    movie_poster : selectedMovie.value.poster_path,
+    release_year : selectedMovie.value.release_date ? Number(selectedMovie.value.release_date.slice(0,4)) : null,
+    rating : selectedMovie.value.vote_average,
+    liked : isLiked.value,
+    watched_on: logDate.value
+  }])
+
+  logging.value = false
+
+  if(error){
+    logError.value = 'Failed to log movie: ' + error.message;
+    window.alert(logError.value)
+  } else {
+    logSuccess.value = true;
+    setTimeout(() => logSuccess.value = false, 2000)
+  }
+
+}
+
 //CHECK IF USER HAS IT LIKED AND CALLS REVIEWS
 watch(selectedMovie, async (movie) => {
   if (movie && movie.id) {
@@ -207,6 +245,17 @@ onMounted(() => {
           <p class="modalDescription">{{ selectedMovie.overview }}</p>
         </div>
       </div>
+
+      <!-- LOG SECTION  -->
+      <div class="log-section">
+  <label for="logDate">Watched on:</label>
+  <input id="logDate" type="date" v-model="logDate" />
+  <button @click="handleLogMovie" :disabled="logging" class="log-btn">
+    {{ logging ? "Logging..." : "Log" }}
+  </button>
+  <span v-if="logSuccess" class="log-success">Logged!</span>
+  <span v-if="logError" class="log-error">{{ logError }}</span>
+</div>
 
       <div class="reviewsWrapper">
         <h3 class="reviewsLabel">Reviews</h3>
@@ -534,4 +583,30 @@ onMounted(() => {
 .delete-review-btn:hover {
   color: #e50914;
 }
+
+/* LOG SECTION STYLES */
+.log-section {
+  margin-top: 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.log-btn {
+  background: #209CE6;
+  color: #fff;
+  border: none;
+  padding: 7px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1em;
+}
+.log-success {
+  color: #0bff71;
+  margin-left: 10px;
+}
+.log-error {
+  color: #ff4d4f;
+  margin-left: 10px;
+}
+
 </style>

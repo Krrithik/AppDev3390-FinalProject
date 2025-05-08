@@ -505,4 +505,6 @@ onMounted(() => {
   color: #ff4d4f;
   margin-left: 10px;
 }
+
+
 </style>
