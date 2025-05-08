@@ -99,6 +99,13 @@ async function handleLike() {
   liking.value = true
   isLiked.value = await toggleLike(selectedMovie.value)
   liking.value = false
+
+
+  await supabase
+    .from('diary')
+    .update({ liked: isLiked.value })
+    .eq('user_id', user.value.id)
+    .eq('movie_id', selectedMovie.value.id)
 }
 
 //HANDLING ADD DATA TO DIARY
