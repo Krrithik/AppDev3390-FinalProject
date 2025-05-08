@@ -74,7 +74,7 @@ onMounted(async () => {
       <span>Rating</span>
       <span>Like</span>
       <span>Review</span>
-      <span>Edit</span>
+      <span>Delete</span>
     </div>
 
   
