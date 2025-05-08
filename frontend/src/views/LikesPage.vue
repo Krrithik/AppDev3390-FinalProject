@@ -8,6 +8,7 @@ const imgBaseUrl = 'https://image.tmdb.org/t/p/w500'
 
 const user = ref(null)
 const liking = ref(false)
+const loading = ref(true)
 
 //ADJUST AS WANTED
 const currentPage = ref(1)
@@ -60,12 +61,15 @@ onMounted(async () => {
   const { data: { user: currentUser } } = await supabase.auth.getUser()
   user.value = currentUser
   await fetchUserLikes()
+  loading.value = false
 })
 </script>
 
 <template>
-  <!-- LOADING TEXT -->
-  <div v-if="loadingLikes" class="loading">Loading...</div>
+  <!-- LOADING SPINNER -->
+  <div v-if="loading" class="spinnerOverlay">
+    <div class="spinner"></div>
+  </div>
 
   <!-- IF NO LIKED MOVIES -->
   <div v-else-if="!likedMovies.length" class="empty">No liked movies yet.</div>
@@ -92,6 +96,34 @@ onMounted(async () => {
 </template>
 
 <style scoped>
+.spinnerOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(255, 255, 255, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #ccc;
+  border-top-color: #27ae60;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .movie-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
