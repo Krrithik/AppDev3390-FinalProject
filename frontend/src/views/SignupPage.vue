@@ -66,7 +66,7 @@ async function handleSignup() {
 <template>
   <div class="signupWrapper">
     <form class="signupForm" @submit.prevent="handleSignup">
-      <h1 class="formTitle">Join Appname</h1>
+      <h1 class="formTitle">Join Scene-It</h1>
 
       <div class="inputGroup">
         <label for="text" class="inputLabel">Full Name</label>

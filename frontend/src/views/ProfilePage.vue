@@ -42,7 +42,7 @@ async function handleLogout() {
 <template>
   <div class="profileWrapper">
     <div class="profileCard">
-      <h1 class="profileTitle">Profile</h1>
+      <h1 class="profileTitle">Your Profile</h1>
       <p class="profileSubtitle">Your Profile Information</p>
 
       <!-- USER INFO -->
