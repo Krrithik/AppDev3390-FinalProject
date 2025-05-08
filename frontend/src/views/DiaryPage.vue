@@ -32,6 +32,24 @@ async function fetchDiary() {
     loading.value = false
 }
 
+
+async function handleDeleteEntry(entryId) {
+  const confirmDelete = window.confirm('Are you sure you want to delete this log entry?');
+  if (!confirmDelete) return;
+
+  const { error } = await supabase
+    .from('diary')
+    .delete()
+    .eq('id', entryId);
+
+  if (error) {
+    window.alert('Failed to delete entry: ' + error.message);
+  } else {
+    // Remove the entry from the local array for instant UI update
+    diaryEntries.value = diaryEntries.value.filter(entry => entry.id !== entryId);
+  }
+}
+
 onMounted(async () => {
   await fetchUser()
   await fetchDiary()
@@ -73,7 +91,7 @@ onMounted(async () => {
         <span class="rating">{{ entry.rating ? entry.rating.toFixed(1) : '' }}</span>
         <span class="like">{{ entry.liked ? '❤️' : ""  }}</span>
         <span class="review">📝</span>
-        <span class="edit">✏️</span>
+        <button class="delete-btn" @click="handleDeleteEntry(entry.id)" title="Delete Entry">🗑️</button>
       </div>
     </div>
   </div>
