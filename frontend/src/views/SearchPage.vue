@@ -10,6 +10,7 @@ const { checkLikeStatus, toggleLike } = useLikes()
 const showModal = ref(false)
 const selectedMovie = ref(null)
 const reviews = ref([])
+const isLogged = ref(false)
 const reviewInput = ref('')
 const submitting = ref(false)
 const user = ref(null)
@@ -52,6 +53,17 @@ async function fetchUser() {
     data: { user: currentUser },
   } = await supabase.auth.getUser()
   user.value = currentUser
+}
+
+async function checkLogStatus(movieId) {
+  const { data, error } = await supabase
+    .from('diary')
+    .select('id')
+    .eq('user_id', user.value.id)
+    .eq('movie_id', movieId)
+    .maybeSingle()
+
+  return !!data
 }
 
 function openModal(movie) {
@@ -131,7 +143,7 @@ async function handleLike() {
 }
 
 //HANDLING ADD DATA TO DIARY
-async function handleLogMovie() {
+async function handleLogToggle() {
   if (!user.value) {
     return
   }
@@ -139,27 +151,40 @@ async function handleLogMovie() {
   logging.value = true
   logError.value = ''
 
-  const { error } = await supabase.from('diary').insert([{
-    user_id: user.value.id,
-    movie_id: selectedMovie.value.id,
-    movie_title: selectedMovie.value.title,
-    movie_poster: selectedMovie.value.poster_path,
-    release_year: selectedMovie.value.release_date ? Number(selectedMovie.value.release_date.slice(0, 4)) : null,
-    rating: selectedMovie.value.vote_average,
-    liked: isLiked.value,
-    watched_on: logDate.value
-  }])
+  if (isLogged.value) {
+    const { error } = await supabase
+      .from('diary')
+      .delete()
+      .eq('user_id', user.value.id)
+      .eq('movie_id', selectedMovie.value.id)
 
-  logging.value = false
-
-  if (error) {
-    logError.value = 'Failed to log movie: ' + error.message;
-    window.alert(logError.value)
+    if (error) {
+      logError.value = 'Failed to unlog movie: ' + error.message
+    } else {
+      isLogged.value = false
+    }
   } else {
-    logSuccess.value = true;
-    setTimeout(() => logSuccess.value = false, 2000)
-  }
+    const { error } = await supabase.from('diary').insert([{
+      user_id: user.value.id,
+      movie_id: selectedMovie.value.id,
+      movie_title: selectedMovie.value.title,
+      movie_poster: selectedMovie.value.poster_path,
+      release_year: selectedMovie.value.release_date ? Number(selectedMovie.value.release_date.slice(0, 4)) : null,
+      rating: selectedMovie.value.vote_average,
+      liked: isLiked.value,
+      watched_on: logDate.value
+    }])
 
+    if (error) {
+      logError.value = 'Failed to log movie: ' + error.message;
+      window.alert(logError.value)
+    } else {
+      isLogged.value = true
+      logSuccess.value = true;
+      setTimeout(() => logSuccess.value = false, 2000)
+    }
+  }
+  logging.value = false
 }
 
 //CHECK IF USER HAS IT LIKED AND CALLS REVIEWS
@@ -167,6 +192,7 @@ watch(selectedMovie, async (movie) => {
   if (movie && movie.id) {
     fetchReviews(movie.id)
     isLiked.value = await checkLikeStatus(movie.id)
+    isLogged.value = await checkLogStatus(movie.id)
   }
 })
 
@@ -217,8 +243,11 @@ onMounted(async () => {
       <div class="modalHeader">
         <div class="modalImgWrapper">
           <img :src="imgBaseUrl + selectedMovie.poster_path" :alt="selectedMovie.title" class="modalImg" />
-          <img :src="isLiked ? '/heartFilled.png' : '/heartOutline.png'" alt="Like" class="likeIcon"
-            @click="handleLike" />
+          <div class="iconRow">
+            <img :src="isLiked ? '/heartFilled.png' : '/heartOutline.png'" alt="Like" class="likeIcon"
+              @click="handleLike" />
+            <img :src="isLogged ? '/filledLog.png' : '/outlineLog.png'" class="logIcon" @click="handleLogToggle" />
+          </div>
         </div>
 
         <div class="modalText">
@@ -231,14 +260,9 @@ onMounted(async () => {
       </div>
 
       <!-- LOG SECTION  -->
-      <div class="log-section">
+      <div class="dateLoggedRow">
         <label for="logDate">Watched on:</label>
-        <input id="logDate" type="date" v-model="logDate" />
-        <button @click="handleLogMovie" :disabled="logging" class="log-btn">
-          {{ logging ? "Logging..." : "Log" }}
-        </button>
-        <span v-if="logSuccess" class="log-success">Logged!</span>
-        <span v-if="logError" class="log-error">{{ logError }}</span>
+        <input id="logDate" type="date" v-model="logDate" class="dateInput" />
       </div>
 
       <div class="reviewsWrapper">
@@ -437,15 +461,55 @@ onMounted(async () => {
   object-fit: cover;
 }
 
+.iconRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
 .likeIcon {
-  width: 16px;
-  height: 16px;
+  width: 20px;
+  height: 20px;
   cursor: pointer;
   transition: transform 0.2s ease;
 }
 
 .likeIcon:hover {
   transform: scale(1.1);
+}
+
+.logIcon {
+  width: 35px;
+  height: 35px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.logIcon:hover {
+  transform: scale(1.1);
+}
+
+.dateLoggedRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+  color: #ccc;
+  font-size: 0.95rem;
+}
+
+.dateInput {
+  background: #2a2a2a;
+  color: white;
+  border: 1px solid #444;
+  border-radius: 4px;
+  padding: 6px 10px;
+  font-size: 0.95rem;
+}
+
+.dateInput:focus {
+  outline: 2px solid #27ae60;
 }
 
 .modalText {
@@ -541,6 +605,7 @@ onMounted(async () => {
 }
 
 .reviewItem {
+  position: relative;
   background: #252525;
   border-radius: 4px;
   padding: 7px 10px;
@@ -570,14 +635,18 @@ onMounted(async () => {
 
 /* delete review button styles */
 .delete-review-btn {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
   background: none;
   border: none;
   color: #ff4d4f;
-  font-size: 1.1em;
+  font-size: 1.2em;
   cursor: pointer;
-  margin-left: auto;
-  align-self: flex-end;
   transition: color 0.2s;
+  padding: 0;
+  margin: 0;
 }
 
 .delete-review-btn:hover {

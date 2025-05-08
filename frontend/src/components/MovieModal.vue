@@ -31,6 +31,7 @@
   color: #fff;
   border-radius: 20px;
   padding: 24px;
+  width: 90vw;
   min-width: 320px;
   max-width: 90vw;
   max-height: 80vh;
