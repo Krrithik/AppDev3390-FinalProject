@@ -8,8 +8,8 @@ const { user } = useAuth();
   <!-- NAVBAR ON TOP -->
   <header class="header">
     <nav class="branding">
-      <img class="logo" src="/appIcon.png" alt="Placeholder Logo" />
-      <span class="app-name">App Name</span>
+      <img class="logo" src="/sceneItLogo.png" alt="Logo of camera with text Scene-It" />
+      <span class="app-name">Scene-It</span>
     </nav>
 
     <nav class="nav">
@@ -57,8 +57,9 @@ const { user } = useAuth();
 .logo {
   align-items: center;
   justify-content: center;
-  height: 80px;
-  width: 80px;
+  height: 120px;
+  width: 120px;
+  border-radius: 20px;
 }
 
 .nav {

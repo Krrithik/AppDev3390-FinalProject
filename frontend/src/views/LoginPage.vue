@@ -34,7 +34,7 @@ async function handleLogin() {
 <template>
    <div class="loginWrapper">
       <form class="loginBar" @submit.prevent="handleLogin">
-         <h1 class="formTitle">Login Appname</h1>
+         <h1 class="formTitle">Login to Scene-It</h1>
 
          <div class="inputGroup">
             <label for="email" class="inputLabel">Email</label>

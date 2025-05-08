@@ -9,12 +9,12 @@
         <aside class="sideBar">
             <div class="sideBarContent">
                 <ul>
-                    <li><a href="#1">What is Appname?</a></li>
-                    <li><a href="#2">Why the name Appname?</a></li>
+                    <li><a href="#1">What is Scene-It?</a></li>
+                    <li><a href="#2">Why the name Scene-It?</a></li>
                     <li><a href="#3">Do I need an account to use this site?</a></li>
                     <li><a href="#4">Is there a paywall for this site?</a></li>
                     <li><a href="#5">Is there an incentive for leaving reviews?</a></li>
-                    <li><a href="#6">Can I watch films on Appname?</a></li>
+                    <li><a href="#6">Can I watch films on Scene-It?</a></li>
                     <li><a href="#7">How do I validate my email?</a></li>
                     <!-- ADD/REMOVE STUFF -->
                 </ul>
@@ -24,16 +24,16 @@
         <!-- ABOUT INFO STUFF -->
         <main class="aboutMain">
             <div class="block">
-                <h2 id="1">What is Appname?</h2>
+                <h2 id="1">What is Scene-It?</h2>
                 <p>
-                    Appname is your personal movie journal — a platform to track the films you've watched, curate a
+                    Scene-It is your personal movie journal — a platform to track the films you've watched, curate a
                     watchlist of upcoming titles, and share your thoughts and favorites. Log your movie-watching
                     journey, explore reviews, and discover new recommendations tailored to your tastes.
                 </p>
             </div>
 
             <div class="block">
-                <h2 id="2">Why the name Appname?</h2>
+                <h2 id="2">Why the name Scene-It?</h2>
                 <p>
                     To be determined.
                 </p>
@@ -42,7 +42,7 @@
             <div class="block">
                 <h2 id="3">Do I need an account to use this site?</h2>
                 <p>
-                    Yes! While an account is required to use Appname, signing up is completely free. Without an account,
+                    Yes! While an account is required to use Scene-It, signing up is completely free. Without an account,
                     access is limited to the Sign In, Create Account, and About pages.
                 </p>
             </div>
@@ -50,7 +50,7 @@
             <div class="block">
                 <h2 id="4">Is there a paywall for this site?</h2>
                 <p>
-                    Appname has no paywalls — all features are completely free to use with a registered account.
+                    Scene-It has no paywalls — all features are completely free to use with a registered account.
                 </p>
             </div>
 
@@ -58,16 +58,16 @@
                 <h2 id="5">Is there an incentive for leaving reviews? </h2>
                 <p>
                     While reviews—written or star-rated—aren’t incentivized with rewards, they play a vital role in
-                    building the Appname community. Sharing your thoughts helps others discover new films, assess
+                    building the Scene-It community. Sharing your thoughts helps others discover new films, assess
                     whether a movie aligns with their tastes, and determine if it’s worth watching. We strongly
                     encourage all users to contribute reviews and ratings.
                 </p>
             </div>
 
             <div class="block">
-                <h2 id="6">Can I watch films on Appname?</h2>
+                <h2 id="6">Can I watch films on Scene-It?</h2>
                 <p>
-                    Appname is a platform for logging and sharing your movie experiences — it does not offer streaming
+                    Scene-It is a platform for logging and sharing your movie experiences — it does not offer streaming
                     or viewing of films. That said, it’s a great way to discover new titles, explore recommendations,
                     and connect with fellow movie enthusiasts.
                 </p>
