@@ -245,9 +245,9 @@ onMounted(async () => {
       <div class="modalImgWrapper">
         <img :src="imgBaseUrl + selectedMovie.poster_path" :alt="selectedMovie.title" class="modalImg" />
         <div class="iconRow">
-          <img :src="isLiked ? '/heartFilled.png' : '/heartOutline.png'" alt="Like" class="likeIcon"
+          <img :src="isLiked ? '/heartFilled.png' : '/heartOutline.png'" alt="Like" class="likeIcon" title="Like Movie"
             @click="handleLike" />
-          <img :src="isLogged ? '/filledLog.png' : '/outlineLog.png'" alt="Log" class="logIcon"
+          <img :src="isLogged ? '/filledLog.png' : '/outlineLog.png'" alt="Log" class="logIcon" title="Log Movie"
             @click="handleLogToggle" />
         </div>
       </div>
@@ -266,7 +266,7 @@ onMounted(async () => {
 
     <div class="dateLoggedRow">
       <label for="logDate">Watched on:</label>
-      <input id="logDate" type="date" v-model="logDate" class="dateInput" />
+      <input id="logDate" type="date" v-model="logDate" class="dateInput" title="Date Watched" />
     </div>
 
     <!-- REVIEWS SECTION -->
@@ -431,6 +431,7 @@ onMounted(async () => {
   border-radius: 4px;
   padding: 6px 10px;
   font-size: 0.95rem;
+  cursor: pointer;
 }
 
 .dateInput:focus {

@@ -8,6 +8,7 @@ const { checkLikeStatus, toggleLike } = useLikes()
 
 const imgBaseUrl = 'https://image.tmdb.org/t/p/w500'
 const apiKey = import.meta.env.VITE_TMDB_API_KEY
+const isLogged = ref(false)
 
 const diaryEntries = ref([])
 const user = ref(null)
@@ -24,7 +25,7 @@ const isLiked = ref(false)
 const liking = ref(false)
 
 // For logging to diary
-const logDate = ref(new Date().toISOString().slice(0,10))
+const logDate = ref(new Date().toISOString().slice(0, 10))
 const logging = ref(false)
 const logSuccess = ref(false)
 const logError = ref('')
@@ -50,9 +51,11 @@ function openModal(entry) {
   selectedMovie.value = entry
   showModal.value = true
   reviewInput.value = ''
-  logDate.value = entry.watched_on || new Date().toISOString().slice(0,10)
+  logDate.value = entry.watched_on || new Date().toISOString().slice(0, 10)
   logSuccess.value = false
   logError.value = ''
+
+  fetchMovieDetails(entry.movie_id)
 }
 
 function closeModal() {
@@ -147,12 +150,65 @@ async function handleLike() {
     .eq('movie_id', selectedMovie.value.movie_id)
 }
 
+async function handleLogToggle() {
+  if (!user.value || !selectedMovie.value) {
+    return
+  }
+
+  const confirmDelete = window.confirm('Unlog this movie?')
+
+  if (!confirmDelete) {
+    return
+  }
+
+  logging.value = true
+  logError.value = ''
+
+  const { error } = await supabase
+    .from('diary')
+    .delete()
+    .eq('user_id', user.value.id)
+    .eq('id', selectedMovie.value.id) // 👈 Use the Supabase diary row ID, not movie_id
+
+  if (error) {
+    logError.value = 'Failed to log movie: ' + error.message;
+    logging.value = false
+    return
+  }
+
+  diaryEntries.value = diaryEntries.value.filter(entry => entry.id !== selectedMovie.value.id)
+
+  showModal.value = false;
+  logging.value = false
+}
+
+async function fetchMovieDetails(movieId) {
+  try {
+    const res = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${apiKey}&language=en-US`)
+    const data = await res.json()
+    if (selectedMovie.value) {
+      selectedMovie.value = {
+        ...selectedMovie.value,
+        overview: data.overview || 'No overview available.',
+        release_date: data.release_date
+      }
+    }
+  } catch (err) {
+    console.error('Failed to fetch overview:', err)
+    selectedMovie.value = {
+      ...selectedMovie.value,
+      overview: 'Failed to load overview.'
+    }
+  }
+}
+
 
 // Watch for modal open to fetch reviews and like status
 watch(selectedMovie, async (movie) => {
   if (movie && movie.movie_id) {
     fetchReviews(movie.movie_id)
     isLiked.value = await checkLikeStatus(movie.movie_id)
+    isLogged.value = await checkLogStatus(movie.movie_id)
   }
 })
 
@@ -185,9 +241,12 @@ onMounted(async () => {
     <div v-if="loading" class="diary-loading">Loading...</div>
     <div v-else>
       <div v-for="entry in diaryEntries" :key="entry.id" class="diaryEntry">
-        <span class="month">{{ entry.watched_on ? new Date(entry.watched_on).toLocaleString('default', {month : 'short', year : 'numeric'}).toUpperCase() : '' }} </span>
+        <span class="month">{{ entry.watched_on ? new Date(entry.watched_on).toLocaleString('default', {
+          month: 'short',
+          year: 'numeric'
+        }).toUpperCase() : '' }} </span>
         <span class="day">
-          {{ entry.watched_on ? entry.watched_on.slice(8,10) : '' }}
+          {{ entry.watched_on ? entry.watched_on.slice(8, 10) : '' }}
         </span>
         <div class="film">
           <img :src="imgBaseUrl + entry.movie_poster" alt="Poster" />
@@ -200,27 +259,43 @@ onMounted(async () => {
         <button class="delete-btn" @click="handleDeleteEntry(entry.id)" title="Delete Entry">🗑️</button>
       </div>
     </div>
+  </div>
 
-    <!-- FULL MODAL -->
-    <MovieModal v-if="showModal" @close="closeModal">
+  <!-- FULL MODAL -->
+  <MovieModal v-if="showModal" @close="closeModal">
+    <div class="modalContainer">
       <div class="modalHeader">
         <div class="modalImgWrapper">
           <img :src="imgBaseUrl + selectedMovie.movie_poster" :alt="selectedMovie.movie_title" class="modalImg" />
-          <img :src="isLiked ? '/heartFilled.png' : '/heartOutline.png'" alt="Like" class="likeIcon"
-            @click="handleLike" />
+          <div class="iconRow">
+            <img :src="isLiked ? '/heartFilled.png' : '/heartOutline.png'" alt="Like" class="likeIcon"
+              title="Like Movie" @click="handleLike" />
+            <img :src="isLogged ? '/outlineLog.png' : '/filledLog.png'" alt="Log" class="logIcon" title="Log Movie"
+              @click="handleLogToggle" />
+          </div>
         </div>
+
+
         <div class="modalText">
           <div class="modalTitleRow">
             <h2 class="modalTitle">{{ selectedMovie.movie_title }}</h2>
-            <span class="modalYear">({{ selectedMovie.release_year }})</span>
+            <span class="modalYear">({{ new Date(selectedMovie.release_date).toISOString().slice(0, 10) }})</span>
           </div>
-          <p class="modalDescription">{{ selectedMovie.overview || 'No description available.' }}</p>
+          <p class="modalDescription">{{ selectedMovie.overview }}</p>
         </div>
       </div>
 
+      <!-- DATE LOGGED -->
+      <div class="dateLoggedRow">
+        <label for="logDate">Watched on:</label>
+        <input id="logDate" type="date" v-model="logDate" class="dateInput" title="Date Watched" />
+      </div>
 
+      <!-- REVIEW SECTION -->
       <div class="reviewsWrapper">
         <h3 class="reviewsLabel">Reviews</h3>
+
+        <!-- WRITE REVIEW AND INPUT -->
         <div class="reviewInputBar">
           <input v-model="reviewInput" :disabled="submitting" class="reviewInput" placeholder="Write your review..."
             @keyup.enter="submitReview" />
@@ -228,24 +303,24 @@ onMounted(async () => {
             Send
           </button>
         </div>
+
+        <!-- SCROLL REVIEW LIST -->
         <div class="reviewsSection">
           <div v-if="reviews.length === 0" class="reviewsEmpty">No reviews yet.</div>
           <div v-else class="reviewsList">
             <div v-for="review in reviews" :key="review.id" class="reviewItem">
               <span class="reviewUser">{{ review.user_name }}</span>
               <span class="reviewText">{{ review.review }}</span>
-              <button
-                v-if="user && review.user_id === user.id"
-                class="delete-review-btn"
-                @click="handleDeleteReview(review.id)"
-                title="Delete your review"
-              >🗑️</button>
+
+              <!-- SHOW DELETE ONLY FOR CURRENT USER -->
+              <button v-if="user && review.user_id === user.id" class="delete-review-btn"
+                @click="handleDeleteReview(review.id)" title="Delete your review">🗑️</button>
             </div>
           </div>
         </div>
       </div>
-    </MovieModal>
-  </div>
+    </div>
+  </MovieModal>
 </template>
 
 <style scoped>
@@ -344,6 +419,59 @@ onMounted(async () => {
 
 
 /* ALL THE STYLES COPIED FROM HOME */
+
+.iconRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.likeIcon {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.likeIcon:hover {
+  transform: scale(1.1);
+}
+
+.logIcon {
+  width: 35px;
+  height: 35px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.logIcon:hover {
+  transform: scale(1.1);
+}
+
+.dateLoggedRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+  color: #ccc;
+  font-size: 0.95rem;
+}
+
+.dateInput {
+  background: #2a2a2a;
+  color: white;
+  border: 1px solid #444;
+  border-radius: 4px;
+  padding: 6px 10px;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.dateInput:focus {
+  outline: 2px solid #27ae60;
+}
+
 .description {
   text-align: center;
   margin-top: 80px;
@@ -394,6 +522,7 @@ onMounted(async () => {
 .modalHeader {
   display: flex;
   align-items: flex-start;
+  justify-content: flex-start;
   gap: 20px;
   margin-bottom: 20px;
 }
@@ -403,17 +532,6 @@ onMounted(async () => {
   flex-direction: column;
   align-items: left;
   gap: 10px;
-}
-
-.likeIcon {
-  width: 16px;
-  height: 16px;
-  cursor: pointer;
-  transition: transform 0.2s ease;
-}
-
-.likeIcon:hover {
-  transform: scale(1.1);
 }
 
 .modalImg {
@@ -492,6 +610,7 @@ onMounted(async () => {
 }
 
 .reviewItem {
+  position: relative;
   background: #252525;
   border-radius: 4px;
   padding: 7px 10px;
@@ -549,15 +668,20 @@ onMounted(async () => {
 
 /* DELETE INSIDE REVIEW */
 .delete-review-btn {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
   background: none;
   border: none;
   color: #ff4d4f;
-  font-size: 1.1em;
+  font-size: 1.2em;
   cursor: pointer;
-  margin-left: auto;
-  align-self: flex-end;
   transition: color 0.2s;
+  padding: 0;
+  margin: 0;
 }
+
 .delete-review-btn:hover {
   color: #e50914;
 }
