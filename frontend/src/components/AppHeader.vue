@@ -9,7 +9,6 @@ const { user } = useAuth();
   <header class="header">
     <nav class="branding">
       <img class="logo" src="/sceneItLogo.png" alt="Logo of camera with text Scene-It" />
-      <span class="app-name">Scene-It</span>
     </nav>
 
     <nav class="nav">
@@ -22,7 +21,7 @@ const { user } = useAuth();
       <RouterLink v-if="user" to="/profile" class="links">Profile</RouterLink>
       <RouterLink to="/about" class="links">About</RouterLink>
 
-      
+
     </nav>
   </header>
 </template>
@@ -33,12 +32,6 @@ const { user } = useAuth();
   align-items: center;
   justify-content: center;
   gap: 16px;
-}
-
-.app-name {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #222;
 }
 
 .searchWrapper {
