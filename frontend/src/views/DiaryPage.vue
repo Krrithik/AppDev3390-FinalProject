@@ -143,11 +143,23 @@ onMounted(async () => {
   padding: 12px 0;
   gap: 10px;
   border-bottom: 1px solid #aaa;
+  /* Add transition for smooth animation */
+  transition: 
+    background-color 0.25s ,
+    transform 0.18s ,
+    box-shadow 0.18s ;
+  /* Optional: for a little depth even when not hovered */
+  box-shadow: 0 1px 2px rgba(0,0,0,0.02);
 }
 
-.diaryEntry:hover{
-    background-color: papayawhip;
+.diaryEntry:hover {
+  background-color: papayawhip;
+  /* Pop up a bit and add a shadow */
+  transform: translateY(-3px) scale(1.025);
+  box-shadow: 0 4px 24px 0 rgba(160, 100, 60, 0.18), 0 1.5px 8px 0 rgba(0,0,0,0.08);
+  z-index: 1;
 }
+
 
 
 .diaryEntry span {
