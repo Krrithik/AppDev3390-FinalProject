@@ -170,8 +170,8 @@ watch(selectedMovie, async (movie) => {
   }
 })
 
-onMounted(() => {
-  fetchUser()
+onMounted(async () => {
+  await fetchUser()
   loading.value = false
 })
 </script>

@@ -18,9 +18,10 @@ const user = ref(null)
 
 const isLiked = ref(false)
 const liking = ref(false)
+const loading = ref(true)
 
 /* For Adding to diary functions */
-const logDate = ref(new Date().toISOString().slice(0,10)) 
+const logDate = ref(new Date().toISOString().slice(0, 10))
 const logging = ref(false)
 const logSuccess = ref(false)
 const logError = ref('')
@@ -130,8 +131,8 @@ async function handleLike() {
 }
 
 //HANDLING ADD DATA TO DIARY
-async function handleLogMovie(){
-  if(!user.value){
+async function handleLogMovie() {
+  if (!user.value) {
     return
   }
 
@@ -139,19 +140,19 @@ async function handleLogMovie(){
   logError.value = ''
 
   const { error } = await supabase.from('diary').insert([{
-    user_id : user.value.id,
-    movie_id : selectedMovie.value.id,
-    movie_title : selectedMovie.value.title,
-    movie_poster : selectedMovie.value.poster_path,
-    release_year : selectedMovie.value.release_date ? Number(selectedMovie.value.release_date.slice(0,4)) : null,
-    rating : selectedMovie.value.vote_average,
-    liked : isLiked.value,
+    user_id: user.value.id,
+    movie_id: selectedMovie.value.id,
+    movie_title: selectedMovie.value.title,
+    movie_poster: selectedMovie.value.poster_path,
+    release_year: selectedMovie.value.release_date ? Number(selectedMovie.value.release_date.slice(0, 4)) : null,
+    rating: selectedMovie.value.vote_average,
+    liked: isLiked.value,
     watched_on: logDate.value
   }])
 
   logging.value = false
 
-  if(error){
+  if (error) {
     logError.value = 'Failed to log movie: ' + error.message;
     window.alert(logError.value)
   } else {
@@ -169,16 +170,24 @@ watch(selectedMovie, async (movie) => {
   }
 })
 
-onMounted(() => {
-  fetchMovies('trending/movie/week', trendingMovies)
-  fetchMovies('movie/now_playing', nowPlayingMovies)
-  fetchUser()
+onMounted(async () => {
+  await Promise.all([
+    fetchMovies('trending/movie/week', trendingMovies),
+    fetchMovies('movie/now_playing', nowPlayingMovies),
+    fetchUser()
+  ])
+  loading.value = false
 })
 </script>
 
 <template>
+
+  <div v-if="loading" class="spinnerOverlay">
+    <div class="spinner"></div>
+  </div>
+
   <!-- SHORT DESCRIPTION -->
-  <section class="description">
+  <section v-else class="description">
     <p>
       Jot the films you've seen.<br />
       Note films to watch next.<br />
@@ -227,14 +236,14 @@ onMounted(() => {
     </div>
 
     <div class="log-section">
-    <label for="logDate">Watched on:</label>
-    <input id="logDate" type="date" v-model="logDate" />
-    <button @click="handleLogMovie" :disabled="logging" class="log-btn">
-      {{ logging ? "Logging..." : "Log" }}
-    </button>
-    <span v-if="logSuccess" class="log-success">Logged!</span>
-    <span v-if="logError" class="log-error">{{ logError }}</span>
-  </div>
+      <label for="logDate">Watched on:</label>
+      <input id="logDate" type="date" v-model="logDate" />
+      <button @click="handleLogMovie" :disabled="logging" class="log-btn">
+        {{ logging ? "Logging..." : "Log" }}
+      </button>
+      <span v-if="logSuccess" class="log-success">Logged!</span>
+      <span v-if="logError" class="log-error">{{ logError }}</span>
+    </div>
 
     <!-- REVIEWS SECTION -->
     <div class="reviewsWrapper">
@@ -258,18 +267,47 @@ onMounted(() => {
             <span class="reviewText">{{ review.review }}</span>
 
             <!-- SHOW DELETE ONLY FOR CURRENT USER -->
-              <button v-if="user && review.user_id === user.id" class="delete-review-btn" @click="handleDeleteReview(review.id)" title="Delete your review">🗑️</button>
+            <button v-if="user && review.user_id === user.id" class="delete-review-btn"
+              @click="handleDeleteReview(review.id)" title="Delete your review">🗑️</button>
           </div>
-          
+
         </div>
       </div>
 
-    
+
     </div>
   </MovieModal>
 </template>
 
 <style scoped>
+.spinnerOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(255, 255, 255, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #ccc;
+  border-top-color: #27ae60;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .description {
   text-align: center;
   margin-top: 80px;
@@ -484,6 +522,7 @@ onMounted(() => {
   align-self: flex-end;
   transition: color 0.2s;
 }
+
 .delete-review-btn:hover {
   color: #e50914;
 }
@@ -495,6 +534,7 @@ onMounted(() => {
   align-items: center;
   gap: 10px;
 }
+
 .log-btn {
   background: #209CE6;
   color: #fff;
@@ -504,14 +544,14 @@ onMounted(() => {
   cursor: pointer;
   font-size: 1em;
 }
+
 .log-success {
   color: #0bff71;
   margin-left: 10px;
 }
+
 .log-error {
   color: #ff4d4f;
   margin-left: 10px;
 }
-
-
 </style>
