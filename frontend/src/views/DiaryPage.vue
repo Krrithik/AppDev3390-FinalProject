@@ -59,22 +59,7 @@ onMounted(async () => {
       <span>Edit</span>
     </div>
 
-    <!-- ENTRY 1 -->
-    <div class="diaryEntry">
-      <span class="month">MAY 2025</span>
-      <span class="day">04</span>
-      <div class="film">
-        <img src="/toyStoryForMockup.jpg" alt="Poster" />
-        <span class="title">Toy Story 3</span>
-      </div>
-      <span class="released">2010</span>
-      <span class="rating">★★★★½</span>
-      <span class="like">❤️</span>
-      <span class="review">📝</span>
-      <span class="edit">✏️</span>
-    </div>
-
-    <!-- ENTRY 2 -->
+  
     <div v-if="loading" class="diary-loading">Loading...</div>
     <div v-else>
       <div v-for="entry in diaryEntries" :key="entry.id" class="diaryEntry">
