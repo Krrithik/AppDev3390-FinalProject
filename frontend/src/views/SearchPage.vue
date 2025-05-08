@@ -20,6 +20,12 @@ const apiKey = import.meta.env.VITE_TMDB_API_KEY
 const searchQuery = ref('')
 const searchResults = ref([])
 
+/* For Adding to diary functions */
+const logDate = ref(new Date().toISOString().slice(0, 10))
+const logging = ref(false)
+const logSuccess = ref(false)
+const logError = ref('')
+
 //LIVE SEARCHES
 async function searchMovies() {
   if (!searchQuery.value.trim()) {
@@ -28,7 +34,7 @@ async function searchMovies() {
   }
   try {
     const response = await fetch(
-      `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&language=en-US&query=${encodeURIComponent(searchQuery.value)}&page=1&include_adult=false`
+      `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&language=en-US&query=${encodeURIComponent(searchQuery.value)}&page=1&include_adult=false`,
     )
     const responseData = await response.json()
     searchResults.value = (responseData.results || []).slice(0, 15)
@@ -61,7 +67,8 @@ function closeModal() {
 //IN CASE IMAGE CANNOT BE LOADED
 function handleImgError(event) {
   event.target.src = ''
-  event.target.alt = 'Image could not be loaded; this may be due to unavailability or an error on our part.'
+  event.target.alt =
+    'Image could not be loaded; this may be due to unavailability or an error on our part.'
   event.target.classList.add('imgError') //SEE CSS ENTRY FOR MORE
 }
 
@@ -102,6 +109,41 @@ async function handleLike() {
   liking.value = false
 }
 
+//HANDLING ADD DATA TO DIARY
+async function handleLogMovie() {
+  if (!user.value) {
+    return
+  }
+
+  logging.value = true
+  logError.value = ''
+
+  const { error } = await supabase.from('diary').insert([
+    {
+      user_id: user.value.id,
+      movie_id: selectedMovie.value.id,
+      movie_title: selectedMovie.value.title,
+      movie_poster: selectedMovie.value.poster_path,
+      release_year: selectedMovie.value.release_date
+        ? Number(selectedMovie.value.release_date.slice(0, 4))
+        : null,
+      rating: selectedMovie.value.vote_average,
+      liked: isLiked.value,
+      watched_on: logDate.value,
+    },
+  ])
+
+  logging.value = false
+
+  if (error) {
+    logError.value = 'Failed to log movie: ' + error.message
+    window.alert(logError.value)
+  } else {
+    logSuccess.value = true
+    setTimeout(() => (logSuccess.value = false), 2000)
+  }
+}
+
 //CHECK IF USER HAS IT LIKED AND CALLS REVIEWS
 watch(selectedMovie, async (movie) => {
   if (movie && movie.id) {
@@ -118,28 +160,43 @@ onMounted(() => {
 <!-- TEMPLATE -->
 <template>
   <div class="searchPage">
-
     <!-- SEARCH BAR -->
     <div class="searchBarWrapper">
       <div class="searchInputContainer">
-        <input type="text" v-model="searchQuery" @input="searchMovies" class="searchInput"
-          placeholder="Search for a movie..." />
+        <input
+          type="text"
+          v-model="searchQuery"
+          @input="searchMovies"
+          class="searchInput"
+          placeholder="Search for a movie..."
+        />
         <Search class="searchIcon" />
       </div>
     </div>
 
     <!-- MOVIE ON LEFT -->
     <section class="searchResultsSection">
-      <div class="searchResultCard" v-for="movie in searchResults" :key="movie.id" @click="openModal(movie)">
-        <img :src="imgBaseUrl + movie.poster_path" :alt="movie.title" class="resultImg"
-          @error="handleImgError($event)" />
+      <div
+        class="searchResultCard"
+        v-for="movie in searchResults"
+        :key="movie.id"
+        @click="openModal(movie)"
+      >
+        <img
+          :src="imgBaseUrl + movie.poster_path"
+          :alt="movie.title"
+          class="resultImg"
+          @error="handleImgError($event)"
+        />
 
         <!-- DETAILS RIGHT OF MOVIE -->
         <div class="resultDetails">
           <h2 class="resultTitle">{{ movie.title }}</h2>
           <p class="resultYear">{{ movie.release_date }}</p>
           <p class="resultOverview">
-            {{ movie.overview || 'No description given, this may be due to unavailability or an error on our part..'
+            {{
+              movie.overview ||
+              'No description given, this may be due to unavailability or an error on our part..'
             }}
           </p>
         </div>
@@ -150,9 +207,17 @@ onMounted(() => {
     <MovieModal v-if="showModal" @close="closeModal">
       <div class="modalHeader">
         <div class="modalImgWrapper">
-          <img :src="imgBaseUrl + selectedMovie.poster_path" :alt="selectedMovie.title" class="modalImg" />
-          <img :src="isLiked ? '/heartFilled.png' : '/heartOutline.png'" alt="Like" class="likeIcon"
-            @click="handleLike" />
+          <img
+            :src="imgBaseUrl + selectedMovie.poster_path"
+            :alt="selectedMovie.title"
+            class="modalImg"
+          />
+          <img
+            :src="isLiked ? '/heartFilled.png' : '/heartOutline.png'"
+            alt="Like"
+            class="likeIcon"
+            @click="handleLike"
+          />
         </div>
 
         <div class="modalText">
@@ -164,13 +229,32 @@ onMounted(() => {
         </div>
       </div>
 
+      <div class="log-section">
+        <label for="logDate">Watched on:</label>
+        <input id="logDate" type="date" v-model="logDate" />
+        <button @click="handleLogMovie" :disabled="logging" class="log-btn">
+          {{ logging ? 'Logging...' : 'Log' }}
+        </button>
+        <span v-if="logSuccess" class="log-success">Logged!</span>
+        <span v-if="logError" class="log-error">{{ logError }}</span>
+      </div>
+
       <div class="reviewsWrapper">
         <h3 class="reviewsLabel">Reviews</h3>
 
         <div class="reviewInputBar">
-          <input v-model="reviewInput" :disabled="submitting" class="reviewInput" placeholder="Write your review..."
-            @keyup.enter="submitReview" />
-          <button @click="submitReview" :disabled="submitting || !reviewInput.trim()" class="reviewSubmitBtn">
+          <input
+            v-model="reviewInput"
+            :disabled="submitting"
+            class="reviewInput"
+            placeholder="Write your review..."
+            @keyup.enter="submitReview"
+          />
+          <button
+            @click="submitReview"
+            :disabled="submitting || !reviewInput.trim()"
+            class="reviewSubmitBtn"
+          >
             Send
           </button>
         </div>
@@ -239,7 +323,9 @@ onMounted(() => {
   background: white;
   border-radius: 8px;
   padding: 16px;
-  transition: background 0.3s ease, transform 0.2s ease;
+  transition:
+    background 0.3s ease,
+    transform 0.2s ease;
   cursor: pointer;
 }
 
@@ -452,5 +538,30 @@ onMounted(() => {
   color: #bbb;
   font-size: 0.98em;
   text-align: center;
+}
+
+/* LOG STYLES */
+.log-section {
+  margin-top: 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.log-btn {
+  background: #209CE6;
+  color: #fff;
+  border: none;
+  padding: 7px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1em;
+}
+.log-success {
+  color: #0bff71;
+  margin-left: 10px;
+}
+.log-error {
+  color: #ff4d4f;
+  margin-left: 10px;
 }
 </style>
