@@ -185,9 +185,7 @@ onMounted(async () => {
     <div v-if="loading" class="diary-loading">Loading...</div>
     <div v-else>
       <div v-for="entry in diaryEntries" :key="entry.id" class="diaryEntry">
-        <span class="month">
-          {{ entry.watched_on ? entry.watched_on.slice(0,7).replace('-',' ').toUpperCase() : '' }}
-        </span>
+        <span class="month">{{ entry.watched_on ? new Date(entry.watched_on).toLocaleString('default', {month : 'short', year : 'numeric'}).toUpperCase() : '' }} </span>
         <span class="day">
           {{ entry.watched_on ? entry.watched_on.slice(8,10) : '' }}
         </span>
