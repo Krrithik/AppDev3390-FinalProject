@@ -1,12 +1,23 @@
 <script setup>
-//NO FUNCTIONALITY NEEDED
+import { ref } from 'vue'
+import { onMounted } from 'vue'
+
+const loading = ref(true)
+
+onMounted(() => {
+    loading.value = false
+})
 </script>
 
 <template>
     <div class="aboutLayout">
 
+        <div v-if="loading" class="spinnerOverlay">
+            <div class="spinner"></div>
+        </div>
+
         <!-- SIDEBAR -->
-        <aside class="sideBar">
+        <aside v-else class="sideBar">
             <div class="sideBarContent">
                 <ul>
                     <li><a href="#1">What is Scene-It?</a></li>
@@ -42,7 +53,8 @@
             <div class="block">
                 <h2 id="3">Do I need an account to use this site?</h2>
                 <p>
-                    Yes! While an account is required to use Scene-It, signing up is completely free. Without an account,
+                    Yes! While an account is required to use Scene-It, signing up is completely free. Without an
+                    account,
                     access is limited to the Sign In, Create Account, and About pages.
                 </p>
             </div>
@@ -92,6 +104,34 @@
     gap: 50px;
     padding: 80px 20px;
     font-family: sans-serif;
+}
+
+.spinnerOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(255, 255, 255, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #ccc;
+    border-top-color: #27ae60;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 .sideBar {

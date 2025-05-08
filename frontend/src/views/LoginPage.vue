@@ -4,6 +4,7 @@ import { supabase } from '@/supabase/supabase.init'
 import { useRouter } from 'vue-router'
 import { Eye } from 'lucide-vue-next'
 import { EyeOff } from 'lucide-vue-next'
+import { onMounted } from 'vue'
 
 const router = useRouter()
 
@@ -11,9 +12,10 @@ const email = ref('')
 const password = ref('')
 const showPassword = ref(false)
 const errorMsg = ref('')
-const loading = ref(false)
+const loading = ref(true)
 
 async function handleLogin() {
+   loading.value = true;
    const { data, error } = await supabase.auth.signInWithPassword({
       email: email.value,
       password: password.value
@@ -29,11 +31,22 @@ async function handleLogin() {
       router.push('/')
    }
 }
+
+onMounted(() => {
+   loading.value = false
+})
+
 </script>
 
 <template>
    <div class="loginWrapper">
-      <form class="loginBar" @submit.prevent="handleLogin">
+
+      <!-- LOADING SPINNER -->
+      <div v-if="loading" class="spinnerOverlay">
+         <div class="spinner"></div>
+      </div>
+
+      <form v-else class="loginBar" @submit.prevent="handleLogin">
          <h1 class="formTitle">Login to Scene-It</h1>
 
          <div class="inputGroup">
@@ -75,6 +88,34 @@ async function handleLogin() {
    background-color: white;
    padding: 40px;
    gap: 20px;
+}
+
+.spinnerOverlay {
+   position: fixed;
+   top: 0;
+   left: 0;
+   width: 100vw;
+   height: 100vh;
+   background-color: rgba(255, 255, 255, 0.7);
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   z-index: 999;
+}
+
+.spinner {
+   width: 40px;
+   height: 40px;
+   border: 4px solid #ccc;
+   border-top-color: #27ae60;
+   border-radius: 50%;
+   animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+   to {
+      transform: rotate(360deg);
+   }
 }
 
 .loginBar {

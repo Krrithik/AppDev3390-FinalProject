@@ -7,6 +7,7 @@ const router = useRouter()
 
 const profileUser = ref(null);
 const sessionData = ref(null);
+const loading = ref(true);
 
 async function getUserForProfile() {
   const { data: { user } } = await supabase.auth.getUser();
@@ -22,13 +23,15 @@ async function seeCurrentUser() {
 onMounted(async () => {
   profileUser.value = await getUserForProfile();
   await seeCurrentUser();
+  loading.value = false;
 });
 
 async function handleLogout() {
+  loading.value = true;
   const { error } = await supabase.auth.signOut()
   if (error) {
-    console.log(error);
-
+    console.log(error)
+    loading.value = false
   }
   else {
     console.log('logout successfull');
@@ -41,7 +44,12 @@ async function handleLogout() {
 
 <template>
   <div class="profileWrapper">
-    <div class="profileCard">
+
+    <div v-if="loading" class="spinnerOverlay">
+      <div class="spinner"></div>
+    </div>
+
+    <div v-else class="profileCard">
       <h1 class="profileTitle">Your Profile</h1>
       <p class="profileSubtitle">Your Profile Information</p>
 
@@ -61,7 +69,8 @@ async function handleLogout() {
 
       <div class="accountInfoRow">
         <span class="infoLabel">Member Since</span>
-        <span class="infoValue">{{ profileUser?.created_at ? new Date(profileUser.created_at).toLocaleDateString() : '' }}</span> <!-- ASK KRRITHIK -->
+        <span class="infoValue">{{ profileUser?.created_at ? new Date(profileUser.created_at).toLocaleDateString() : ''
+        }}</span> <!-- ASK KRRITHIK -->
       </div>
 
       <div class="accountInfoRow">
@@ -82,6 +91,34 @@ async function handleLogout() {
   padding: 60px 20px;
   background-color: white;
   min-height: 100vh;
+}
+
+.spinnerOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(255, 255, 255, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #ccc;
+  border-top-color: #27ae60;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .profileCard {
