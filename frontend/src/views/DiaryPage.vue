@@ -27,11 +27,10 @@ async function fetchDiary() {
     .select('*')
     .eq('user_id', user.value.id)
     .order('watched_on', { ascending: false })
-    
-    diaryEntries.value = data || [];
-    loading.value = false
-}
 
+  diaryEntries.value = data || [];
+  loading.value = false
+}
 
 async function handleDeleteEntry(entryId) {
   const confirmDelete = window.confirm('Are you sure you want to delete this log entry?');
@@ -53,14 +52,20 @@ async function handleDeleteEntry(entryId) {
 onMounted(async () => {
   await fetchUser()
   await fetchDiary()
+  loading.value = false
 })
 </script>
 
 <!-- USE ROW UNDER EDIT, AND MAYBE SCROLL IN THE SPACE OR JUST SCROLL THE PAGE, ASK KRITTHIK -->
 <template>
   <div class="diaryPage">
+
+    <div v-if="loading" class="spinnerOverlay">
+      <div class="spinner"></div>
+    </div>
+
     <!-- TOP TABS -->
-    <div class="topTabs">
+    <div v-else class="topTabs">
       <span class="tab activeTab">Diary</span>
       <span class="tab">Next Watch</span>
     </div>
@@ -77,19 +82,23 @@ onMounted(async () => {
       <span>Delete</span>
     </div>
 
-  
+
     <div v-if="loading" class="diary-loading">Loading...</div>
     <div v-else>
       <div v-for="entry in diaryEntries" :key="entry.id" class="diaryEntry">
-        <span class="month">{{ entry.watched_on ? new Date(entry.watched_on).toLocaleString('default', {month : 'short', year : 'numeric'}).toUpperCase() : '' }} </span>
-        <span class="day">{{ entry.watched_on ? new Date(entry.watched_on).getDate().toString().padStart(2, '0') : '' }}</span>
+        <span class="month">{{ entry.watched_on ? new Date(entry.watched_on).toLocaleString('default', {
+          month: 'short',
+          year: 'numeric'
+        }).toUpperCase() : '' }} </span>
+        <span class="day">{{ entry.watched_on ? new Date(entry.watched_on).getDate().toString().padStart(2, '0') : ''
+        }}</span>
         <div class="film">
           <img :src="imgBaseUrl + entry.movie_poster" alt="Poster" />
-          <span class="title">{{  entry.movie_title }} </span>
+          <span class="title">{{ entry.movie_title }} </span>
         </div>
         <span class="released">{{ entry.release_year }}</span>
         <span class="rating">{{ entry.rating ? entry.rating.toFixed(1) : '' }}</span>
-        <span class="like">{{ entry.liked ? '❤️' : ""  }}</span>
+        <span class="like">{{ entry.liked ? '❤️' : "" }}</span>
         <span class="review">📝</span>
         <button class="delete-btn" @click="handleDeleteEntry(entry.id)" title="Delete Entry">🗑️</button>
       </div>
@@ -103,6 +112,34 @@ onMounted(async () => {
   font-family: sans-serif;
   background-color: white;
   color: #111;
+}
+
+.spinnerOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(255, 255, 255, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #ccc;
+  border-top-color: #27ae60;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .topTabs {
@@ -144,19 +181,19 @@ onMounted(async () => {
   gap: 10px;
   border-bottom: 1px solid #aaa;
   /* Add transition for smooth animation */
-  transition: 
-    background-color 0.25s ,
-    transform 0.18s ,
-    box-shadow 0.18s ;
+  transition:
+    background-color 0.25s,
+    transform 0.18s,
+    box-shadow 0.18s;
   /* Optional: for a little depth even when not hovered */
-  box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
 }
 
 .diaryEntry:hover {
   background-color: papayawhip;
   /* Pop up a bit and add a shadow */
   transform: translateY(-3px) scale(1.025);
-  box-shadow: 0 4px 24px 0 rgba(160, 100, 60, 0.18), 0 1.5px 8px 0 rgba(0,0,0,0.08);
+  box-shadow: 0 4px 24px 0 rgba(160, 100, 60, 0.18), 0 1.5px 8px 0 rgba(0, 0, 0, 0.08);
   z-index: 1;
 }
 
