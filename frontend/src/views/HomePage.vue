@@ -93,6 +93,27 @@ async function submitReview() {
   }
 }
 
+//DELETING CURRENT USERS REVIEWS
+async function handleDeleteReview(reviewId) {
+  if (!user.value) return
+  const confirmDelete = window.confirm('Delete this review?')
+  if (!confirmDelete) return
+
+  const { error } = await supabase
+    .from('reviews')
+    .delete()
+    .eq('id', reviewId)
+    .eq('user_id', user.value.id) // extra safety: only delete your own
+
+  if (error) {
+    window.alert('Failed to delete review: ' + error.message)
+  } else {
+    // Refresh reviews after delete
+    fetchReviews(selectedMovie.value.id)
+  }
+}
+
+
 // ADD LIKE HANDLER
 async function handleLike() {
   if (!user.value) return
@@ -228,7 +249,11 @@ onMounted(() => {
           <div v-for="review in reviews" :key="review.id" class="reviewItem">
             <span class="reviewUser">{{ review.user_name }}</span>
             <span class="reviewText">{{ review.review }}</span>
+
+            <!-- SHOW DELETE ONLY FOR CURRENT USER -->
+              <button v-if="user && review.user_id === user.id" class="delete-review-btn" @click="handleDeleteReview(review.id)" title="Delete your review">🗑️</button>
           </div>
+          
         </div>
       </div>
 
@@ -439,6 +464,21 @@ onMounted(() => {
 .reviewSubmitBtn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+/* DELETE INSIDE REVIEW */
+.delete-review-btn {
+  background: none;
+  border: none;
+  color: #ff4d4f;
+  font-size: 1.1em;
+  cursor: pointer;
+  margin-left: auto;
+  align-self: flex-end;
+  transition: color 0.2s;
+}
+.delete-review-btn:hover {
+  color: #e50914;
 }
 
 /* LOG SECTION STYLES */
