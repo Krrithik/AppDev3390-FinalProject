@@ -108,7 +108,7 @@ async function handleLogMovie(){
   }
 
   logging.value = true
-  logError = ''
+  logError.value = ''
 
   const { error } = await supabase.from('diary').insert([{
     user_id : user.value.id,
