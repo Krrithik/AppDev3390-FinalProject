@@ -19,9 +19,10 @@ const imgBaseUrl = 'https://image.tmdb.org/t/p/w500'
 const apiKey = import.meta.env.VITE_TMDB_API_KEY
 const searchQuery = ref('')
 const searchResults = ref([])
+const loading = ref(true)
 
 /* For Adding to diary functions */
-const logDate = ref(new Date().toISOString().slice(0,10)) 
+const logDate = ref(new Date().toISOString().slice(0, 10))
 const logging = ref(false)
 const logSuccess = ref(false)
 const logError = ref('')
@@ -130,8 +131,8 @@ async function handleLike() {
 }
 
 //HANDLING ADD DATA TO DIARY
-async function handleLogMovie(){
-  if(!user.value){
+async function handleLogMovie() {
+  if (!user.value) {
     return
   }
 
@@ -139,19 +140,19 @@ async function handleLogMovie(){
   logError.value = ''
 
   const { error } = await supabase.from('diary').insert([{
-    user_id : user.value.id,
-    movie_id : selectedMovie.value.id,
-    movie_title : selectedMovie.value.title,
-    movie_poster : selectedMovie.value.poster_path,
-    release_year : selectedMovie.value.release_date ? Number(selectedMovie.value.release_date.slice(0,4)) : null,
-    rating : selectedMovie.value.vote_average,
-    liked : isLiked.value,
+    user_id: user.value.id,
+    movie_id: selectedMovie.value.id,
+    movie_title: selectedMovie.value.title,
+    movie_poster: selectedMovie.value.poster_path,
+    release_year: selectedMovie.value.release_date ? Number(selectedMovie.value.release_date.slice(0, 4)) : null,
+    rating: selectedMovie.value.vote_average,
+    liked: isLiked.value,
     watched_on: logDate.value
   }])
 
   logging.value = false
 
-  if(error){
+  if (error) {
     logError.value = 'Failed to log movie: ' + error.message;
     window.alert(logError.value)
   } else {
@@ -171,40 +172,32 @@ watch(selectedMovie, async (movie) => {
 
 onMounted(() => {
   fetchUser()
+  loading.value = false
 })
 </script>
 
 <!-- TEMPLATE -->
 <template>
   <div class="searchPage">
+
+    <div v-if="loading" class="spinnerOverlay">
+      <div class="spinner"></div>
+    </div>
+
     <!-- SEARCH BAR -->
-    <div class="searchBarWrapper">
+    <div v-else class="searchBarWrapper">
       <div class="searchInputContainer">
-        <input
-          type="text"
-          v-model="searchQuery"
-          @input="searchMovies"
-          class="searchInput"
-          placeholder="Search for a movie..."
-        />
+        <input type="text" v-model="searchQuery" @input="searchMovies" class="searchInput"
+          placeholder="Search for a movie..." />
         <Search class="searchIcon" />
       </div>
     </div>
 
     <!-- MOVIE ON LEFT -->
     <section class="searchResultsSection">
-      <div
-        class="searchResultCard"
-        v-for="movie in searchResults"
-        :key="movie.id"
-        @click="openModal(movie)"
-      >
-        <img
-          :src="imgBaseUrl + movie.poster_path"
-          :alt="movie.title"
-          class="resultImg"
-          @error="handleImgError($event)"
-        />
+      <div class="searchResultCard" v-for="movie in searchResults" :key="movie.id" @click="openModal(movie)">
+        <img :src="imgBaseUrl + movie.poster_path" :alt="movie.title" class="resultImg"
+          @error="handleImgError($event)" />
 
         <!-- DETAILS RIGHT OF MOVIE -->
         <div class="resultDetails">
@@ -213,7 +206,7 @@ onMounted(() => {
           <p class="resultOverview">
             {{
               movie.overview ||
-              'No description given, this may be due to unavailability or an error on our part..'}}
+              'No description given, this may be due to unavailability or an error on our part..' }}
           </p>
         </div>
       </div>
@@ -223,17 +216,9 @@ onMounted(() => {
     <MovieModal v-if="showModal" @close="closeModal">
       <div class="modalHeader">
         <div class="modalImgWrapper">
-          <img
-            :src="imgBaseUrl + selectedMovie.poster_path"
-            :alt="selectedMovie.title"
-            class="modalImg"
-          />
-          <img
-            :src="isLiked ? '/heartFilled.png' : '/heartOutline.png'"
-            alt="Like"
-            class="likeIcon"
-            @click="handleLike"
-          />
+          <img :src="imgBaseUrl + selectedMovie.poster_path" :alt="selectedMovie.title" class="modalImg" />
+          <img :src="isLiked ? '/heartFilled.png' : '/heartOutline.png'" alt="Like" class="likeIcon"
+            @click="handleLike" />
         </div>
 
         <div class="modalText">
@@ -247,31 +232,22 @@ onMounted(() => {
 
       <!-- LOG SECTION  -->
       <div class="log-section">
-  <label for="logDate">Watched on:</label>
-  <input id="logDate" type="date" v-model="logDate" />
-  <button @click="handleLogMovie" :disabled="logging" class="log-btn">
-    {{ logging ? "Logging..." : "Log" }}
-  </button>
-  <span v-if="logSuccess" class="log-success">Logged!</span>
-  <span v-if="logError" class="log-error">{{ logError }}</span>
-</div>
+        <label for="logDate">Watched on:</label>
+        <input id="logDate" type="date" v-model="logDate" />
+        <button @click="handleLogMovie" :disabled="logging" class="log-btn">
+          {{ logging ? "Logging..." : "Log" }}
+        </button>
+        <span v-if="logSuccess" class="log-success">Logged!</span>
+        <span v-if="logError" class="log-error">{{ logError }}</span>
+      </div>
 
       <div class="reviewsWrapper">
         <h3 class="reviewsLabel">Reviews</h3>
 
         <div class="reviewInputBar">
-          <input
-            v-model="reviewInput"
-            :disabled="submitting"
-            class="reviewInput"
-            placeholder="Write your review..."
-            @keyup.enter="submitReview"
-          />
-          <button
-            @click="submitReview"
-            :disabled="submitting || !reviewInput.trim()"
-            class="reviewSubmitBtn"
-          >
+          <input v-model="reviewInput" :disabled="submitting" class="reviewInput" placeholder="Write your review..."
+            @keyup.enter="submitReview" />
+          <button @click="submitReview" :disabled="submitting || !reviewInput.trim()" class="reviewSubmitBtn">
             Send
           </button>
         </div>
@@ -283,12 +259,8 @@ onMounted(() => {
               <span class="reviewText">{{ review.review }}</span>
 
               <!-- SHOW DELETE ONLY FOR CURRENT USER -->
-              <button
-                v-if="user && review.user_id === user.id"
-                class="delete-review-btn"
-                @click="handleDeleteReview(review.id)"
-                title="Delete your review"
-              >
+              <button v-if="user && review.user_id === user.id" class="delete-review-btn"
+                @click="handleDeleteReview(review.id)" title="Delete your review">
                 🗑️
               </button>
             </div>
@@ -306,6 +278,34 @@ onMounted(() => {
   color: white;
   min-height: 100vh;
   font-family: Arial, sans-serif;
+}
+
+.spinnerOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(255, 255, 255, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #ccc;
+  border-top-color: #27ae60;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .searchBarWrapper {
@@ -565,7 +565,7 @@ onMounted(() => {
   font-size: 0.98em;
   text-align: center;
 
-  
+
 }
 
 /* delete review button styles */
@@ -579,6 +579,7 @@ onMounted(() => {
   align-self: flex-end;
   transition: color 0.2s;
 }
+
 .delete-review-btn:hover {
   color: #e50914;
 }
@@ -590,6 +591,7 @@ onMounted(() => {
   align-items: center;
   gap: 10px;
 }
+
 .log-btn {
   background: #209CE6;
   color: #fff;
@@ -599,14 +601,14 @@ onMounted(() => {
   cursor: pointer;
   font-size: 1em;
 }
+
 .log-success {
   color: #0bff71;
   margin-left: 10px;
 }
+
 .log-error {
   color: #ff4d4f;
   margin-left: 10px;
 }
-
 </style>
-
