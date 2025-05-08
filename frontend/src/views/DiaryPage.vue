@@ -145,6 +145,11 @@ onMounted(async () => {
   border-bottom: 1px solid #aaa;
 }
 
+.diaryEntry:hover{
+    background-color: papayawhip;
+}
+
+
 .diaryEntry span {
   display: flex;
   align-items: center;
