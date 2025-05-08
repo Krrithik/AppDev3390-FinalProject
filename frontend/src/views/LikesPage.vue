@@ -44,6 +44,13 @@ async function handleLike(movie) {
   liking.value = false
 
 
+  // Sync diary entry's liked field
+  await supabase
+    .from('diary')
+    .update({ liked: isNowLiked })
+    .eq('user_id', user.value.id)
+    .eq('movie_id', movie.movie_id)
+
   if (!isNowLiked) {
     await fetchUserLikes();
   }

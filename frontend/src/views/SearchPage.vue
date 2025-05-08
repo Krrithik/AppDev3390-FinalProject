@@ -35,6 +35,7 @@ async function searchMovies() {
   try {
     const response = await fetch(
       `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&language=en-US&query=${encodeURIComponent(searchQuery.value)}&page=1&include_adult=false`,
+      `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&language=en-US&query=${encodeURIComponent(searchQuery.value)}&page=1&include_adult=false`,
     )
     const responseData = await response.json()
     searchResults.value = (responseData.results || []).slice(0, 15)
@@ -67,6 +68,8 @@ function closeModal() {
 //IN CASE IMAGE CANNOT BE LOADED
 function handleImgError(event) {
   event.target.src = ''
+  event.target.alt =
+    'Image could not be loaded; this may be due to unavailability or an error on our part.'
   event.target.alt =
     'Image could not be loaded; this may be due to unavailability or an error on our part.'
   event.target.classList.add('imgError') //SEE CSS ENTRY FOR MORE
@@ -187,12 +190,31 @@ onMounted(() => {
           class="searchInput"
           placeholder="Search for a movie..."
         />
+        <input
+          type="text"
+          v-model="searchQuery"
+          @input="searchMovies"
+          class="searchInput"
+          placeholder="Search for a movie..."
+        />
         <Search class="searchIcon" />
       </div>
     </div>
 
     <!-- MOVIE ON LEFT -->
     <section class="searchResultsSection">
+      <div
+        class="searchResultCard"
+        v-for="movie in searchResults"
+        :key="movie.id"
+        @click="openModal(movie)"
+      >
+        <img
+          :src="imgBaseUrl + movie.poster_path"
+          :alt="movie.title"
+          class="resultImg"
+          @error="handleImgError($event)"
+        />
       <div
         class="searchResultCard"
         v-for="movie in searchResults"
@@ -214,9 +236,13 @@ onMounted(() => {
             {{
               movie.overview ||
               'No description given, this may be due to unavailability or an error on our part..'
+            {{
+              movie.overview ||
+              'No description given, this may be due to unavailability or an error on our part..'
             }}
           </p>
         </div>
+      </div>
       </div>
     </section>
 
@@ -224,6 +250,17 @@ onMounted(() => {
     <MovieModal v-if="showModal" @close="closeModal">
       <div class="modalHeader">
         <div class="modalImgWrapper">
+          <img
+            :src="imgBaseUrl + selectedMovie.poster_path"
+            :alt="selectedMovie.title"
+            class="modalImg"
+          />
+          <img
+            :src="isLiked ? '/heartFilled.png' : '/heartOutline.png'"
+            alt="Like"
+            class="likeIcon"
+            @click="handleLike"
+          />
           <img
             :src="imgBaseUrl + selectedMovie.poster_path"
             :alt="selectedMovie.title"
@@ -261,6 +298,18 @@ onMounted(() => {
         <h3 class="reviewsLabel">Reviews</h3>
 
         <div class="reviewInputBar">
+          <input
+            v-model="reviewInput"
+            :disabled="submitting"
+            class="reviewInput"
+            placeholder="Write your review..."
+            @keyup.enter="submitReview"
+          />
+          <button
+            @click="submitReview"
+            :disabled="submitting || !reviewInput.trim()"
+            class="reviewSubmitBtn"
+          >
           <input
             v-model="reviewInput"
             :disabled="submitting"
@@ -350,6 +399,9 @@ onMounted(() => {
   background: white;
   border-radius: 8px;
   padding: 16px;
+  transition:
+    background 0.3s ease,
+    transform 0.2s ease;
   transition:
     background 0.3s ease,
     transform 0.2s ease;
@@ -610,3 +662,4 @@ onMounted(() => {
 }
 
 </style>
+
