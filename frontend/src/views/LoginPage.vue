@@ -138,6 +138,7 @@ onMounted(() => {
    font-size: 1.5rem;
    text-align: center;
    margin-bottom: 10px;
+   font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
 .inputGroup {
@@ -153,6 +154,7 @@ onMounted(() => {
    margin-bottom: 5px;
    font-size: 0.95rem;
    font-weight: 500;
+   font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
 .passwordInputWrapper {
@@ -168,6 +170,7 @@ onMounted(() => {
    background-color: #dce6f0;
    width: 100%;
    box-sizing: border-box;
+   font-family:Verdana, Geneva, Tahoma, sans-serif;
 }
 
 .passwordInputWrapper .loginInput {
@@ -206,6 +209,7 @@ onMounted(() => {
    cursor: pointer;
    width: 400px;
    transition: background-color 0.3s ease;
+   font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .loginButton:hover {
