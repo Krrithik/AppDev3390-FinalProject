@@ -45,6 +45,7 @@ async function handleLogout() {
 <template>
   <div class="profileWrapper">
 
+    <!-- SPINNER -->
     <div v-if="loading" class="spinnerOverlay">
       <div class="spinner"></div>
     </div>
@@ -59,25 +60,28 @@ async function handleLogout() {
         <div class="formValue">{{ profileUser?.user_metadata?.fullName }}</div>
       </div>
 
+      <!-- EMAIL INFO-->
       <div class="formGroup">
         <label class="formLabel">Email Address</label>
         <div class="formValue">{{ sessionData?.session?.user?.email }}</div> <!-- IS THERE A BETTER WAY? -->
       </div>
 
-      <!-- ACCOUNT INFO -->
+      <!-- ACCOUNT INFO LABEL-->
       <div class="sectionDivider">Account Information</div>
 
       <div class="accountInfoRow">
         <span class="infoLabel">Member Since</span>
         <span class="infoValue">{{ profileUser?.created_at ? new Date(profileUser.created_at).toLocaleDateString() : ''
-          }}</span> <!-- ASK KRRITHIK -->
+          }}</span>
       </div>
 
+      <!-- STATUS TEXTS -->
       <div class="accountInfoRow">
         <span class="infoLabel">Account Status</span>
         <span class="infoValueActive">Active</span>
       </div>
 
+      <!-- LOGOUT BUTTON -->
       <button @click="handleLogout" class="logoutButton">Logout</button>
     </div>
   </div>

@@ -207,6 +207,7 @@ onMounted(async () => {
 <template>
   <div class="searchPage">
 
+    <!-- SPINNER -->
     <div v-if="loading" class="spinnerOverlay">
       <div class="spinner"></div>
     </div>
@@ -239,12 +240,16 @@ onMounted(async () => {
       </div>
     </section>
 
-    <!-- MODAL WIP -->
+    <!-- MODAL -->
     <MovieModal v-if="showModal" @close="closeModal">
       <div class="modalHeader">
+
+        <!-- MODAL IMAGE -->
         <div class="modalImgWrapper">
           <img :src="imgBaseUrl + selectedMovie.poster_path" :alt="selectedMovie.title" class="modalImg"
             @error="handleImgError" />
+
+          <!-- MODAL ICONS -->
           <div class="iconRow">
             <img :src="isLiked ? '/heartFilled.png' : '/heartOutline.png'" alt="Like" class="likeIcon"
               title="Like Movie" @click="handleLike" />
@@ -253,6 +258,7 @@ onMounted(async () => {
           </div>
         </div>
 
+        <!-- MOVIE TITLE YEAR AND DESCRIPTION -->
         <div class="modalText">
           <div class="modalTitleRow">
             <h2 class="modalTitle">{{ selectedMovie.title || "No Title Available" }}</h2>
@@ -262,7 +268,7 @@ onMounted(async () => {
         </div>
       </div>
 
-      <!-- LOG SECTION  -->
+      <!-- DATE SECTION  -->
       <div class="dateLoggedRow">
         <label for="logDate">Watched on:</label>
         <input id="logDate" type="date" v-model="logDate" class="dateInput" title="Date Watched" />
@@ -271,6 +277,7 @@ onMounted(async () => {
       <div class="reviewsWrapper">
         <h3 class="reviewsLabel">Reviews</h3>
 
+        <!-- REVIEW BAR AND BUTTON -->
         <div class="reviewInputBar">
           <input v-model="reviewInput" :disabled="submitting" class="reviewInput" placeholder="Write your review..."
             @keyup.enter="submitReview" />
@@ -278,6 +285,8 @@ onMounted(async () => {
             Send
           </button>
         </div>
+
+        <!-- REVIEWS ON MOVIE -->
         <div class="reviewsSection">
           <div v-if="reviews.length === 0" class="reviewsEmpty">No reviews yet.</div>
           <div v-else class="reviewsList">

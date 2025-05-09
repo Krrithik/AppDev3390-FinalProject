@@ -304,9 +304,12 @@ onMounted(async () => {
       <span>Delete</span>
     </div>
 
+    <!-- SPINNER -->
     <div v-if="loading" class="spinnerOverlay">
       <div class="spinner"></div>
     </div>
+
+    <!-- DIARY ENTRIES -->
     <div v-else>
       <div v-for="entry in paginatedEntries" :key="entry.id" class="diaryEntry">
         <span class="month">{{ entry.watched_on ? new Date(entry.watched_on).toLocaleString('default', {
@@ -328,6 +331,7 @@ onMounted(async () => {
         <Trash2 class="delete-btn" @click="handleDeleteEntry(entry.id)" title="Delete Entry"></trash2>
       </div>
 
+      <!-- TABS -->
       <div v-if="totalPages > 1" class="pagination">
         <button v-for="page in totalPages" :key="page" @click="goToPage(page)"
           :class="{ active: currentPage === page }">
@@ -338,12 +342,16 @@ onMounted(async () => {
     </div>
   </div>
 
-  <!-- FULL MODAL -->
+  <!-- MODAL -->
   <MovieModal v-if="showModal" @close="closeModal">
     <div class="modalContainer">
       <div class="modalHeader">
+
+        <!-- MOVIE IMAGE -->
         <div class="modalImgWrapper">
           <img :src="imgBaseUrl + selectedMovie.movie_poster" :alt="selectedMovie.movie_title" class="modalImg" />
+
+          <!-- ICONS BELOW MOVIE -->
           <div class="iconRow">
             <img :src="isLiked ? '/heartFilled.png' : '/heartOutline.png'" alt="Like" class="likeIcon"
               title="Like Movie" @click="handleLike" />
@@ -352,13 +360,15 @@ onMounted(async () => {
           </div>
         </div>
 
-
+        <!-- MOVIE TITLE AND YEAR -->
         <div class="modalText">
           <div class="modalTitleRow">
             <h2 class="modalTitle">{{ selectedMovie.movie_title }}</h2>
             <span class="modalYear">({{ selectedMovie.release_date ?
               new Date(selectedMovie.release_date).toISOString().slice(0, 10) : "Unknown" }})</span>
           </div>
+
+          <!-- MOVIE DESCRIPTION -->
           <p class="modalDescription">{{ selectedMovie.overview }}</p>
         </div>
       </div>
@@ -373,7 +383,7 @@ onMounted(async () => {
       <div class="reviewsWrapper">
         <h3 class="reviewsLabel">Reviews</h3>
 
-        <!-- WRITE REVIEW AND INPUT -->
+        <!-- WRITE REVIEW INPUT AND BUTTON -->
         <div class="reviewInputBar">
           <input v-model="reviewInput" :disabled="submitting" class="reviewInput" placeholder="Write your review..."
             @keyup.enter="submitReview" />
@@ -382,7 +392,7 @@ onMounted(async () => {
           </button>
         </div>
 
-        <!-- SCROLL REVIEW LIST -->
+        <!-- REVIEWS FOR MOVIE -->
         <div class="reviewsSection">
           <div v-if="reviews.length === 0" class="reviewsEmpty">No reviews yet.</div>
           <div v-else class="reviewsList">

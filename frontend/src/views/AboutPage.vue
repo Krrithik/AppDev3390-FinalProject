@@ -12,6 +12,7 @@ onMounted(() => {
 <template>
     <div class="aboutLayout">
 
+        <!-- SPINNER -->
         <div v-if="loading" class="spinnerOverlay">
             <div class="spinner"></div>
         </div>

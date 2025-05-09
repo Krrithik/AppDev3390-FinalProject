@@ -74,6 +74,7 @@ onMounted(async () => {
 
 <template>
   <div class="likedPage">
+
     <!-- LOADING SPINNER -->
     <div v-if="loading" class="spinnerOverlay">
       <div class="spinner"></div>
@@ -85,10 +86,13 @@ onMounted(async () => {
     <!-- IF HAS LIKED MOVIES -->
     <div v-else>
       <div class="movie-grid">
+
+        <!-- DISPLAY MOVIES -->
         <div v-for="movie in paginatedMovies" :key="movie.id" class="liked-movie">
           <img :src="imgBaseUrl + movie.movie_poster" :alt="movie.movie_title" class="liked-poster"
             @error="handleImgError" />
 
+          <!-- HEART ICON UPON HOVER -->
           <div class="card-footer" @click.stop="handleLike(movie)">
             <img :src="likedMovies.some(m => m.id === movie.id) ? '/heartFilled.png' : '/heartOutline.png'" alt="Like"
               class="likeIcon" />
@@ -96,6 +100,7 @@ onMounted(async () => {
         </div>
       </div>
 
+      <!-- TABS -->
       <div v-if="totalPages > 1" class="pagination">
         <button v-for="page in totalPages" :key="page" @click="goToPage(page)"
           :class="{ active: currentPage === page }">

@@ -46,6 +46,7 @@ onMounted(() => {
          <div class="spinner"></div>
       </div>
 
+      <!-- EMAIL INPUT -->
       <form v-else class="loginBar" @submit.prevent="handleLogin">
          <h1 class="formTitle">Login to Scene-It</h1>
 
@@ -54,11 +55,14 @@ onMounted(() => {
             <input v-model="email" type="email" placeholder="Email" required class="loginInput" />
          </div>
 
+         <!-- PASSWORD INPUT-->
          <div class="inputGroup">
             <label for="password" class="inputLabel">Password</label>
             <div class="passwordInputWrapper">
                <input v-model="password" :type="showPassword ? 'text' : 'password'" placeholder="Password" required
                   autocomplete="current-password" class="loginInput" />
+
+               <!-- TOGGLE EYE VISIBILITY-->
                <button type="button" class="toggleEye" @click="showPassword = !showPassword">
                   <EyeOff v-if="!showPassword" />
                   <Eye v-else />
@@ -69,6 +73,8 @@ onMounted(() => {
          <button :disabled="loading" class="loginButton">
             {{ loading ? 'Logging in...' : 'LOGIN' }}
          </button>
+
+         <!-- LOWER TEXT-->
          <h2 class="redirectHeader">Don't have an account?</h2>
          <RouterLink v-if="!user" to="/signup" class="links">
             <h3 class="dontAccount">Create an account</h3>

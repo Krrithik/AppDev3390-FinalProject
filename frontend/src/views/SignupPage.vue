@@ -73,6 +73,7 @@ onMounted(() => {
 <template>
   <div class="signupWrapper">
 
+    <!-- SPINNER -->
     <div v-if="loading" class="spinnerOverlay">
       <div class="spinner"></div>
     </div>
@@ -80,21 +81,26 @@ onMounted(() => {
     <form v-else class="signupForm" @submit.prevent="handleSignup">
       <h1 class="formTitle">Join Scene-It</h1>
 
+      <!-- FULL NAME INPUT -->
       <div class="inputGroup">
         <label for="text" class="inputLabel">Full Name</label>
         <input v-model="fullName" type="text" placeholder="Full Name" required />
       </div>
 
+      <!-- EMAIL INPUT -->
       <div class="inputGroup">
         <label for="email" class="inputLabel">Email</label>
         <input v-model="email" type="email" placeholder="Email Address" required />
       </div>
 
+      <!-- PASSWORD INPUT -->
       <div class="inputGroup">
         <label for="password" class="inputLabel">Password</label>
         <div class="passwordInputWrapper">
           <input v-model="password" :type="showPassword ? 'text' : 'password'" placeholder="Create Password" required
             class="loginInput" />
+
+          <!-- TOGGLE EYE VISIBILITY-->
           <button type="button" class="toggleEye" @click="showPassword = !showPassword">
             <EyeOff v-if="!showPassword" />
             <Eye v-else />
