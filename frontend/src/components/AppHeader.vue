@@ -57,11 +57,27 @@ const { user } = useAuth();
   flex-wrap: nowrap;
 }
 
+.searchWrapper {
+  position: relative;
+  width: 200px;
+}
+
+.searchIcon {
+  position: absolute;
+  top: 50%;
+  right: -40px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  width: 18px;
+  height: 18px;
+  color: #bbb;
+}
+
 .links {
   text-decoration: none;
   color: #444;
   cursor: pointer;
-  font-family:Verdana, Geneva, Tahoma, sans-serif ;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
   font-size: 18px;
 }
 
