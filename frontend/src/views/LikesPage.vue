@@ -9,6 +9,7 @@ const imgBaseUrl = 'https://image.tmdb.org/t/p/w500'
 const user = ref(null)
 const liking = ref(false)
 const loading = ref(true)
+const imgErrors = ref(new Set())
 
 //ADJUST AS WANTED
 const currentPage = ref(1)
@@ -32,7 +33,7 @@ function goToPage(page) {
 
 function handleImgError(event) {
   event.target.src = '' // Use your own default image
-  event.target.alt = 'N/A'
+  event.target.alt = movie.title
   event.target.classList.add('imgError')
 }
 
