@@ -170,7 +170,7 @@ async function toggleEntryLike(entry) {
     poster_path: entry.movie_poster,
   })
 
-  // ✅ Update diary.liked in Supabase directly
+  // Update diary.liked in Supabase directly
   const { error } = await supabase
     .from('diary')
     .update({ liked: newLikeState })
@@ -182,7 +182,7 @@ async function toggleEntryLike(entry) {
     return
   }
 
-  // ✅ Update locally
+  // Update locally
   const index = diaryEntries.value.findIndex(e => e.id === entry.id)
   if (index !== -1) {
     diaryEntries.value[index] = {
@@ -229,7 +229,7 @@ async function handleLogToggle() {
     .from('diary')
     .delete()
     .eq('user_id', user.value.id)
-    .eq('id', selectedMovie.value.id) // 👈 Use the Supabase diary row ID, not movie_id
+    .eq('id', selectedMovie.value.id) // Use the Supabase diary row ID, not movie_id
 
   if (error) {
     logError.value = 'Failed to log movie: ' + error.message;
