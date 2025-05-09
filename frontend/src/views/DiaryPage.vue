@@ -332,7 +332,7 @@ onMounted(async () => {
         <img :src="entry.liked ? '/heartFilled.png' : '/heartOutline.png'" alt="Like" class="likeIcon"
           @click=toggleEntryLike(entry) title="Toggle Like">
         <Pencil class="edit" @click="openModal(entry)" title="Edit Details"></pencil>
-        <Trash2 class="delete-btn" @click="handleDeleteEntry(entry.id)" title="Delete Entry"></trash2>
+        <Trash2 class="deleteBtn" @click="handleDeleteEntry(entry.id)" title="Delete Entry"></trash2>
       </div>
 
       <!-- TABS -->
@@ -405,7 +405,7 @@ onMounted(async () => {
               <span class="reviewText">{{ review.review }}</span>
 
               <!-- SHOW DELETE ONLY FOR CURRENT USER -->
-              <Trash2 v-if="user && review.user_id === user.id" class="delete-review-btn"
+              <Trash2 v-if="user && review.user_id === user.id" class="deleteReviewBtn"
                 @click="handleDeleteReview(review.id)" title="Delete your review"></trash2>
             </div>
           </div>
@@ -492,7 +492,7 @@ onMounted(async () => {
   padding-left: 8px;
 }
 
-.delete-btn {
+.deleteBtn {
   color: #EAFBFC;
   cursor: pointer;
   padding-left: 4px;
@@ -845,7 +845,7 @@ onMounted(async () => {
 }
 
 /* DELETE INSIDE REVIEW */
-.delete-review-btn {
+.deleteReviewBtn {
   position: absolute;
   top: 50%;
   right: 10px;
@@ -860,7 +860,7 @@ onMounted(async () => {
   margin: 0;
 }
 
-.delete-review-btn:hover {
+.deleteReviewBtn:hover {
   color: #e50914;
 }
 </style>
