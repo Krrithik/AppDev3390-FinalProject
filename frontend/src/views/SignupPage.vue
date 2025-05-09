@@ -236,7 +236,7 @@ onMounted(() => {
   background-color: #8ECAE6;
 }
 
-.loginIInput:focus,
+.loginInput:focus,
 .signupForm input:focus {
   outline: 2px solid #219EBC;
 }

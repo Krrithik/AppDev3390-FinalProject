@@ -1,11 +1,11 @@
-  <script setup>
+<script setup>
   // No script needed for basic modal
 </script>
   
 <template>
-  <div class="modal-backdrop" @click.self="$emit('close')">
-    <div class="modal-content">
-      <button class="close-btn" @click="$emit('close')">×</button>
+  <div class="modalBackdrop" @click.self="$emit('close')">
+    <div class="modalContent">
+      <button class="closeBtn" @click="$emit('close')">×</button>
       <slot></slot>
     </div>
   </div>
@@ -13,7 +13,7 @@
 
 
 <style scoped>
-.modal-backdrop {
+.modalBackdrop {
   position: fixed;
   top: 0;
   left: 0;
@@ -26,7 +26,7 @@
   z-index: 1000;
 }
 
-.modal-content {
+.modalContent {
   background: #012535;
   color: #EAFBFC;
   border-radius: 20px;
@@ -43,11 +43,11 @@
   -ms-overflow-style: none;
 }
 
-.modal-content::-webkit-scrollbar {
+.modalContent::-webkit-scrollbar {
   display: none;
 }
 
-.close-btn {
+.closeBtn {
   position: absolute;
   top: 8px;
   right: 12px;
@@ -58,7 +58,7 @@
   cursor: pointer;
 }
 
-.close-btn:hover {
+.closeBtn:hover {
   color: #FB8500;
 }
 </style>
