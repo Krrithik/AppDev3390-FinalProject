@@ -47,7 +47,7 @@ onMounted(() => {
                 <h2 id="2">Why the name Scene-It?</h2>
                 <p>
                     As a movie logging app, we wanted a name that reflected both cinema and tracking what you've
-                    watched. Scene-It plays on the word scene—a clear reference to film and storytelling—while also
+                    watched (like a Homophone). Scene-It plays on the word scene—a clear reference to film and storytelling—while also
                     sounding like “seen it,” which ties directly into the logging and tracking experience. The name
                     immediately signals to users that the app is about watching, remembering, and sharing films.
                 </p>
