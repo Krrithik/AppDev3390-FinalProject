@@ -132,7 +132,7 @@ async function handleLogout() {
 }
 
 .profileTitle {
-  font-size: 2rem;
+  font-size: 45px;
   margin-bottom: 5px;
   text-align: center;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
@@ -140,7 +140,7 @@ async function handleLogout() {
 
 .profileSubtitle {
   color: #aaa;
-  font-size: 0.95rem;
+  font-size: 20px;
   text-align: center;
   margin-bottom: 30px;
   font-family:'Courier New', Courier, monospace;
@@ -163,7 +163,7 @@ async function handleLogout() {
   background-color: #2a2a2a;
   padding: 10px 15px;
   border-radius: 8px;
-  font-size: 1rem;
+  font-size: 12px;
   color: white;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
@@ -173,7 +173,7 @@ async function handleLogout() {
   margin-bottom: 10px;
   font-weight: bold;
   color: white;
-  font-size: 1rem;
+  font-size: 18px;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
@@ -187,19 +187,20 @@ async function handleLogout() {
 
 .infoLabel {
   color: #ccc;
-  font-size: 0.95rem;
+  font-size: 15px;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
 .infoValue {
   color: #eee;
-  font-size: 0.95rem;
+  font-size: 15px;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
 .infoValueActive {
   color: #0bff71;
   font-weight: bold;
+  font-size: 15px;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 

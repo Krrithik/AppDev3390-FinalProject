@@ -190,6 +190,7 @@ onMounted(async () => {
   object-fit: cover;
   border-radius: 4px;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 15px;
 }
 
 .liked-poster:hover {
@@ -222,6 +223,8 @@ onMounted(async () => {
   cursor: pointer;
   border-radius: 4px;
   margin-bottom: 150px;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-size: 15px;
 }
 
 .pagination button:hover {

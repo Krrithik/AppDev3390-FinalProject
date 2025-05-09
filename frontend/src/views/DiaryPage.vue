@@ -445,7 +445,8 @@ onMounted(async () => {
   padding: 5px 0px 5px 18px;
   gap: 10px;
   border-bottom: 1px solid #aaa;
-  font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  font-size: 17px;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
 .diaryEntry {
@@ -473,6 +474,7 @@ onMounted(async () => {
 .delete-btn {
   color: black;
   cursor: pointer;
+  padding-left: 4px;
 }
 
 .diaryEntry:hover {
@@ -489,6 +491,7 @@ onMounted(async () => {
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 17px;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
@@ -591,7 +594,7 @@ onMounted(async () => {
   gap: 10px;
   margin-top: 12px;
   color: #ccc;
-  font-size: 0.95rem;
+  font-size: 20px;
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
@@ -601,7 +604,7 @@ onMounted(async () => {
   border: 1px solid #444;
   border-radius: 4px;
   padding: 6px 10px;
-  font-size: 0.95rem;
+  font-size: 15px;
   cursor: pointer;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
@@ -692,7 +695,7 @@ onMounted(async () => {
 }
 
 .modalTitle {
-  font-size: 1.8rem;
+  font-size: 40px;
   font-weight: bold;
   margin: 0;
   color: #fff;
@@ -700,14 +703,14 @@ onMounted(async () => {
 }
 
 .modalYear {
-  font-size: 1rem;
+  font-size: 20px;
   color: #aaa;
   margin-top: 4px;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
 .modalDescription {
-  font-size: 1rem;
+  font-size: 18px;
   line-height: 1.5;
   color: #ddd;
   margin-bottom: 20px;
@@ -719,7 +722,7 @@ onMounted(async () => {
 }
 
 .reviewsLabel {
-  font-size: 1.2rem;
+  font-size: 22px;
   font-weight: bold;
   color: #fff;
   margin-bottom: 10px;
@@ -762,7 +765,7 @@ onMounted(async () => {
 }
 
 .reviewUser {
-  font-size: 0.93em;
+  font-size: 15px;
   font-weight: bold;
   color: #ffb700;
   margin-bottom: 2px;
@@ -770,14 +773,14 @@ onMounted(async () => {
 }
 
 .reviewText {
-  font-size: 1em;
+  font-size: 13px;
   color: #eee;
   font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 }
 
 .reviewsEmpty {
   color: #bbb;
-  font-size: 0.98em;
+  font-size: 15px;
   text-align: center;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
@@ -785,9 +788,9 @@ onMounted(async () => {
 .reviewInput {
   flex: 1 1 auto;
   padding: 8px 10px;
-  border-radius: 4px;
+  border-radius: 8px;
   border: none;
-  font-size: 1em;
+  font-size: 15px;
   outline: none;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
@@ -797,9 +800,9 @@ onMounted(async () => {
   color: #fff;
   border: none;
   padding: 8px 16px;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
-  font-size: 1em;
+  font-size: 15px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
@@ -823,7 +826,7 @@ onMounted(async () => {
   background: none;
   border: none;
   color: #ff4d4f;
-  font-size: 1.2em;
+  font-size: 15px;
   cursor: pointer;
   transition: color 0.2s;
   padding: 0;
