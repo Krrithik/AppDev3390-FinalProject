@@ -30,6 +30,12 @@ function goToPage(page) {
   currentPage.value = page
 }
 
+function handleImgError(event) {
+  event.target.src = '' // Use your own default image
+  event.target.alt = 'N/A'
+  event.target.classList.add('imgError')
+}
+
 async function handleLike(movie) {
   console.log('Clicked heart for:', movie)
 
@@ -78,7 +84,8 @@ onMounted(async () => {
   <div v-else>
     <div class="movie-grid">
       <div v-for="movie in paginatedMovies" :key="movie.id" class="liked-movie">
-        <img :src="imgBaseUrl + movie.movie_poster" :alt="movie.movie_title" class="liked-poster" />
+        <img :src="imgBaseUrl + movie.movie_poster" :alt="movie.movie_title" class="liked-poster"
+          @error="handleImgError" />
 
         <div class="card-footer" @click.stop="handleLike(movie)">
           <img :src="likedMovies.some(m => m.id === movie.id) ? '/heartFilled.png' : '/heartOutline.png'" alt="Like"
@@ -161,6 +168,13 @@ onMounted(async () => {
   height: 20px;
   cursor: pointer;
   pointer-events: auto;
+}
+
+.imgError {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 4px;
 }
 
 .liked-movie:hover .liked-poster,

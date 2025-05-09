@@ -3,6 +3,8 @@ import { watch, ref, onMounted } from 'vue'
 import { supabase } from '@/supabase/supabase.init'
 import MovieModal from '@/components/MovieModal.vue'
 import { useLikes } from '@/composables/useLikes'
+import { Pencil } from 'lucide-vue-next'
+import { Trash2 } from 'lucide-vue-next'
 
 const { checkLikeStatus, toggleLike } = useLikes()
 
@@ -62,6 +64,12 @@ function closeModal() {
   showModal.value = false
   selectedMovie.value = null
   reviewInput.value = ''
+}
+
+function handleImgError(event) {
+  event.target.src = '' // Use your own default image
+  event.target.alt = 'N/A'
+  event.target.classList.add('imgError')
 }
 
 // Fetch reviews for this movie
@@ -220,11 +228,6 @@ onMounted(async () => {
 
 <template>
   <div class="diaryPage">
-    <!-- TOP TABS -->
-    <div class="topTabs">
-      <span class="tab activeTab">Diary</span>
-      <span class="tab">Next Watch</span>
-    </div>
 
     <!-- COLUMN HEADERS -->
     <div class="diaryHeaders">
@@ -244,19 +247,19 @@ onMounted(async () => {
         <span class="month">{{ entry.watched_on ? new Date(entry.watched_on).toLocaleString('default', {
           month: 'short',
           year: 'numeric'
-        }).toUpperCase() : '' }} </span>
+        }).toUpperCase() : '' || "N/A" }} </span>
         <span class="day">
-          {{ entry.watched_on ? entry.watched_on.slice(8, 10) : '' }}
+          {{ entry.watched_on ? entry.watched_on.slice(8, 10) : '' || "N/A" }}
         </span>
         <div class="film">
-          <img :src="imgBaseUrl + entry.movie_poster" alt="Poster" />
-          <span class="title">{{ entry.movie_title }}</span>
+          <img :src="imgBaseUrl + entry.movie_poster" alt="Poster" @error="handleImgError" />
+          <span class="title">{{ entry.movie_title || "N/A" }}</span>
         </div>
-        <span class="released">{{ entry.release_year }}</span>
-        <span class="rating">{{ entry.rating ? entry.rating.toFixed(1) : '' }}</span>
-        <span class="like">{{ entry.liked ? '❤️' : '' }}</span>
-        <span class="edit" @click="openModal(entry)" style="cursor:pointer" title="Edit details">📝</span>
-        <button class="delete-btn" @click="handleDeleteEntry(entry.id)" title="Delete Entry">🗑️</button>
+        <span class="released">{{ entry.release_year || "N/A" }}</span>
+        <span class="rating">{{ entry.rating ? entry.rating.toFixed(1) : '' || "N/A" }}</span>
+        <img :src="isLiked ? '/heartFilled.png' : 'heartOutline.png'" alt="Like" @error=handleImgError class="likeIcon">
+        <pencil class="edit" @click="openModal(entry)" title="Edit Details"></pencil>
+        <trash2 class="delete-btn" @click="handleDeleteEntry(entry.id)" title="Delete Entry"></trash2>
       </div>
     </div>
   </div>
@@ -331,33 +334,12 @@ onMounted(async () => {
   color: #111;
 }
 
-.topTabs {
-  display: flex;
-  gap: 20px;
-  padding-bottom: 10px;
-  margin-bottom: 40px;
-  border-bottom: 1px solid #bbb;
-}
-
-.tab {
-  padding: 8px 16px;
-  background-color: #333;
-  color: white;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.activeTab {
-  background-color: #555;
-  font-weight: bold;
-}
-
 /* Grid structure */
 .diaryHeaders {
   display: grid;
-  grid-template-columns: 80px 60px 1fr 80px 100px 60px 60px 60px;
+  grid-template-columns: 80px 60px 1fr 95px 70px 70px 45px 70px;
   align-items: center;
-  padding: 12px 0;
+  padding: 5px 0px 5px 18px;
   gap: 10px;
   border-bottom: 1px solid #aaa;
 }
@@ -378,10 +360,21 @@ onMounted(async () => {
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
 }
 
+.edit {
+  color: orange;
+  cursor: pointer;
+  padding-left: 8px;
+}
+
+.delete-btn {
+  color: black;
+  cursor: pointer;
+}
+
 .diaryEntry:hover {
   background-color: papayawhip;
   /* Pop up a bit and add a shadow */
-  transform: translateY(-3px) scale(1.025);
+  transform: translateX(-10px) scale(1.025);
   box-shadow:
     0 4px 24px 0 rgba(160, 100, 60, 0.18),
     0 1.5px 8px 0 rgba(0, 0, 0, 0.08);
@@ -406,6 +399,16 @@ onMounted(async () => {
   border-radius: 4px;
   object-fit: cover;
   display: block;
+}
+
+.film img.imgError {
+  width: 40px;
+  height: 60px;
+  border-radius: 4px;
+  object-fit: cover;
+  display: block;
+  align-items: center;
+  justify-content: center;
 }
 
 .title {
