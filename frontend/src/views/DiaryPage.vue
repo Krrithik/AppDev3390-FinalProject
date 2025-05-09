@@ -50,6 +50,8 @@ async function fetchDiary() {
 }
 
 function openModal(entry) {
+  console.log("Opened Modal:", entry)
+
   selectedMovie.value = entry
   showModal.value = true
   reviewInput.value = ''
@@ -139,6 +141,37 @@ async function handleDeleteEntry(entryId) {
   }
 }
 
+async function toggleEntryLike(entry) {
+  if (!user.value) return
+
+  const newLikeState = await toggleLike({
+    id: entry.movie_id,
+    title: entry.movie_title,
+    poster_path: entry.movie_poster,
+  })
+
+  // ✅ Update diary.liked in Supabase directly
+  const { error } = await supabase
+    .from('diary')
+    .update({ liked: newLikeState })
+    .eq('user_id', user.value.id)
+    .eq('id', entry.id)
+
+  if (error) {
+    console.error('Failed to sync diary like field:', error.message)
+    return
+  }
+
+  // ✅ Update locally
+  const index = diaryEntries.value.findIndex(e => e.id === entry.id)
+  if (index !== -1) {
+    diaryEntries.value[index] = {
+      ...diaryEntries.value[index],
+      liked: newLikeState
+    }
+  }
+}
+
 // Like handler
 async function handleLike() {
   if (!user.value) return
@@ -198,7 +231,7 @@ async function fetchMovieDetails(movieId) {
       selectedMovie.value = {
         ...selectedMovie.value,
         overview: data.overview || 'No overview available.',
-        release_date: data.release_date
+        release_date: data.release_date || null
       }
     }
   } catch (err) {
@@ -210,6 +243,16 @@ async function fetchMovieDetails(movieId) {
   }
 }
 
+async function checkLogStatus(movieId) {
+  const { data } = await supabase
+    .from('diary')
+    .select('id')
+    .eq('user_id', user.value.id)
+    .eq('movie_id', movieId)
+    .maybeSingle()
+
+  return !!data
+}
 
 // Watch for modal open to fetch reviews and like status
 watch(selectedMovie, async (movie) => {
@@ -257,9 +300,10 @@ onMounted(async () => {
         </div>
         <span class="released">{{ entry.release_year || "N/A" }}</span>
         <span class="rating">{{ entry.rating ? entry.rating.toFixed(1) : '' || "N/A" }}</span>
-        <img :src="isLiked ? '/heartFilled.png' : 'heartOutline.png'" alt="Like" @error=handleImgError class="likeIcon">
-        <pencil class="edit" @click="openModal(entry)" title="Edit Details"></pencil>
-        <trash2 class="delete-btn" @click="handleDeleteEntry(entry.id)" title="Delete Entry"></trash2>
+        <img :src="entry.liked ? '/heartFilled.png' : '/heartOutline.png'" alt="Like" class="likeIcon"
+          @click=toggleEntryLike(entry) title="Toggle Like">
+        <Pencil class="edit" @click="openModal(entry)" title="Edit Details"></pencil>
+        <Trash2 class="delete-btn" @click="handleDeleteEntry(entry.id)" title="Delete Entry"></trash2>
       </div>
     </div>
   </div>
@@ -273,7 +317,7 @@ onMounted(async () => {
           <div class="iconRow">
             <img :src="isLiked ? '/heartFilled.png' : '/heartOutline.png'" alt="Like" class="likeIcon"
               title="Like Movie" @click="handleLike" />
-            <img :src="isLogged ? '/outlineLog.png' : '/filledLog.png'" alt="Log" class="logIcon" title="Log Movie"
+            <img :src="isLogged ? '/filledLog.png' : '/outlineLog.png'" alt="Log" class="logIcon" title="Log Movie"
               @click="handleLogToggle" />
           </div>
         </div>
@@ -282,7 +326,8 @@ onMounted(async () => {
         <div class="modalText">
           <div class="modalTitleRow">
             <h2 class="modalTitle">{{ selectedMovie.movie_title }}</h2>
-            <span class="modalYear">({{ new Date(selectedMovie.release_date).toISOString().slice(0, 10) }})</span>
+            <span class="modalYear">({{ selectedMovie.release_date ?
+              new Date(selectedMovie.release_date).toISOString().slice(0, 10) : "Unknown" }})</span>
           </div>
           <p class="modalDescription">{{ selectedMovie.overview }}</p>
         </div>
