@@ -135,7 +135,7 @@ onMounted(() => {
 
 .formTitle {
    color: #ccc;
-   font-size: 1.5rem;
+   font-size: 30px;
    text-align: center;
    margin-bottom: 10px;
    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
@@ -219,6 +219,7 @@ onMounted(() => {
 .redirectHeader {
    color: gray;
    height: 1px;
+   font-size: 15px;
    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
@@ -226,6 +227,7 @@ onMounted(() => {
    color: #209CE6;
    text-decoration: none;
    cursor: pointer;
+   font-size: 15px;
    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 

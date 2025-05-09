@@ -156,7 +156,7 @@ onMounted(() => {
 .sideBar ul {
     list-style: none;
     padding: 0;
-    font-size: 0.95rem;
+    font-size: 15px;
 }
 
 .sideBar li {
@@ -194,7 +194,7 @@ onMounted(() => {
 }
 
 .block h2 {
-    font-size: 1.6rem;
+    font-size: 25px;
     margin-bottom: 12px;
     color: #111;
     border-bottom: 1px solid #ccc;
@@ -203,7 +203,7 @@ onMounted(() => {
 }
 
 .block p {
-    font-size: 1rem;
+    font-size: 15px;
     line-height: 1.6;
     color: #333;
     margin-bottom: 12px; 

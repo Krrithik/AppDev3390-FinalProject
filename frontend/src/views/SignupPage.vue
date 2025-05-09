@@ -162,7 +162,7 @@ onMounted(() => {
 
 .formTitle {
   color: #ccc;
-  font-size: 1.5rem;
+  font-size: 30px;
   text-align: center;
   margin-bottom: 10px;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
