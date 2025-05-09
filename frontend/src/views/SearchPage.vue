@@ -21,9 +21,11 @@ const imgBaseUrl = 'https://image.tmdb.org/t/p/w500'
 const apiKey = import.meta.env.VITE_TMDB_API_KEY
 const searchQuery = ref('')
 const searchResults = ref([])
+
+//FOR SPINNER
 const loading = ref(true)
 
-/* For Adding to diary functions */
+//FOR ADDING TO DIARY FUNCTIONS
 const logDate = ref(new Date().toISOString().slice(0, 10))
 const logging = ref(false)
 const logSuccess = ref(false)
@@ -56,6 +58,7 @@ async function fetchUser() {
   user.value = currentUser
 }
 
+//CHECK IF MOVIE IS LOGGED
 async function checkLogStatus(movieId) {
   const { data, error } = await supabase
     .from('diary')
@@ -65,25 +68,6 @@ async function checkLogStatus(movieId) {
     .maybeSingle()
 
   return !!data
-}
-
-function openModal(movie) {
-  selectedMovie.value = movie
-  showModal.value = true
-}
-
-function closeModal() {
-  showModal.value = false
-  selectedMovie.value = null
-  reviewInput.value = ''
-}
-
-//IN CASE IMAGE CANNOT BE LOADED
-function handleImgError(event) {
-  event.target.src = ''
-  event.target.alt =
-    'Image could not be loaded; this may be due to unavailability or an error on our part.'
-  event.target.classList.add('imgError') //SEE CSS ENTRY FOR MORE
 }
 
 //GET CURRENT REVIEWS FOR MOVIE
@@ -186,6 +170,25 @@ async function handleLogToggle() {
     }
   }
   logging.value = false
+}
+
+function openModal(movie) {
+  selectedMovie.value = movie
+  showModal.value = true
+}
+
+function closeModal() {
+  showModal.value = false
+  selectedMovie.value = null
+  reviewInput.value = ''
+}
+
+//IN CASE IMAGE CANNOT BE LOADED
+function handleImgError(event) {
+  event.target.src = ''
+  event.target.alt =
+    'Image could not be loaded; this may be due to unavailability or an error on our part.'
+  event.target.classList.add('imgError') //SEE CSS ENTRY FOR MORE
 }
 
 //CHECK IF USER HAS IT LIKED AND CALLS REVIEWS
