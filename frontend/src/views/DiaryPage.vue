@@ -389,8 +389,8 @@ onMounted(async () => {
               <span class="reviewText">{{ review.review }}</span>
 
               <!-- SHOW DELETE ONLY FOR CURRENT USER -->
-              <button v-if="user && review.user_id === user.id" class="delete-review-btn"
-                @click="handleDeleteReview(review.id)" title="Delete your review">🗑️</button>
+              <Trash2 v-if="user && review.user_id === user.id" class="delete-review-btn"
+                @click="handleDeleteReview(review.id)" title="Delete your review"></trash2>
             </div>
           </div>
         </div>

@@ -4,6 +4,7 @@ import MovieCard from '@/components/MovieCard.vue'
 import MovieModal from '@/components/MovieModal.vue'
 import { supabase } from '@/supabase/supabase.init'
 import { watch } from "vue"
+import { Trash2 } from 'lucide-vue-next'
 
 import { useLikes } from '@/composables/useLikes'
 const { checkLikeStatus, toggleLike, fetchUserLikes } = useLikes()
@@ -291,14 +292,11 @@ onMounted(async () => {
             <span class="reviewText">{{ review.review }}</span>
 
             <!-- SHOW DELETE ONLY FOR CURRENT USER -->
-            <button v-if="user && review.user_id === user.id" class="delete-review-btn"
-              @click="handleDeleteReview(review.id)" title="Delete your review">🗑️</button>
+            <Trash2 v-if="user && review.user_id === user.id" class="delete-review-btn"
+              @click="handleDeleteReview(review.id)" title="Delete your review"></trash2>
           </div>
-
         </div>
       </div>
-
-
     </div>
   </MovieModal>
 </template>
