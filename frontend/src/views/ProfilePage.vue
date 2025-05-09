@@ -7,6 +7,8 @@ const router = useRouter()
 
 const profileUser = ref(null);
 const sessionData = ref(null);
+
+// FOR SPINNNER
 const loading = ref(true);
 
 async function getUserForProfile() {
@@ -19,12 +21,6 @@ async function seeCurrentUser() {
   sessionData.value = session;
   console.log(sessionData.value);
 }
-
-onMounted(async () => {
-  profileUser.value = await getUserForProfile();
-  await seeCurrentUser();
-  loading.value = false;
-});
 
 async function handleLogout() {
   loading.value = true;
@@ -40,6 +36,12 @@ async function handleLogout() {
 
   }
 }
+
+onMounted(async () => {
+  profileUser.value = await getUserForProfile();
+  await seeCurrentUser();
+  loading.value = false;
+});
 </script>
 
 <template>
