@@ -15,6 +15,11 @@ import AppHeader from './components/AppHeader.vue';
 </template>
 
 <style>
+body{
+  margin: 0;
+  padding: 0;
+}
+
 .homepage {
   padding: 20px;
   font-family: sans-serif;
