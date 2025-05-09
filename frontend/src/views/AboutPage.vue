@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { onMounted } from 'vue'
 
+// FOR SPINNER
 const loading = ref(true)
 
 onMounted(() => {
