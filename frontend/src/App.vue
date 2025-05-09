@@ -15,7 +15,7 @@ import AppHeader from './components/AppHeader.vue';
 </template>
 
 <style>
-body{
+body {
   margin: 0;
   padding: 0;
 }
@@ -23,6 +23,7 @@ body{
 .homepage {
   padding: 20px;
   font-family: sans-serif;
-  background-color: #ddd;
+  background-color: #012535;
+  border-bottom: 2px solid #8ECAE6;
 }
 </style>

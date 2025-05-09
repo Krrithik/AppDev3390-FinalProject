@@ -29,6 +29,7 @@ const { user } = useAuth();
 <style>
 .branding {
   display: flex;
+  background-color: #012535;
   align-items: center;
   justify-content: center;
 }
@@ -36,6 +37,8 @@ const { user } = useAuth();
 .header {
   display: flex;
   align-items: center;
+  background-color: #012535;
+  box-shadow: #FB8500;
   justify-content: center;
   padding: 16px 32px;
   gap: 60px;
@@ -75,13 +78,13 @@ const { user } = useAuth();
 
 .links {
   text-decoration: none;
-  color: #444;
+  color: #EAFBFC;
   cursor: pointer;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   font-size: 18px;
 }
 
 .links:hover {
-  color: #209CE6;
+  color: #FB8500;
 }
 </style>
