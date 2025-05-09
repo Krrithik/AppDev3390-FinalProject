@@ -219,12 +219,14 @@ onMounted(() => {
 .redirectHeader {
    color: gray;
    height: 1px;
+   font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
 .dontAccount {
    color: #209CE6;
    text-decoration: none;
    cursor: pointer;
+   font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
 .dontAccount:hover {

@@ -46,7 +46,10 @@ onMounted(() => {
             <div class="block">
                 <h2 id="2">Why the name Scene-It?</h2>
                 <p>
-                    To be determined.
+                    As a movie logging app, we wanted a name that reflected both cinema and tracking what you've
+                    watched. Scene-It plays on the word scene—a clear reference to film and storytelling—while also
+                    sounding like “seen it,” which ties directly into the logging and tracking experience. The name
+                    immediately signals to users that the app is about watching, remembering, and sharing films.
                 </p>
             </div>
 
@@ -88,7 +91,12 @@ onMounted(() => {
             <div class="block">
                 <h2 id="7">How do I validate my email?</h2>
                 <p>
-                    Scene-It handles email validation automatically as part of its authentication system. When a user signs up with their email, Scene-It sends a verification email to the address provided. This email contains a secure link that the user must use to confirm their email address (one-time). Until the user completes this step, their account remains unverified and, if you have "Confirm email" enabled in your Supabase Auth settings, they cannot fully access the app. This ensures that only users with access to the provided email can activate their accounts, improving security and reducing spam or fake signups.
+                    Scene-It automatically handles email verification as part of its secure authentication system. When
+                    a user creates an account, a verification email is sent to the address they provide. This email
+                    includes a secure, one-time link that the user must click to confirm their email. Until this step is
+                    completed, the account remains unverified. If email confirmation is enabled in your Supabase Auth
+                    settings, unverified users will not have full access to the app. This process helps ensure that only
+                    valid users can activate their accounts, enhancing security and preventing spam or fake signups.
                 </p>
             </div>
             <!-- MORE BLOCKS ADD HERE -->
@@ -191,12 +199,14 @@ onMounted(() => {
     color: #111;
     border-bottom: 1px solid #ccc;
     padding-bottom: 8px;
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
 .block p {
     font-size: 1rem;
     line-height: 1.6;
     color: #333;
-    margin-bottom: 12px;
+    margin-bottom: 12px; 
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 }
 </style>
