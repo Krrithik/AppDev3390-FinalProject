@@ -242,7 +242,8 @@ onMounted(async () => {
     <MovieModal v-if="showModal" @close="closeModal">
       <div class="modalHeader">
         <div class="modalImgWrapper">
-          <img :src="imgBaseUrl + selectedMovie.poster_path" :alt="selectedMovie.title" class="modalImg" />
+          <img :src="imgBaseUrl + selectedMovie.poster_path" :alt="selectedMovie.title" class="modalImg"
+            @error="handleImgError" />
           <div class="iconRow">
             <img :src="isLiked ? '/heartFilled.png' : '/heartOutline.png'" alt="Like" class="likeIcon"
               title="Like Movie" @click="handleLike" />
@@ -253,10 +254,10 @@ onMounted(async () => {
 
         <div class="modalText">
           <div class="modalTitleRow">
-            <h2 class="modalTitle">{{ selectedMovie.title }}</h2>
-            <span class="modalYear">({{ selectedMovie.release_date }})</span>
+            <h2 class="modalTitle">{{ selectedMovie.title || "No Title Available" }}</h2>
+            <span class="modalYear">({{ selectedMovie.release_date || "Not Date is Available" }})</span>
           </div>
-          <p class="modalDescription">{{ selectedMovie.overview }}</p>
+          <p class="modalDescription">{{ selectedMovie.overview || "No Description is Available" }}</p>
         </div>
       </div>
 
