@@ -8,7 +8,7 @@ import SignupPage from '@/views/SignupPage.vue'
 import { supabase } from '@/supabase/supabase.init'
 import SearchPage from '@/views/SearchPage.vue'
 
-
+// NAVIGATION CODE
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -35,9 +35,9 @@ const router = createRouter({
     {
       path: '/about',
       name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
+      // ROUTE LEVEL CODE-SPLITTING
+      // THIS GENERATES A SEPERATE CHUNK (About.[hash].js) FOR THIS ROUTE
+      // WHICH IS LAZY-LOADED WHEN THE ROUTE IS VISITED
       component: () => import('../views/AboutPage.vue'),
     },
     {
@@ -59,7 +59,7 @@ const router = createRouter({
 })
 
 
-// List of routes that don't require authentication
+// LISTS OF ROUTES THAT DONT REQUIRE AUTHENTICATION
 const publicPages = ['/login', '/signup', '/about']
 const authOnlyPages = ['/login', '/signup']
 
@@ -70,12 +70,12 @@ router.beforeEach(async (to, from, next) => {
   const isAuthOnly = authOnlyPages.includes(to.path)
 
 
+  // NOT LOGGED IN AND TRYING TO ACCESS A PROTECTED PAGE
   if (!isAuth && !isPublic) {
-    // Not logged in and trying to access a protected page
     return next('/login')
   }
+  // LOGGED IN AND TRYING TO ACCESS LOGIN/SIGNUP
   if (isAuth && isAuthOnly) {
-    // Logged in and trying to access login/signup
     return next('/')
   }
   next()

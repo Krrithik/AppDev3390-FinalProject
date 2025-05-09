@@ -4,6 +4,7 @@ import { Search } from 'lucide-vue-next';
 import AppHeader from './components/AppHeader.vue';
 </script>
 
+<!-- IMPORTANTS SOME THINGS TO EVERY PAGE -->
 <template>
   <div class="homepage">
     <AppHeader />
