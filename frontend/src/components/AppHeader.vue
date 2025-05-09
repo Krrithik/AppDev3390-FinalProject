@@ -31,12 +31,6 @@ const { user } = useAuth();
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 16px;
-}
-
-.searchWrapper {
-  position: relative;
-  width: 200px;
 }
 
 .header {
@@ -50,8 +44,8 @@ const { user } = useAuth();
 .logo {
   align-items: center;
   justify-content: center;
-  height: 120px;
-  width: 120px;
+  height: 80px;
+  width: 80px;
   border-radius: 20px;
 }
 
@@ -59,35 +53,15 @@ const { user } = useAuth();
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 18px;
+  gap: 20px;
   flex-wrap: nowrap;
-}
-
-.search {
-  width: 100%;
-  padding: 8px 36px 8px 12px;
-  /* room for icon on right */
-  border: 2px solid black;
-  font-size: 1rem;
-  border-radius: 18px;
-}
-
-.searchIcon {
-  position: absolute;
-  top: 50%;
-  right: -40px;
-  transform: translateY(-50%);
-  pointer-events: none;
-  width: 18px;
-  height: 18px;
-  color: #bbb;
 }
 
 .links {
   text-decoration: none;
   color: #444;
   cursor: pointer;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family:Verdana, Geneva, Tahoma, sans-serif ;
   font-size: 18px;
 }
 
