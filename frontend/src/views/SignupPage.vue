@@ -117,7 +117,7 @@ onMounted(() => {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: white;
+  background-color: #023047;
 }
 
 .spinnerOverlay {
@@ -149,7 +149,7 @@ onMounted(() => {
 }
 
 .signupForm {
-  background-color: black;
+  background-color: #012535;
   padding: 40px;
   border-radius: 8px;
   width: 100%;
@@ -157,11 +157,11 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 20px rgba(33, 158, 188, 0.4);
 }
 
 .formTitle {
-  color: #ccc;
+  color: #ffffff;
   font-size: 30px;
   text-align: center;
   margin-bottom: 10px;
@@ -174,7 +174,7 @@ onMounted(() => {
 }
 
 .inputLabel {
-  color: white;
+  color: #ffffff;
   margin-bottom: 5px;
   font-size: 0.95rem;
   font-weight: 500;
@@ -186,7 +186,8 @@ onMounted(() => {
   border-radius: 4px;
   border: none;
   font-size: 1rem;
-  background-color: #dce6f0;
+  background-color: #8ECAE6;
+  color: #000;
   width: 100%;
   box-sizing: border-box;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
@@ -215,7 +216,7 @@ onMounted(() => {
   border: none;
   padding: 0;
   cursor: pointer;
-  color: #444;
+  color: #023047;
 }
 
 .signupForm input {
@@ -223,15 +224,17 @@ onMounted(() => {
   border-radius: 4px;
   border: none;
   font-size: 1rem;
-  background-color: #dce6f0;
+  color: #000;
+  background-color: #8ECAE6;
 }
 
+.loginIInput:focus,
 .signupForm input:focus {
-  outline: 2px solid #a696c8;
+  outline: 2px solid #219EBC;
 }
 
 .signUpButton {
-  background-color: #27ae60;
+  background-color: #219EBC;
   color: white;
   border: none;
   padding: 12px;
@@ -244,7 +247,7 @@ onMounted(() => {
 }
 
 .signUpButton:hover {
-  background-color: #1b7641;
+  background-color: #FB8500;
 }
 
 .errorMsg {

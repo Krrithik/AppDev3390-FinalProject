@@ -85,9 +85,9 @@ onMounted(() => {
    justify-content: center;
    align-items: center;
    height: 100vh;
-   background-color: white;
    padding: 40px;
    gap: 20px;
+   background-color: #023047;
 }
 
 .spinnerOverlay {
@@ -119,7 +119,7 @@ onMounted(() => {
 }
 
 .loginBar {
-   background-color: black;
+   background-color: #012535;
    padding: 40px;
    border-radius: 8px;
    width: 100%;
@@ -127,18 +127,18 @@ onMounted(() => {
    display: flex;
    flex-direction: column;
    gap: 20px;
-   box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
+   box-shadow: 0 0 20px rgba(33, 158, 188, 0.4);
    justify-content: center;
    align-items: center;
    text-align: center;
 }
 
 .formTitle {
-   color: #ccc;
+   color: #ffffff;
    font-size: 30px;
    text-align: center;
    margin-bottom: 10px;
-   font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
 .inputGroup {
@@ -150,11 +150,11 @@ onMounted(() => {
 }
 
 .inputLabel {
-   color: white;
+   color: #ffffff;
    margin-bottom: 5px;
    font-size: 0.95rem;
    font-weight: 500;
-   font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
 .passwordInputWrapper {
@@ -167,10 +167,10 @@ onMounted(() => {
    border-radius: 4px;
    border: none;
    font-size: 1rem;
-   background-color: #dce6f0;
+   background-color: #8ECAE6;
    width: 100%;
    box-sizing: border-box;
-   font-family:Verdana, Geneva, Tahoma, sans-serif;
+   font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
 .passwordInputWrapper .loginInput {
@@ -191,15 +191,15 @@ onMounted(() => {
    border: none;
    padding: 0;
    cursor: pointer;
-   color: #444;
+   color: #023047;
 }
 
 .loginInput:focus {
-   outline: 2px solid #a696c8;
+   outline: 2px solid #219EBC;
 }
 
 .loginButton {
-   background-color: #27ae60;
+   background-color: #219EBC;
    color: white;
    border: none;
    padding: 10px 20px;
@@ -209,31 +209,31 @@ onMounted(() => {
    cursor: pointer;
    width: 400px;
    transition: background-color 0.3s ease;
-   font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .loginButton:hover {
-   background-color: #1b7641;
+   background-color: #FB8500;
 }
 
 .redirectHeader {
-   color: gray;
+   color: #BFD8EA;
    height: 1px;
    font-size: 15px;
-   font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
 .dontAccount {
-   color: #209CE6;
+   color: #8ECAE6;
    text-decoration: none;
    cursor: pointer;
    font-size: 15px;
-   font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
 .dontAccount:hover {
    transform: scale(1.05);
-   text-shadow: 0 0 15px white, 0 0 25px #209CE6;
+   text-shadow: 0 0 15px white, 0 0 25px #FFB703;
    transition: all 0.3s ease;
 }
 

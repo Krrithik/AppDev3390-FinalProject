@@ -112,6 +112,8 @@ onMounted(() => {
     gap: 50px;
     padding: 80px 20px;
     font-family: sans-serif;
+    background-color: #023047;
+    color: #ffffff;
 }
 
 .spinnerOverlay {
@@ -147,7 +149,7 @@ onMounted(() => {
 }
 
 .sideBarContent {
-    border-right: 1px solid #ccc;
+    border-right: 1px solid #8ECAE6;
     padding-right: 20px;
     display: inline-block;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -161,12 +163,12 @@ onMounted(() => {
 
 .sideBar li {
     margin-bottom: 12px;
-    color: #444;
+    color: #EAFBFC;
     cursor: pointer;
 }
 
 .sideBar li:hover {
-    color: #209CE6;
+    color: #FB8500;
 }
 
 .sideBar a {
@@ -180,7 +182,7 @@ onMounted(() => {
 
 .sideBar a:hover {
     text-decoration: none;
-    color: #209CE6;
+    color: #FB8500;
 }
 
 .aboutMain {
@@ -196,17 +198,17 @@ onMounted(() => {
 .block h2 {
     font-size: 25px;
     margin-bottom: 12px;
-    color: #111;
-    border-bottom: 1px solid #ccc;
+    color: #FB8500;
+    border-bottom: 1px solid #8ECAE6;
     padding-bottom: 8px;
-    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
 .block p {
     font-size: 15px;
     line-height: 1.6;
-    color: #333;
-    margin-bottom: 12px; 
-    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    color: #EAFBFC;
+    margin-bottom: 12px;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 }
 </style>
