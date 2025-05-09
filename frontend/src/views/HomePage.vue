@@ -20,9 +20,11 @@ const user = ref(null)
 
 const isLiked = ref(false)
 const liking = ref(false)
+
+//FOR SPINNER
 const loading = ref(true)
 
-/* For Adding to diary functions */
+//FOR ADDING TO DIARY FUNCTIONS
 const logDate = ref(new Date().toISOString().slice(0, 10))
 const logging = ref(false)
 const logSuccess = ref(false)
@@ -32,6 +34,17 @@ const trendingMovies = ref([])
 const nowPlayingMovies = ref([])
 const imgBaseUrl = 'https://image.tmdb.org/t/p/w500'
 const apiKey = import.meta.env.VITE_TMDB_API_KEY
+
+function openModal(movie) {
+  selectedMovie.value = movie
+  showModal.value = true
+}
+
+function closeModal() {
+  showModal.value = false
+  selectedMovie.value = null
+  reviewInput.value = ''
+}
 
 async function fetchMovies(endpoint, targetRef) {
   try {
@@ -45,17 +58,6 @@ async function fetchMovies(endpoint, targetRef) {
   }
 }
 
-function openModal(movie) {
-  selectedMovie.value = movie
-  showModal.value = true
-}
-
-function closeModal() {
-  showModal.value = false
-  selectedMovie.value = null
-  reviewInput.value = ''
-}
-
 async function checkLogStatus(movieId) {
   const { data, error } = await supabase
     .from('diary')
@@ -67,7 +69,7 @@ async function checkLogStatus(movieId) {
   return !!data
 }
 
-// GET CURRENT USER INFO (WITH FULL NAME)
+//GET CURRENT USER INFO (WITH FULL NAME)
 async function fetchUser() {
   const {
     data: { user: currentUser },
@@ -75,7 +77,7 @@ async function fetchUser() {
   user.value = currentUser
 }
 
-// FETCH REVIEWS FOR A MOVIE
+//FETCH REVIEWS FOR A MOVIE
 async function fetchReviews(movieId) {
   const { data, error } = await supabase
     .from('reviews')
@@ -85,7 +87,7 @@ async function fetchReviews(movieId) {
   reviews.value = data || []
 }
 
-// SUBMIT A NEW REVIEW
+//SUBMIT A NEW REVIEW
 async function submitReview() {
   if (!reviewInput.value.trim() || !user.value) return
   submitting.value = true
@@ -128,7 +130,7 @@ async function handleDeleteReview(reviewId) {
 }
 
 
-// ADD LIKE HANDLER
+//ADD LIKE HANDLER
 async function handleLike() {
   if (!user.value) return
   liking.value = true
@@ -188,7 +190,7 @@ async function handleLogToggle() {
   }
 }
 
-// ADD THIS WATCH, FOR WHEN YOU SELECTING A NEW MOVIE
+//ADD THIS WATCH, FOR WHEN YOU SELECTING A NEW MOVIE
 watch(selectedMovie, async (movie) => {
   if (movie && movie.id) {
     fetchReviews(movie.id)
