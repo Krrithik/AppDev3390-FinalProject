@@ -189,6 +189,7 @@ onMounted(async () => {
   height: auto;
   object-fit: cover;
   border-radius: 4px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
 .liked-poster:hover {

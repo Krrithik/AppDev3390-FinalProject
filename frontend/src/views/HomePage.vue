@@ -340,8 +340,7 @@ onMounted(async () => {
 
 #headerText {
   font-size: 30px;
-  font-family:
-    'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .movieSection {
@@ -420,6 +419,7 @@ onMounted(async () => {
   margin-top: 12px;
   color: #ccc;
   font-size: 0.95rem;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
 .dateInput {
@@ -430,6 +430,7 @@ onMounted(async () => {
   padding: 6px 10px;
   font-size: 0.95rem;
   cursor: pointer;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
 .dateInput:focus {
@@ -466,12 +467,14 @@ onMounted(async () => {
   font-weight: bold;
   margin: 0;
   color: #fff;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
 .modalYear {
   font-size: 1rem;
   color: #aaa;
   margin-top: 4px;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
 .modalDescription {
@@ -479,6 +482,7 @@ onMounted(async () => {
   line-height: 1.5;
   color: #ddd;
   margin-bottom: 20px;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 }
 
 .reviewsWrapper {
@@ -490,6 +494,7 @@ onMounted(async () => {
   font-weight: bold;
   color: #fff;
   margin-bottom: 10px;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
 .reviewInputBar {
@@ -532,17 +537,20 @@ onMounted(async () => {
   font-weight: bold;
   color: #ffb700;
   margin-bottom: 2px;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
 .reviewText {
   font-size: 1em;
   color: #eee;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 }
 
 .reviewsEmpty {
   color: #bbb;
   font-size: 0.98em;
   text-align: center;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
 .reviewInput {
@@ -552,6 +560,7 @@ onMounted(async () => {
   border: none;
   font-size: 1em;
   outline: none;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
 .reviewSubmitBtn {
@@ -562,6 +571,7 @@ onMounted(async () => {
   border-radius: 4px;
   cursor: pointer;
   font-size: 1em;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .reviewSubmitBtn:hover {
