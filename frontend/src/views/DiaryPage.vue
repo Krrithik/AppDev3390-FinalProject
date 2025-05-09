@@ -14,6 +14,8 @@ const isLogged = ref(false)
 
 const diaryEntries = ref([])
 const user = ref(null)
+
+//FOR SPINNER
 const loading = ref(true)
 
 //ADJUST AS WANTED
@@ -30,7 +32,7 @@ const submitting = ref(false)
 const isLiked = ref(false)
 const liking = ref(false)
 
-// For logging to diary
+// FOR LOGGING TO DIARY
 const logDate = ref(new Date().toISOString().slice(0, 10))
 const logging = ref(false)
 const logSuccess = ref(false)
@@ -52,23 +54,6 @@ function goToPage(page) {
   currentPage.value = page
 }
 
-async function fetchUser() {
-  const response = await supabase.auth.getUser()
-  user.value = response.data.user
-}
-
-async function fetchDiary() {
-  loading.value = true
-  if (!user.value) return
-  const { data } = await supabase
-    .from('diary')
-    .select('*')
-    .eq('user_id', user.value.id)
-    .order('watched_on', { ascending: false })
-  diaryEntries.value = data || []
-  loading.value = false
-}
-
 function openModal(entry) {
   console.log("Opened Modal:", entry)
 
@@ -88,13 +73,31 @@ function closeModal() {
   reviewInput.value = ''
 }
 
+//HANDLES MOVIE IMG WHEN ERROR
 function handleImgError(event) {
   event.target.src = '' // Use your own default image
   event.target.alt = 'N/A'
   event.target.classList.add('imgError')
 }
 
-// Fetch reviews for this movie
+async function fetchUser() {
+  const response = await supabase.auth.getUser()
+  user.value = response.data.user
+}
+
+async function fetchDiary() {
+  loading.value = true
+  if (!user.value) return
+  const { data } = await supabase
+    .from('diary')
+    .select('*')
+    .eq('user_id', user.value.id)
+    .order('watched_on', { ascending: false })
+  diaryEntries.value = data || []
+  loading.value = false
+}
+
+//FETCH REVIEWS FOR THIS MOVIE
 async function fetchReviews(movieId) {
   const { data } = await supabase
     .from('reviews')
@@ -104,7 +107,7 @@ async function fetchReviews(movieId) {
   reviews.value = data || []
 }
 
-// Submit a new review
+//SUBMIT A NEW REVIEW
 async function submitReview() {
   if (!reviewInput.value.trim() || !user.value) return
   submitting.value = true
@@ -125,7 +128,7 @@ async function submitReview() {
   }
 }
 
-// Delete a review
+//DELETE A REVIEW
 async function handleDeleteReview(reviewId) {
   if (!user.value) return
   const confirmDelete = window.confirm('Delete this review?')
@@ -144,6 +147,7 @@ async function handleDeleteReview(reviewId) {
   }
 }
 
+//DELETE AN ENTRY VIA UNLOG 
 async function handleDeleteEntry(entryId) {
   const confirmDelete = window.confirm('Are you sure you want to delete this log entry?');
   if (!confirmDelete) return;
@@ -156,7 +160,7 @@ async function handleDeleteEntry(entryId) {
   if (error) {
     window.alert('Failed to delete entry: ' + error.message);
   } else {
-    // Remove the entry from the local array for instant UI update
+    //REMOVE THE ENTRY FROM THE LOCAL ARRAY FOR INSTANT UI UPDATE
     diaryEntries.value = diaryEntries.value.filter(entry => entry.id !== entryId);
   }
 }
@@ -170,7 +174,7 @@ async function toggleEntryLike(entry) {
     poster_path: entry.movie_poster,
   })
 
-  // Update diary.liked in Supabase directly
+  //UPDATE DIARY.LIKED IN SUPABASE DIRECTLY 
   const { error } = await supabase
     .from('diary')
     .update({ liked: newLikeState })
@@ -182,7 +186,7 @@ async function toggleEntryLike(entry) {
     return
   }
 
-  // Update locally
+  //UPDATE LOCALLY 
   const index = diaryEntries.value.findIndex(e => e.id === entry.id)
   if (index !== -1) {
     diaryEntries.value[index] = {
@@ -192,7 +196,7 @@ async function toggleEntryLike(entry) {
   }
 }
 
-// Like handler
+//LIKE HANDLER
 async function handleLike() {
   if (!user.value) return
   liking.value = true
@@ -203,7 +207,7 @@ async function handleLike() {
   })
   liking.value = false
 
-  // Sync diary liked field
+  //SYNC DIARY LIKED FIELD
   await supabase
     .from('diary')
     .update({ liked: isLiked.value })
@@ -229,7 +233,7 @@ async function handleLogToggle() {
     .from('diary')
     .delete()
     .eq('user_id', user.value.id)
-    .eq('id', selectedMovie.value.id) // Use the Supabase diary row ID, not movie_id
+    .eq('id', selectedMovie.value.id)
 
   if (error) {
     logError.value = 'Failed to log movie: ' + error.message;
@@ -274,7 +278,7 @@ async function checkLogStatus(movieId) {
   return !!data
 }
 
-// Watch for modal open to fetch reviews and like status
+//WATCH FOR MODAL OPEN TO FETCH REVIEWS AND LIKE STATUS
 watch(selectedMovie, async (movie) => {
   if (movie && movie.movie_id) {
     fetchReviews(movie.movie_id)
