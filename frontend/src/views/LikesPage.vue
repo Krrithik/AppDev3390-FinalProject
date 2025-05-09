@@ -13,7 +13,7 @@ const imgErrors = ref(new Set())
 
 //ADJUST AS WANTED
 const currentPage = ref(1)
-const itemsPerPage = 16
+const itemsPerPage = 18
 
 //CREATES TABS OFF PAGES
 const totalPages = computed(() =>

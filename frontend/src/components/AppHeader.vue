@@ -8,9 +8,11 @@ const { user } = useAuth();
   <!-- NAVBAR ON TOP -->
   <header class="header">
     <nav class="branding">
+      <!-- APP LOGO -->
       <img class="logo" src="/sceneItLogo.png" alt="Logo of camera with text Scene-It" />
     </nav>
 
+    <!-- NAVBAR STUFF-->
     <nav class="nav">
       <RouterLink v-if="!user" to="/login" class="links">Login</RouterLink>
       <RouterLink v-if="!user" to="/signup" class="links">Signup</RouterLink>
@@ -20,7 +22,6 @@ const { user } = useAuth();
       <RouterLink v-if="user" to="/likes" class="links">Likes</RouterLink>
       <RouterLink v-if="user" to="/profile" class="links">Profile</RouterLink>
       <RouterLink to="/about" class="links">About</RouterLink>
-
 
     </nav>
   </header>
