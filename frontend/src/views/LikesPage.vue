@@ -73,37 +73,49 @@ onMounted(async () => {
 </script>
 
 <template>
-  <!-- LOADING SPINNER -->
-  <div v-if="loading" class="spinnerOverlay">
-    <div class="spinner"></div>
-  </div>
-
-  <!-- IF NO LIKED MOVIES -->
-  <div v-else-if="!likedMovies.length" class="empty">No liked movies yet.</div>
-
-  <!-- IF HAS LIKED MOVIES -->
-  <div v-else>
-    <div class="movie-grid">
-      <div v-for="movie in paginatedMovies" :key="movie.id" class="liked-movie">
-        <img :src="imgBaseUrl + movie.movie_poster" :alt="movie.movie_title" class="liked-poster"
-          @error="handleImgError" />
-
-        <div class="card-footer" @click.stop="handleLike(movie)">
-          <img :src="likedMovies.some(m => m.id === movie.id) ? '/heartFilled.png' : '/heartOutline.png'" alt="Like"
-            class="likeIcon" />
-        </div>
-      </div>
+  <div class="likedPage">
+    <!-- LOADING SPINNER -->
+    <div v-if="loading" class="spinnerOverlay">
+      <div class="spinner"></div>
     </div>
 
-    <div v-if="totalPages > 1" class="pagination">
-      <button v-for="page in totalPages" :key="page" @click="goToPage(page)" :class="{ active: currentPage === page }">
-        {{ page }}
-      </button>
+    <!-- IF NO LIKED MOVIES -->
+    <div v-else-if="!likedMovies.length" class="empty">No liked movies yet.</div>
+
+    <!-- IF HAS LIKED MOVIES -->
+    <div v-else>
+      <div class="movie-grid">
+        <div v-for="movie in paginatedMovies" :key="movie.id" class="liked-movie">
+          <img :src="imgBaseUrl + movie.movie_poster" :alt="movie.movie_title" class="liked-poster"
+            @error="handleImgError" />
+
+          <div class="card-footer" @click.stop="handleLike(movie)">
+            <img :src="likedMovies.some(m => m.id === movie.id) ? '/heartFilled.png' : '/heartOutline.png'" alt="Like"
+              class="likeIcon" />
+          </div>
+        </div>
+      </div>
+
+      <div v-if="totalPages > 1" class="pagination">
+        <button v-for="page in totalPages" :key="page" @click="goToPage(page)"
+          :class="{ active: currentPage === page }">
+          {{ page }}
+        </button>
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
+body {
+  background-color: #023047;
+}
+
+.likedPage {
+  background-color: #023047;
+  min-height: 100vh;
+}
+
 .spinnerOverlay {
   position: fixed;
   top: 0;
@@ -137,11 +149,20 @@ onMounted(async () => {
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   gap: 1rem;
   padding: 1rem;
+  background-color: #023047;
 }
 
 .liked-movie {
   text-align: center;
   position: relative;
+  background-color: #012535;
+  box-shadow: 0 0 12px rgba(33, 158, 188, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.liked-movie:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 15px #FB8500;
 }
 
 .card-footer {
@@ -150,7 +171,7 @@ onMounted(async () => {
   left: 0;
   right: 0;
   height: 20px;
-  background: rgba(33, 32, 32, 0.885);
+  background: rgba(33, 158, 188, 0.85);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -172,6 +193,8 @@ onMounted(async () => {
 }
 
 .imgError {
+  background-color: #fff;
+  color: #000;
   width: 100%;
   height: auto;
   object-fit: cover;
@@ -181,7 +204,7 @@ onMounted(async () => {
 .liked-movie:hover .liked-poster,
 .card-footer:hover+.liked-poster {
   transform: scale(1.05);
-  box-shadow: 0 0 15px #a696c8, 0 0 25px #a696c8;
+  box-shadow: 0 0 15px #FB8500, 0 0 25px #FB8500;
 }
 
 .liked-poster {
@@ -189,6 +212,7 @@ onMounted(async () => {
   height: auto;
   object-fit: cover;
   border-radius: 4px;
+  color: white;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   font-size: 15px;
 }
@@ -196,7 +220,7 @@ onMounted(async () => {
 .liked-poster:hover {
   transform: scale(1.05);
   transition: transform 0.3s ease;
-  box-shadow: 0 0 15px #a696c8, 0 0 25px #a696c8;
+  box-shadow: 0 0 15px #FB8500, 0 0 25px #FB8500;
   cursor: pointer;
 }
 
@@ -204,7 +228,7 @@ onMounted(async () => {
 .empty {
   text-align: center;
   padding: 2rem;
-  color: black;
+  color: #EAFBFC;
 }
 
 /* Pagination */
@@ -216,8 +240,8 @@ onMounted(async () => {
 }
 
 .pagination button {
-  background-color: black;
-  border: 1px solid #ccc;
+  background-color: #012535;
+  border: 1px solid #8ECAE6;
   padding: 6px 12px;
   color: white;
   cursor: pointer;
@@ -228,7 +252,8 @@ onMounted(async () => {
 }
 
 .pagination button:hover {
-  background-color: #36683e;
+  background-color: #FB8500;
+  color: white;
   transform: scale(1.05);
   transition: transform 0.3s ease;
   cursor: pointer;
@@ -236,8 +261,8 @@ onMounted(async () => {
 }
 
 .pagination button.active {
-  background-color: #27ae60;
-  border-color: #27ae60;
+  background-color: #219EBC;
+  border-color: #219EBC;
   color: white;
 }
 </style>

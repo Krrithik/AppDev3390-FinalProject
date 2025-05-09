@@ -405,8 +405,9 @@ onMounted(async () => {
 .diaryPage {
   padding: 40px;
   font-family: sans-serif;
-  background-color: white;
-  color: #111;
+  background-color: #023047;
+  color: #EAFBFC;
+  min-height: 100vh;
 }
 
 .spinnerOverlay {
@@ -443,8 +444,9 @@ onMounted(async () => {
   grid-template-columns: 80px 60px 1fr 95px 70px 70px 45px 70px;
   align-items: center;
   padding: 5px 0px 5px 18px;
+  color: #EAFBFC;
+  border-bottom: 1px solid #8ECAE6;
   gap: 10px;
-  border-bottom: 1px solid #aaa;
   font-size: 17px;
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
@@ -455,7 +457,7 @@ onMounted(async () => {
   align-items: center;
   padding: 12px 0;
   gap: 10px;
-  border-bottom: 1px solid #aaa;
+  border-bottom: 1px solid #8ECAE6;
   /* Add transition for smooth animation */
   transition:
     background-color 0.25s,
@@ -466,24 +468,22 @@ onMounted(async () => {
 }
 
 .edit {
-  color: orange;
+  color: #FFB703;
   cursor: pointer;
   padding-left: 8px;
 }
 
 .delete-btn {
-  color: black;
+  color: #EAFBFC;
   cursor: pointer;
   padding-left: 4px;
 }
 
 .diaryEntry:hover {
-  background-color: papayawhip;
+  background-color: #012535;
   /* Pop up a bit and add a shadow */
   transform: translateX(-10px) scale(1.025);
-  box-shadow:
-    0 4px 24px 0 rgba(160, 100, 60, 0.18),
-    0 1.5px 8px 0 rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 16px #FB8500;
   z-index: 1;
 }
 
@@ -536,9 +536,9 @@ onMounted(async () => {
 }
 
 .pagination button {
-  background-color: black;
+  background-color: #012535;
   color: white;
-  border: 1px solid #ccc;
+  border: 1px solid #8ECAE6;
   padding: 6px 12px;
   border-radius: 4px;
   font-weight: bold;
@@ -547,13 +547,13 @@ onMounted(async () => {
 }
 
 .pagination button:hover {
-  background-color: #36683e;
+  background-color: #FB8500;
   transform: scale(1.05);
 }
 
 .pagination button.active {
-  background-color: #27ae60;
-  border-color: #27ae60;
+  background-color: #219EBC;
+  border-color: #023047;
   color: white;
 }
 
@@ -567,6 +567,7 @@ onMounted(async () => {
 }
 
 .likeIcon {
+  filter: drop-shadow(0 0 2px #219EBC);
   width: 20px;
   height: 20px;
   cursor: pointer;
@@ -593,15 +594,15 @@ onMounted(async () => {
   align-items: center;
   gap: 10px;
   margin-top: 12px;
-  color: #ccc;
+  color: #EAFBFC;
   font-size: 20px;
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
 .dateInput {
-  background: #2a2a2a;
-  color: white;
-  border: 1px solid #444;
+  background: #1b2a3a;
+  color: #EAFBFC;
+  border: 1px solid #8ECAE6;
   border-radius: 4px;
   padding: 6px 10px;
   font-size: 15px;
@@ -610,7 +611,7 @@ onMounted(async () => {
 }
 
 .dateInput:focus {
-  outline: 2px solid #27ae60;
+  outline: 2px solid #219EBC;
 }
 
 .description {
@@ -698,13 +699,13 @@ onMounted(async () => {
   font-size: 40px;
   font-weight: bold;
   margin: 0;
-  color: #fff;
+  color: #EAFBFC;
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
 .modalYear {
   font-size: 20px;
-  color: #aaa;
+  color: #8ECAE6;
   margin-top: 4px;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
@@ -712,7 +713,7 @@ onMounted(async () => {
 .modalDescription {
   font-size: 18px;
   line-height: 1.5;
-  color: #ddd;
+  color: #ccc;
   margin-bottom: 20px;
   font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif
 }
@@ -724,7 +725,7 @@ onMounted(async () => {
 .reviewsLabel {
   font-size: 22px;
   font-weight: bold;
-  color: #fff;
+  color: #FB8500;
   margin-bottom: 10px;
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
@@ -744,7 +745,7 @@ onMounted(async () => {
 .reviewsSection {
   max-height: 200px;
   overflow-y: auto;
-  background: #181818;
+  background: #012535;
   border-radius: 6px;
   padding: 12px;
 }
@@ -757,7 +758,8 @@ onMounted(async () => {
 
 .reviewItem {
   position: relative;
-  background: #252525;
+  background: #1b2a3a;
+  color: #EAFBFC;
   border-radius: 4px;
   padding: 7px 10px;
   display: flex;
@@ -791,12 +793,18 @@ onMounted(async () => {
   border-radius: 8px;
   border: none;
   font-size: 15px;
+  background-color: #8ECAE6;
+  color: #000;
   outline: none;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
+.reviewInput:focus {
+  outline: 2px solid #219EBC;
+}
+
 .reviewSubmitBtn {
-  background: #4caf50;
+  background: #219EBC;
   color: #fff;
   border: none;
   padding: 8px 16px;
@@ -807,7 +815,7 @@ onMounted(async () => {
 }
 
 .reviewSubmitBtn:hover {
-  background: #2e6730;
+  background: #FB8500;
   transition: transform 0.3s ease;
 
 }
@@ -825,7 +833,7 @@ onMounted(async () => {
   transform: translateY(-50%);
   background: none;
   border: none;
-  color: #ff4d4f;
+  color: #8ECAE6;
   font-size: 15px;
   cursor: pointer;
   transition: color 0.2s;

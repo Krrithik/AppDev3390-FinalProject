@@ -70,7 +70,7 @@ async function handleLogout() {
       <div class="accountInfoRow">
         <span class="infoLabel">Member Since</span>
         <span class="infoValue">{{ profileUser?.created_at ? new Date(profileUser.created_at).toLocaleDateString() : ''
-        }}</span> <!-- ASK KRRITHIK -->
+          }}</span> <!-- ASK KRRITHIK -->
       </div>
 
       <div class="accountInfoRow">
@@ -89,7 +89,7 @@ async function handleLogout() {
   justify-content: center;
   align-items: center;
   padding: 60px 20px;
-  background-color: white;
+  background-color: #023047;
   min-height: 100vh;
 }
 
@@ -122,28 +122,29 @@ async function handleLogout() {
 }
 
 .profileCard {
-  background-color: #1e1e1e;
+  background-color: #012535;
   padding: 40px;
   border-radius: 12px;
   width: 100%;
   max-width: 500px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
-  color: white;
+  box-shadow: 0 0 20px rgba(33, 158, 188, 0.4);
+  color: #EAFBFC;
 }
 
 .profileTitle {
   font-size: 45px;
   margin-bottom: 5px;
   text-align: center;
+  color: #ffffff;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
 .profileSubtitle {
-  color: #aaa;
+  color: #8ECAE6;
   font-size: 20px;
   text-align: center;
   margin-bottom: 30px;
-  font-family:'Courier New', Courier, monospace;
+  font-family: 'Courier New', Courier, monospace;
 }
 
 .formGroup {
@@ -151,7 +152,7 @@ async function handleLogout() {
 }
 
 .formLabel {
-  color: #ccc;
+  color: #EAFBFC;
   font-size: 0.9rem;
   margin-bottom: 5px;
   display: block;
@@ -159,12 +160,12 @@ async function handleLogout() {
 }
 
 .formValue {
-  border: 1px solid white;
-  background-color: #2a2a2a;
+  border: 1px solid #8ECAE6;
+  background-color: #1b2a3a;
   padding: 10px 15px;
   border-radius: 8px;
   font-size: 12px;
-  color: white;
+  color: #ffffff;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
@@ -172,7 +173,7 @@ async function handleLogout() {
   margin-top: 30px;
   margin-bottom: 10px;
   font-weight: bold;
-  color: white;
+  color: #FB8500;
   font-size: 18px;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
@@ -186,13 +187,13 @@ async function handleLogout() {
 }
 
 .infoLabel {
-  color: #ccc;
+  color: #EAFBFC;
   font-size: 15px;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
 .infoValue {
-  color: #eee;
+  color: #EAFBFC;
   font-size: 15px;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
@@ -208,7 +209,7 @@ async function handleLogout() {
   margin-top: 30px;
   width: 100%;
   padding: 10px;
-  background-color: #e74c3c;
+  background-color: #219EBC;
   border: none;
   border-radius: 6px;
   color: white;
@@ -219,6 +220,6 @@ async function handleLogout() {
 }
 
 .logoutButton:hover {
-  background-color: #682119;
+  background-color: #FB8500;
 }
 </style>

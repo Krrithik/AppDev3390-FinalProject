@@ -208,107 +208,116 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div v-if="loading" class="spinnerOverlay">
-    <div class="spinner"></div>
-  </div>
-
-  <!-- SHORT DESCRIPTION -->
-  <section v-else class="description">
-    <p>
-      Jot the films you've seen.<br />
-      Note films to watch next.<br />
-      Then tell your friends the great ones.
-    </p>
-  </section>
-
-  <!-- TRENDING SECTION -->
-  <section class="movieSection">
-    <h2 id="headerText">TRENDING</h2>
-    <div class="movieRow">
-      <MovieCard v-for="movie in trendingMovies.slice(0, 6)" :key="movie.id" :title="movie.title"
-        :imgUrl="imgBaseUrl + movie.poster_path" :releaseDate="movie.release_date" @click="openModal(movie)" />
+  <div class="homeWrapper">
+    <div v-if="loading" class="spinnerOverlay">
+      <div class="spinner"></div>
     </div>
-  </section>
 
-  <!-- IN THEATERS -->
-  <section class="movieSection">
-    <h2 id="headerText">IN THEATERS</h2>
-    <div class="movieRow">
-      <MovieCard v-for="movie in nowPlayingMovies.slice(0, 6)" :key="movie.id" :title="movie.title"
-        :imgUrl="imgBaseUrl + movie.poster_path" :releaseDate="movie.release_date" @click="openModal(movie)" />
-    </div>
-  </section>
+    <!-- SHORT DESCRIPTION -->
+    <section v-else class="description">
+      <p>
+        Jot the films you've seen.<br />
+        Note films to watch next.<br />
+        Then tell your friends the great ones.
+      </p>
+    </section>
 
-  <!-- MODAL SECTION -->
-  <MovieModal v-if="showModal" @close="closeModal">
-    <!-- HEART BUTTON -->
-    <div class="modalHeader">
-      <div class="modalImgWrapper">
-        <img :src="imgBaseUrl + selectedMovie.poster_path" :alt="selectedMovie.title" class="modalImg" />
-        <div class="iconRow">
-          <img :src="isLiked ? '/heartFilled.png' : '/heartOutline.png'" alt="Like" class="likeIcon" title="Like Movie"
-            @click="handleLike" />
-          <img :src="isLogged ? '/filledLog.png' : '/outlineLog.png'" alt="Log" class="logIcon" title="Log Movie"
-            @click="handleLogToggle" />
+    <!-- TRENDING SECTION -->
+    <section class="movieSection">
+      <h2 id="headerText">TRENDING</h2>
+      <div class="movieRow">
+        <MovieCard v-for="movie in trendingMovies.slice(0, 6)" :key="movie.id" :title="movie.title"
+          :imgUrl="imgBaseUrl + movie.poster_path" :releaseDate="movie.release_date" @click="openModal(movie)" />
+      </div>
+    </section>
+
+    <!-- IN THEATERS -->
+    <section class="movieSection">
+      <h2 id="headerText">IN THEATERS</h2>
+      <div class="movieRow">
+        <MovieCard v-for="movie in nowPlayingMovies.slice(0, 6)" :key="movie.id" :title="movie.title"
+          :imgUrl="imgBaseUrl + movie.poster_path" :releaseDate="movie.release_date" @click="openModal(movie)" />
+      </div>
+    </section>
+
+    <!-- MODAL SECTION -->
+    <MovieModal v-if="showModal" @close="closeModal">
+      <!-- HEART BUTTON -->
+      <div class="modalHeader">
+        <div class="modalImgWrapper">
+          <img :src="imgBaseUrl + selectedMovie.poster_path" :alt="selectedMovie.title" class="modalImg" />
+          <div class="iconRow">
+            <img :src="isLiked ? '/heartFilled.png' : '/heartOutline.png'" alt="Like" class="likeIcon"
+              title="Like Movie" @click="handleLike" />
+            <img :src="isLogged ? '/filledLog.png' : '/outlineLog.png'" alt="Log" class="logIcon" title="Log Movie"
+              @click="handleLogToggle" />
+          </div>
+        </div>
+
+        <!-- MOVIE IMG WITH TEXT TO ITS RIGHT -->
+        <div class="modalText">
+          <div class="modalTitleRow">
+            <h2 class="modalTitle">{{ selectedMovie.title }}</h2>
+            <span class="modalYear">({{ selectedMovie.release_date }})</span>
+          </div>
+
+          <!-- MOVIE DESCRIPTION -->
+          <p class="modalDescription">{{ selectedMovie.overview }}</p>
         </div>
       </div>
 
-      <!-- MOVIE IMG WITH TEXT TO ITS RIGHT -->
-      <div class="modalText">
-        <div class="modalTitleRow">
-          <h2 class="modalTitle">{{ selectedMovie.title }}</h2>
-          <span class="modalYear">({{ selectedMovie.release_date }})</span>
+      <div class="dateLoggedRow">
+        <label for="logDate">Watched on:</label>
+        <input id="logDate" type="date" v-model="logDate" class="dateInput" title="Date Watched" />
+      </div>
+
+      <!-- REVIEWS SECTION -->
+      <div class="reviewsWrapper">
+        <h3 class="reviewsLabel">Reviews</h3>
+
+        <!-- WRITE REVIEW AND INPUT -->
+        <div class="reviewInputBar">
+          <input v-model="reviewInput" :disabled="submitting" class="reviewInput" placeholder="Write your review..."
+            @keyup.enter="submitReview" />
+          <button @click="submitReview" :disabled="submitting || !reviewInput.trim()" class="reviewSubmitBtn">
+            Send
+          </button>
         </div>
 
-        <!-- MOVIE DESCRIPTION -->
-        <p class="modalDescription">{{ selectedMovie.overview }}</p>
-      </div>
-    </div>
+        <!-- SCROLL REVIEW LIST -->
+        <div class="reviewsSection">
+          <div v-if="reviews.length === 0" class="reviewsEmpty">No reviews yet.</div>
+          <div v-else class="reviewsList">
+            <div v-for="review in reviews" :key="review.id" class="reviewItem">
+              <span class="reviewUser">{{ review.user_name }}</span>
+              <span class="reviewText">{{ review.review }}</span>
 
-    <div class="dateLoggedRow">
-      <label for="logDate">Watched on:</label>
-      <input id="logDate" type="date" v-model="logDate" class="dateInput" title="Date Watched" />
-    </div>
-
-    <!-- REVIEWS SECTION -->
-    <div class="reviewsWrapper">
-      <h3 class="reviewsLabel">Reviews</h3>
-
-      <!-- WRITE REVIEW AND INPUT -->
-      <div class="reviewInputBar">
-        <input v-model="reviewInput" :disabled="submitting" class="reviewInput" placeholder="Write your review..."
-          @keyup.enter="submitReview" />
-        <button @click="submitReview" :disabled="submitting || !reviewInput.trim()" class="reviewSubmitBtn">
-          Send
-        </button>
-      </div>
-
-      <!-- SCROLL REVIEW LIST -->
-      <div class="reviewsSection">
-        <div v-if="reviews.length === 0" class="reviewsEmpty">No reviews yet.</div>
-        <div v-else class="reviewsList">
-          <div v-for="review in reviews" :key="review.id" class="reviewItem">
-            <span class="reviewUser">{{ review.user_name }}</span>
-            <span class="reviewText">{{ review.review }}</span>
-
-            <!-- SHOW DELETE ONLY FOR CURRENT USER -->
-            <Trash2 v-if="user && review.user_id === user.id" class="delete-review-btn"
-              @click="handleDeleteReview(review.id)" title="Delete your review"></trash2>
+              <!-- SHOW DELETE ONLY FOR CURRENT USER -->
+              <Trash2 v-if="user && review.user_id === user.id" class="delete-review-btn"
+                @click="handleDeleteReview(review.id)" title="Delete your review"></trash2>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </MovieModal>
+    </MovieModal>
+  </div>
 </template>
 
 <style scoped>
+.homeWrapper {
+  background-color: #023047;
+  color: #EAFBFC;
+  min-height: 100vh;
+  padding: 2rem;
+}
+
 .spinnerOverlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(255, 255, 255, 0.7);
+  background-color: rgba(2, 48, 71, 0.8);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -335,11 +344,13 @@ onMounted(async () => {
   margin-top: 80px;
   margin-bottom: 80px;
   font-size: 48px;
+  color: #FFB703;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
 #headerText {
   font-size: 35px;
+  color: #FFB703;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
@@ -371,7 +382,7 @@ onMounted(async () => {
 .movieBox:hover {
   /* THIS IS COMPIED FROM MY 2650 PROJ, CHANGE COLORS LATER */
   transform: scale(1.05);
-  box-shadow: 0 0 15px #a696c8, 0 0 25px #a696c8;
+  box-shadow: 0 0 15px #FFB703, 0 0 25px #FFB703;
   transition: all 0.3s ease;
   cursor: pointer;
 }
@@ -395,6 +406,7 @@ onMounted(async () => {
   height: 20px;
   cursor: pointer;
   transition: transform 0.2s ease;
+  filter: drop-shadow(0 0 2px #219EBC);
 }
 
 .likeIcon:hover {
@@ -417,15 +429,15 @@ onMounted(async () => {
   align-items: center;
   gap: 10px;
   margin-top: 12px;
-  color: #ccc;
+  color: #EAFBFC;
   font-size: 20px;
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
 .dateInput {
-  background: #2a2a2a;
-  color: white;
-  border: 1px solid #444;
+  background: #1b2a3a;
+  color: #EAFBFC;
+  border: 1px solid #8ECAE6;
   border-radius: 4px;
   padding: 6px 10px;
   font-size: 15px;
@@ -434,7 +446,7 @@ onMounted(async () => {
 }
 
 .dateInput:focus {
-  outline: 2px solid #27ae60;
+  outline: 2px solid #219EBC;
 }
 
 .modalImg {
@@ -466,13 +478,13 @@ onMounted(async () => {
   font-size: 40px;
   font-weight: bold;
   margin: 0;
-  color: #fff;
+  color: #EAFBFC;
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
 .modalYear {
   font-size: 20px;
-  color: #aaa;
+  color: #8ECAE6;
   margin-top: 4px;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
@@ -480,7 +492,7 @@ onMounted(async () => {
 .modalDescription {
   font-size: 18px;
   line-height: 1.5;
-  color: #ddd;
+  color: #ccc;
   margin-bottom: 20px;
   font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 }
@@ -492,7 +504,7 @@ onMounted(async () => {
 .reviewsLabel {
   font-size: 22px;
   font-weight: bold;
-  color: #fff;
+  color: #FB8500;
   margin-bottom: 10px;
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
@@ -512,7 +524,7 @@ onMounted(async () => {
 .reviewsSection {
   max-height: 200px;
   overflow-y: auto;
-  background: #181818;
+  background: #012535;
   border-radius: 6px;
   padding: 12px;
 }
@@ -525,9 +537,10 @@ onMounted(async () => {
 
 .reviewItem {
   position: relative;
-  background: #252525;
+  background: #1b2a3a;
   border-radius: 4px;
   padding: 7px 10px;
+  color: #EAFBFC;
   display: flex;
   flex-direction: column;
 }
@@ -535,7 +548,7 @@ onMounted(async () => {
 .reviewUser {
   font-size: 15px;
   font-weight: bold;
-  color: #ffb700;
+  color: #FFB703;
   margin-bottom: 2px;
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
@@ -560,11 +573,17 @@ onMounted(async () => {
   border: none;
   font-size: 15px;
   outline: none;
+  background-color: #8ECAE6;
+  color: #000;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
+.reviewInput:focus {
+  outline: 2px solid #219EBC;
+}
+
 .reviewSubmitBtn {
-  background: #4caf50;
+  background: #219EBC;
   color: #fff;
   border: none;
   padding: 8px 16px;
@@ -575,7 +594,7 @@ onMounted(async () => {
 }
 
 .reviewSubmitBtn:hover {
-  background: #2e6730;
+  background-color: #FB8500;
   transition: transform 0.3s ease;
 
 }
@@ -593,7 +612,7 @@ onMounted(async () => {
   transform: translateY(-50%);
   background: none;
   border: none;
-  color: #ff4d4f;
+  color: #8ECAE6;
   font-size: 15px;
   cursor: pointer;
   transition: color 0.2s;

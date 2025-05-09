@@ -299,6 +299,7 @@ onMounted(async () => {
 <!-- STYLE -->
 <style scoped>
 .searchPage {
+  background-color: #023047;
   padding: 2rem;
   color: white;
   min-height: 100vh;
@@ -311,7 +312,7 @@ onMounted(async () => {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(255, 255, 255, 0.7);
+  background-color: rgba(2, 48, 71, 0.8);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -351,11 +352,15 @@ onMounted(async () => {
   padding: 12px 40px 12px 16px;
   font-size: 15px;
   border-radius: 20px;
-  border: 2px solid black;
+  border: 2px solid #219EBC;
   outline: none;
-  background: white;
+  background: #8ECAE6;
   color: black;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.searchInput:focus {
+  outline: 2px solid #FB8500;
 }
 
 .searchInput::placeholder {
@@ -371,8 +376,8 @@ onMounted(async () => {
 .searchResultCard {
   display: flex;
   gap: 20px;
-  border: 2px solid black;
-  background: white;
+  border: 2px solid #8ECAE6;
+  background: #012535;
   border-radius: 8px;
   padding: 16px;
   transition:
@@ -382,14 +387,14 @@ onMounted(async () => {
 }
 
 .searchResultCard:hover {
-  background: black;
+  background: #FB8500;
   transform: scale(1.01);
 }
 
 .searchResultCard:hover .resultTitle,
 .searchResultCard:hover .resultYear,
 .searchResultCard:hover .resultOverview {
-  color: white;
+  color: #fff;
 }
 
 .searchResultCard:hover .resultImg.imgError {
@@ -400,6 +405,7 @@ onMounted(async () => {
 .resultImg {
   width: 120px;
   height: 180px;
+  border: 2px solid #8ECAE6;
   border-radius: 6px;
   object-fit: cover;
 }
@@ -409,13 +415,13 @@ onMounted(async () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: white;
-  color: black;
+  background-color: #181818;
+  color: #fff;
+  border: 2px solid #8ECAE6;
   font-size: 0.9rem;
   width: 120px;
   height: 180px;
   text-align: center;
-  padding: 10px;
   border-radius: 6px;
   font-size: 15px;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
@@ -430,20 +436,20 @@ onMounted(async () => {
 .resultTitle {
   font-size: 27px;
   margin: 0;
-  color: black;
+  color: #eee;
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
 .resultYear {
   font-size: 17px;
-  color: black;
+  color: #eee;
   margin: 4px 0 10px;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
 .resultOverview {
   font-size: 16px;
-  color: black;
+  color: #eee;
   line-height: 1.5;
   font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 }
@@ -503,15 +509,15 @@ onMounted(async () => {
   align-items: center;
   gap: 10px;
   margin-top: 12px;
-  color: #ccc;
+  color: #EAFBFC;
   font-size: 20px;
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
 .dateInput {
-  background: #2a2a2a;
-  color: white;
-  border: 1px solid #444;
+  background: #1b2a3a;
+  color: #EAFBFC;
+  border: 1px solid #8ECAE6;
   border-radius: 4px;
   padding: 6px 10px;
   font-size: 15px;
@@ -520,7 +526,7 @@ onMounted(async () => {
 }
 
 .dateInput:focus {
-  outline: 2px solid #27ae60;
+  outline: 2px solid #219EBC;
 }
 
 .modalText {
@@ -538,13 +544,13 @@ onMounted(async () => {
   font-size: 40px;
   font-weight: bold;
   margin: 0;
-  color: #fff;
+  color: #EAFBFC;
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
 .modalYear {
   font-size: 20px;
-  color: #aaa;
+  color: #8ECAE6;
   margin-top: 4px;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
@@ -552,7 +558,7 @@ onMounted(async () => {
 .modalDescription {
   font-size: 18px;
   line-height: 1.5;
-  color: #ddd;
+  color: #ccc;
   margin-bottom: 20px;
   font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 }
@@ -564,7 +570,7 @@ onMounted(async () => {
 .reviewsLabel {
   font-size: 22px;
   font-weight: bold;
-  color: #fff;
+  color: #FB8500;
   margin-bottom: 10px;
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
@@ -587,12 +593,18 @@ onMounted(async () => {
   border-radius: 8px;
   border: none;
   font-size: 15px;
+  background-color: #8ECAE6;
+  color: #000;
   outline: none;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
+.reviewInput:focus {
+  outline: 2px solid #219EBC;
+}
+
 .reviewSubmitBtn {
-  background: #4caf50;
+  background-color: #219EBC;
   color: #fff;
   border: none;
   padding: 8px 16px;
@@ -603,7 +615,7 @@ onMounted(async () => {
 }
 
 .reviewSubmitBtn:hover {
-  background: #2e6730;
+  background-color: #FB8500;
   transition: transform 0.3s ease;
 }
 
@@ -615,7 +627,7 @@ onMounted(async () => {
 .reviewsSection {
   max-height: 200px;
   overflow-y: auto;
-  background: #181818;
+  background: #012535;
   border-radius: 6px;
   padding: 12px;
 }
@@ -628,7 +640,8 @@ onMounted(async () => {
 
 .reviewItem {
   position: relative;
-  background: #252525;
+  background: #1b2a3a;
+  color: #EAFBFC;
   border-radius: 4px;
   padding: 7px 10px;
   display: flex;
@@ -638,7 +651,7 @@ onMounted(async () => {
 .reviewUser {
   font-size: 15px;
   font-weight: bold;
-  color: #ffb700;
+  color: #FFB703;
   margin-bottom: 2px;
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
@@ -664,7 +677,7 @@ onMounted(async () => {
   transform: translateY(-50%);
   background: none;
   border: none;
-  color: #ff4d4f;
+  color: #8ECAE6;
   font-size: 15px;
   cursor: pointer;
   transition: color 0.2s;

@@ -70,7 +70,7 @@ const { user } = useAuth();
   pointer-events: none;
   width: 18px;
   height: 18px;
-  color: #bbb;
+  color: black;
 }
 
 .links {
