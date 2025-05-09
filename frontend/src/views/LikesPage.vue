@@ -8,7 +8,11 @@ const imgBaseUrl = 'https://image.tmdb.org/t/p/w500'
 
 const user = ref(null)
 const liking = ref(false)
+
+//FOR SPINNEr
 const loading = ref(true)
+
+//FOR IMG ERRORS
 const imgErrors = ref(new Set())
 
 //ADJUST AS WANTED
@@ -31,6 +35,7 @@ function goToPage(page) {
   currentPage.value = page
 }
 
+//HANDLES ERROR IN MOVIE IMGS
 function handleImgError(event) {
   event.target.src = '' // Use your own default image
   event.target.alt = movie.title
@@ -44,7 +49,7 @@ async function handleLike(movie) {
   liking.value = true
 
   const isNowLiked = await toggleLike({
-    id: movie.movie_id, // <- use the actual TMDB movie ID
+    id: movie.movie_id,
     title: movie.movie_title,
     poster_path: movie.movie_poster,
   })
@@ -52,7 +57,7 @@ async function handleLike(movie) {
   liking.value = false
 
 
-  // Sync diary entry's liked field
+  // SYNC DIARY ENTRY'S LIKED FIELD
   await supabase
     .from('diary')
     .update({ liked: isNowLiked })
