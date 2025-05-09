@@ -301,7 +301,7 @@ onMounted(async () => {
               <span class="reviewText">{{ review.review }}</span>
 
               <!-- SHOW DELETE ONLY FOR CURRENT USER -->
-              <Trash2 v-if="user && review.user_id === user.id" class="delete-review-btn"
+              <Trash2 v-if="user && review.user_id === user.id" class="deleteReviewBtn"
                 @click="handleDeleteReview(review.id)" title="Delete your review"></trash2>
             </div>
           </div>
@@ -618,7 +618,7 @@ onMounted(async () => {
 }
 
 /* DELETE INSIDE REVIEW */
-.delete-review-btn {
+.deleteReviewBtn {
   position: absolute;
   top: 50%;
   right: 10px;
@@ -633,19 +633,19 @@ onMounted(async () => {
   margin: 0;
 }
 
-.delete-review-btn:hover {
+.deleteReviewBtn:hover {
   color: #e50914;
 }
 
 /* LOG SECTION STYLES */
-.log-section {
+.logSection {
   margin-top: 18px;
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.log-btn {
+.logBtn {
   background: #209CE6;
   color: #fff;
   border: none;
@@ -655,12 +655,12 @@ onMounted(async () => {
   font-size: 1em;
 }
 
-.log-success {
+.logSuccess {
   color: #0bff71;
   margin-left: 10px;
 }
 
-.log-error {
+.logError {
   color: #ff4d4f;
   margin-left: 10px;
 }
