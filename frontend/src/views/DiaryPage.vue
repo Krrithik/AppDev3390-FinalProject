@@ -1,5 +1,5 @@
 <script setup>
-import { watch, ref, onMounted } from 'vue'
+import { watch, ref, onMounted, computed } from 'vue'
 import { supabase } from '@/supabase/supabase.init'
 import MovieModal from '@/components/MovieModal.vue'
 import { useLikes } from '@/composables/useLikes'
@@ -16,6 +16,10 @@ const diaryEntries = ref([])
 const user = ref(null)
 const loading = ref(true)
 
+//ADJUST AS WANTED
+const currentPage = ref(1)
+const itemsPerPage = 10
+
 const showModal = ref(false)
 const selectedMovie = ref(null)
 
@@ -31,6 +35,22 @@ const logDate = ref(new Date().toISOString().slice(0, 10))
 const logging = ref(false)
 const logSuccess = ref(false)
 const logError = ref('')
+
+//CREATES TABS OFF PAGES
+const totalPages = computed(() =>
+  Math.ceil(diaryEntries.value.length / itemsPerPage)
+)
+
+//SHOWS WHAT PAGES ARE SHOWN ON WHICH TAB
+const paginatedEntries = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage
+  return diaryEntries.value.slice(start, start + itemsPerPage)
+})
+
+//REDIRECTION
+function goToPage(page) {
+  currentPage.value = page
+}
 
 async function fetchUser() {
   const response = await supabase.auth.getUser()
@@ -286,7 +306,7 @@ onMounted(async () => {
 
     <div v-if="loading" class="diary-loading">Loading...</div>
     <div v-else>
-      <div v-for="entry in diaryEntries" :key="entry.id" class="diaryEntry">
+      <div v-for="entry in paginatedEntries" :key="entry.id" class="diaryEntry">
         <span class="month">{{ entry.watched_on ? new Date(entry.watched_on).toLocaleString('default', {
           month: 'short',
           year: 'numeric'
@@ -305,6 +325,14 @@ onMounted(async () => {
         <Pencil class="edit" @click="openModal(entry)" title="Edit Details"></pencil>
         <Trash2 class="delete-btn" @click="handleDeleteEntry(entry.id)" title="Delete Entry"></trash2>
       </div>
+
+      <div v-if="totalPages > 1" class="pagination">
+        <button v-for="page in totalPages" :key="page" @click="goToPage(page)"
+          :class="{ active: currentPage === page }">
+          {{ page }}
+        </button>
+      </div>
+
     </div>
   </div>
 
@@ -465,6 +493,34 @@ onMounted(async () => {
   text-overflow: ellipsis;
 }
 
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.pagination button {
+  background-color: black;
+  color: white;
+  border: 1px solid #ccc;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pagination button:hover {
+  background-color: #36683e;
+  transform: scale(1.05);
+}
+
+.pagination button.active {
+  background-color: #27ae60;
+  border-color: #27ae60;
+  color: white;
+}
 
 /* ALL THE STYLES COPIED FROM HOME */
 
