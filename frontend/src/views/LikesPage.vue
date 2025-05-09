@@ -90,15 +90,15 @@ onMounted(async () => {
 
     <!-- IF HAS LIKED MOVIES -->
     <div v-else>
-      <div class="movie-grid">
+      <div class="movieGrid">
 
         <!-- DISPLAY MOVIES -->
-        <div v-for="movie in paginatedMovies" :key="movie.id" class="liked-movie">
-          <img :src="imgBaseUrl + movie.movie_poster" :alt="movie.movie_title" class="liked-poster"
+        <div v-for="movie in paginatedMovies" :key="movie.id" class="likedMovie">
+          <img :src="imgBaseUrl + movie.movie_poster" :alt="movie.movie_title" class="likedPoster"
             @error="handleImgError" />
 
           <!-- HEART ICON UPON HOVER -->
-          <div class="card-footer" @click.stop="handleLike(movie)">
+          <div class="cardFooter" @click.stop="handleLike(movie)">
             <img :src="likedMovies.some(m => m.id === movie.id) ? '/heartFilled.png' : '/heartOutline.png'" alt="Like"
               class="likeIcon" />
           </div>
@@ -154,7 +154,7 @@ body {
   }
 }
 
-.movie-grid {
+.movieGrid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   gap: 1rem;
@@ -162,7 +162,7 @@ body {
   background-color: #023047;
 }
 
-.liked-movie {
+.likedMovie {
   text-align: center;
   position: relative;
   background-color: #012535;
@@ -170,12 +170,12 @@ body {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.liked-movie:hover {
+.likedMovie:hover {
   transform: scale(1.03);
   box-shadow: 0 0 15px #FB8500;
 }
 
-.card-footer {
+.cardFooter {
   position: absolute;
   bottom: 0;
   left: 0;
@@ -191,7 +191,7 @@ body {
   pointer-events: none;
 }
 
-.liked-movie:hover .card-footer {
+.likedMovie:hover .cardFooter {
   opacity: 1;
 }
 
@@ -211,13 +211,13 @@ body {
   border-radius: 4px;
 }
 
-.liked-movie:hover .liked-poster,
-.card-footer:hover+.liked-poster {
+.likedMovie:hover .likedPoster,
+.cardFooter:hover+.likedPoster {
   transform: scale(1.05);
   box-shadow: 0 0 15px #FB8500, 0 0 25px #FB8500;
 }
 
-.liked-poster {
+.likedPoster {
   width: 100%;
   height: auto;
   object-fit: cover;
@@ -227,7 +227,7 @@ body {
   font-size: 15px;
 }
 
-.liked-poster:hover {
+.likedPoster:hover {
   transform: scale(1.05);
   transition: transform 0.3s ease;
   box-shadow: 0 0 15px #FB8500, 0 0 25px #FB8500;
