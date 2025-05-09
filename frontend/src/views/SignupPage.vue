@@ -13,6 +13,8 @@ const password = ref('')
 const showPassword = ref(false)
 const fullName = ref('')
 const errorMsg = ref('')
+
+// FOR SPINNER
 const loading = ref(true)
 
 /* const handleSignup = async () => {
