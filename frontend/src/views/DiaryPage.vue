@@ -347,8 +347,8 @@ onMounted(async () => {
           <div class="iconRow">
             <img :src="isLiked ? '/heartFilled.png' : '/heartOutline.png'" alt="Like" class="likeIcon"
               title="Like Movie" @click="handleLike" />
-            <img :src="isLogged ? '/filledLog.png' : '/outlineLog.png'" alt="Log" class="logIcon" title="Log Movie"
-              @click="handleLogToggle" />
+            <img :src="isLogged ? '/filledLog.png' : '/outlineLog.png'" alt="Log" class="logIcon"
+              :class="{ inverted: !isLogged }" title="Log Movie" @click="handleLogToggle" />
           </div>
         </div>
 
@@ -402,6 +402,11 @@ onMounted(async () => {
 </template>
 
 <style scoped>
+.inverted {
+  filter: invert(1);
+  transition: filter 0.2s ease;
+}
+
 .diaryPage {
   padding: 40px;
   font-family: sans-serif;
