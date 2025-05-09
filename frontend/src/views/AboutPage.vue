@@ -88,7 +88,7 @@ onMounted(() => {
             <div class="block">
                 <h2 id="7">How do I validate my email?</h2>
                 <p>
-                    krrithik do this!
+                    Scene-It handles email validation automatically as part of its authentication system. When a user signs up with their email, Scene-It sends a verification email to the address provided. This email contains a secure link that the user must use to confirm their email address (one-time). Until the user completes this step, their account remains unverified and, if you have "Confirm email" enabled in your Supabase Auth settings, they cannot fully access the app. This ensures that only users with access to the provided email can activate their accounts, improving security and reducing spam or fake signups.
                 </p>
             </div>
             <!-- MORE BLOCKS ADD HERE -->
