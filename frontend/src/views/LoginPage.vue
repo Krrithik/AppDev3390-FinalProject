@@ -5,6 +5,7 @@ import { useRouter } from 'vue-router'
 import { Eye } from 'lucide-vue-next'
 import { EyeOff } from 'lucide-vue-next'
 import { onMounted } from 'vue'
+import { toast } from 'vue3-toastify'
 
 const router = useRouter()
 
@@ -25,11 +26,11 @@ async function handleLogin() {
    loading.value = false;
    if (error) {
       console.log(error);
-      window.alert(error)
+      toast.error(error.message || 'Login failed!')
    }
    else {
       console.log(data);
-      console.log('login success')
+      toast.success('Login successful!')
       router.push('/')
    }
 }

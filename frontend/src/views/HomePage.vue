@@ -5,6 +5,7 @@ import MovieModal from '@/components/MovieModal.vue'
 import { supabase } from '@/supabase/supabase.init'
 import { watch } from "vue"
 import { Trash2 } from 'lucide-vue-next'
+import { toast } from 'vue3-toastify'
 
 import { useLikes } from '@/composables/useLikes'
 const { checkLikeStatus, toggleLike, fetchUserLikes } = useLikes()
@@ -184,6 +185,7 @@ async function handleLogToggle() {
       window.alert(logError.value)
     } else {
       isLogged.value = true;
+      toast.success('Movie logged to diary!')
       setTimeout(() => logSuccess.value = false, 2000)
     }
     logging.value = false
