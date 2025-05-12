@@ -11,7 +11,7 @@ const app = createApp(App)
 app.use(createPinia())
 app.use(router)
 app.use(Vue3Toastify, {
-  autoClose: 3000, // Toast duration (ms)
+  autoClose: 2000, // Toast duration (ms)
   position: 'top-right'
 })
 app.mount('#app')
